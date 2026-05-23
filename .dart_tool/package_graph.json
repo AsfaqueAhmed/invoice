@@ -10,7 +10,8 @@
         "cached_network_image",
         "flutter",
         "get",
-        "http"
+        "http",
+        "intl"
       ],
       "devDependencies": [
         "flutter_lints",
@@ -263,6 +264,17 @@
       ]
     },
     {
+      "name": "leak_tracker",
+      "version": "11.0.2",
+      "dependencies": [
+        "clock",
+        "collection",
+        "meta",
+        "path",
+        "vm_service"
+      ]
+    },
+    {
       "name": "term_glyph",
       "version": "1.2.2",
       "dependencies": []
@@ -342,6 +354,11 @@
       "dependencies": [
         "collection"
       ]
+    },
+    {
+      "name": "vm_service",
+      "version": "15.0.0",
+      "dependencies": []
     },
     {
       "name": "fixnum",
@@ -473,20 +490,13 @@
       ]
     },
     {
-      "name": "leak_tracker",
-      "version": "11.0.2",
+      "name": "intl",
+      "version": "0.20.2",
       "dependencies": [
         "clock",
-        "collection",
         "meta",
-        "path",
-        "vm_service"
+        "path"
       ]
-    },
-    {
-      "name": "vm_service",
-      "version": "15.0.0",
-      "dependencies": []
     }
   ],
   "configVersion": 1
