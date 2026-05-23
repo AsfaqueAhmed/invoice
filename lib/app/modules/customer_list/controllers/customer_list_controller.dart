@@ -16,7 +16,7 @@ class CustomerListController extends GetxController {
   void openFilterSheet() {}
 
   void onAddNewCustomerTap() {
-    Get.toNamed(Routes.CUSTOMER_ADD);
+    Get.toNamed(Routes.ADD_CUSTOMER);
   }
 
   void onCustomerCardTap() {

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_getx_app/app/core/configs/theme/app_colors.dart';
+import 'package:flutter_getx_app/app/core/constants/gaps.dart';
+import 'package:flutter_getx_app/app/core/widgets/custom_cache_network_image.dart';
+import 'package:flutter_getx_app/app/core/widgets/custom_text_field.dart';
 import 'package:flutter_getx_app/app/modules/product/product_list/model/product_model.dart';
 import 'package:flutter_getx_app/app/modules/product/product_list/views/widgets/app_status_chip.dart';
 import 'package:flutter_getx_app/app/routes/app_pages.dart';
@@ -11,67 +14,70 @@ import '../controllers/product_list_controller.dart';
 
 class ProductListView extends GetView<ProductListController> {
   const ProductListView({super.key});
+
   @override
   Widget build(BuildContext context) {
     final fmt = NumberFormat.currency(symbol: '\$', decimalDigits: 0);
 
     return Scaffold(
-      body: Column(
-        children: [
-          // Search
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
-            child: _DarkSearchBar(
-              onChanged: (v) => controller.searchQuery.value = v,
+      backgroundColor: AppColors.white,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Search
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
+              child: _DarkSearchBar(
+                onChanged: (v) => controller.searchQuery.value = v,
+              ),
             ),
-          ),
-          // Stats Row
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
-            child: Obx(() => Row(
-              children: [
-                Expanded(
-                  child: _DarkStatCard(
-                    label: 'TOTAL VALUE',
-                    value: fmt.format(controller.totalInventoryValue),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: _DarkStatCard(
-                    label: 'LOW STOCK ITEMS',
-                    value: '${controller.lowStockCount}',
-                    isAlert: true,
-                  ),
-                ),
-              ],
-            )),
-          ),
-          const SizedBox(height: 14),
-          // Product list
-          Expanded(
-            child: Obx(() {
-              if (controller.isLoading.value) {
-                return const Center(
-                    child: CircularProgressIndicator(
-                        color: AppColors.primary));
-              }
-              return ListView.separated(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 100),
-                itemCount: controller.filteredProducts.length,
-                separatorBuilder: (_, __) =>
-                const SizedBox(height: 10),
-                itemBuilder: (ctx, i) {
-                  final product = controller.filteredProducts[i];
-                  return _ProductCard(
-                    product: product,
-                    onTap: () => controller.selectProduct(product),
-                  );
-                },
-              );
-            }),
-          ),
-        ],
+            // Stats Row
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+              child: Obx(() => Row(
+                    children: [
+                      Expanded(
+                        child: _DarkStatCard(
+                          label: 'TOTAL VALUE',
+                          value: fmt.format(controller.totalInventoryValue),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: _DarkStatCard(
+                          label: 'LOW STOCK ITEMS',
+                          value: '${controller.lowStockCount}',
+                          isAlert: true,
+                        ),
+                      ),
+                    ],
+                  )),
+            ),
+            Gaps.v16,
+            // Product list
+            Expanded(
+              child: Obx(() {
+                if (controller.isLoading.value) {
+                  return const Center(
+                      child:
+                          CircularProgressIndicator(color: AppColors.primary));
+                }
+                return ListView.separated(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 100),
+                  itemCount: controller.filteredProducts.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 10),
+                  itemBuilder: (ctx, i) {
+                    final product = controller.filteredProducts[i];
+                    return _ProductCard(
+                      product: product,
+                      onTap: () => controller.selectProduct(product),
+                    );
+                  },
+                );
+              }),
+            ),
+          ],
+        ),
       ),
       // bottomNavigationBar: _BottomNav(),
       floatingActionButton: FloatingActionButton(
@@ -79,13 +85,14 @@ class ProductListView extends GetView<ProductListController> {
         backgroundColor: AppColors.primary,
         child: const Icon(Icons.add_rounded, color: Colors.white),
       ),
-      floatingActionButtonLocation:
-      FloatingActionButtonLocation.endFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
+
 class _DarkSearchBar extends StatelessWidget {
   final ValueChanged<String> onChanged;
+
   const _DarkSearchBar({required this.onChanged});
 
   @override
@@ -93,43 +100,32 @@ class _DarkSearchBar extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: Container(
-            height: 44,
-            decoration: BoxDecoration(
-              color: AppColors.darkCard,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.darkBorder),
-            ),
-            child: TextField(
-              onChanged: onChanged,
-              style: const TextStyle(
-                  fontFamily: 'DMSans', fontSize: 14, color: Colors.white),
-              decoration: const InputDecoration(
-                hintText: 'Search products...',
-                hintStyle: TextStyle(
-                    fontFamily: 'DMSans',
-                    fontSize: 14,
-                    color: Color(0xFF6B7280)),
-                prefixIcon: Icon(Icons.search_rounded,
-                    color: Color(0xFF6B7280), size: 20),
-                border: InputBorder.none,
-                contentPadding:
-                EdgeInsets.symmetric(vertical: 12),
+          child: CustomTextFormField(
+            hintText: 'Search products...',
+            onChanged: onChanged,
+            prefixIcon: const Padding(
+              padding: EdgeInsets.only(left: 12, right: 8),
+              child: Icon(
+                Icons.search_rounded,
+                size: 20,
               ),
             ),
           ),
         ),
         const SizedBox(width: 10),
         Container(
-          width: 44,
-          height: 44,
+          width: 48,
+          height: 48,
           decoration: BoxDecoration(
-            color: AppColors.darkCard,
+            color: AppColors.cardBg,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.darkBorder),
+            border: Border.all(color: AppColors.grey100),
           ),
-          child: const Icon(Icons.tune_rounded,
-              color: Color(0xFF9CA3AF), size: 20),
+          child: const Icon(
+            Icons.tune_rounded,
+            color: Color(0xFF9CA3AF),
+            size: 20,
+          ),
         ),
       ],
     );
@@ -152,9 +148,9 @@ class _DarkStatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.darkCard,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.darkBorder),
+        color: AppColors.grey50,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.grey100),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,23 +158,23 @@ class _DarkStatCard extends StatelessWidget {
           Text(
             label,
             style: const TextStyle(
-              fontFamily: 'DMSans',
-              fontSize: 9,
+              fontFamily: 'Inter',
+              fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF6B7280),
+              color: AppColors.textTertiary,
               letterSpacing: 0.5,
             ),
           ),
-          const SizedBox(height: 6),
+          Gaps.v4,
           Row(
             children: [
               Text(
                 value,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'DMSans',
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: !isAlert ? AppColors.textPrimary : AppColors.overdue,
                 ),
               ),
               if (isAlert) ...[
@@ -227,92 +223,100 @@ class _ProductCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: AppColors.darkCard,
+          color: AppColors.cardBg,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.darkBorder),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 16,
+              offset: const Offset(0, 2),
+            )
+          ],
         ),
-        child: Row(
+        child: Column(
           children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Text(
-                          product.name,
-                          style: const TextStyle(
-                            fontFamily: 'DMSans',
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                          ),
+                      Text(
+                        product.name,
+                        style: const TextStyle(
+                          fontFamily: 'DMSans',
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.textPrimary,
                         ),
                       ),
-                      AppStatusChip(
-                        label: product.stockStatus.label,
-                        bg: colors.$1,
-                        fg: colors.$2,
+                      Gaps.v4,
+                      Text(
+                        'SKU: ${product.sku}',
+                        style: const TextStyle(
+                          fontFamily: 'DMSans',
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF6B7280),
+                        ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'SKU: ${product.sku}',
-                    style: const TextStyle(
-                      fontFamily: 'DMSans',
-                      fontSize: 11,
-                      color: Color(0xFF6B7280),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      _ProductMeta(
-                          label: 'Stock Level',
-                          value: '${product.stockQty} units'),
-                      const SizedBox(width: 24),
-                      _ProductMeta(
-                          label: 'Unit Price',
-                          value: fmt.format(product.price)),
-                    ],
-                  ),
-                  if (product.stockStatus == StockStatus.lowStock)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
-                        child: LinearProgressIndicator(
-                          value: product.stockQty / 20,
-                          backgroundColor:
-                          AppColors.darkBorder,
-                          color: AppColors.lowStock,
-                          minHeight: 4,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
+                ),
+                AppStatusChip(
+                  label: product.stockStatus.label,
+                  bg: colors.$1,
+                  fg: colors.$2,
+                ),
+              ],
             ),
-            const SizedBox(width: 12),
-            // Product Image placeholder
-            Container(
-              width: 70,
-              height: 70,
-              decoration: BoxDecoration(
-                color: AppColors.darkBorder,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: product.imageUrl != null
-                  ? ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.network(product.imageUrl!,
-                    fit: BoxFit.cover),
-              )
-                  : const Icon(Icons.inventory_2_outlined,
-                  color: Color(0xFF4B5563), size: 28),
+            Gaps.v4,
+            Row(
+              children: [
+                Expanded(
+                  child: _ProductMeta(
+                      label: 'Stock Level', value: '${product.stockQty} units'),
+                ),
+                const SizedBox(width: 24),
+                Expanded(
+                  child: _ProductMeta(
+                    label: 'Unit Price',
+                    value: fmt.format(product.price),
+                    isPrice: true,
+                  ),
+                ),
+                Gaps.h8,
+                Container(
+                  width: 70,
+                  height: 70,
+                  decoration: BoxDecoration(
+                    color: AppColors.grey100,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const CacheNetworkImage(
+                    imageUrl: '',
+                    height: 70,
+                    width: 70,
+                    borderRadius: 12,
+                  ),
+                ),
+              ],
             ),
+            const SizedBox(height: 4),
+            if (product.stockStatus == StockStatus.lowStock)
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: LinearProgressIndicator(
+                    value: product.stockQty / 20,
+                    backgroundColor: AppColors.grey100,
+                    color: AppColors.overdue,
+                    minHeight: 4,
+                  ),
+                ),
+              ),
           ],
         ),
       ),
@@ -323,8 +327,13 @@ class _ProductCard extends StatelessWidget {
 class _ProductMeta extends StatelessWidget {
   final String label;
   final String value;
+  final bool isPrice;
 
-  const _ProductMeta({required this.label, required this.value});
+  const _ProductMeta({
+    required this.label,
+    required this.value,
+    this.isPrice = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -335,18 +344,19 @@ class _ProductMeta extends StatelessWidget {
           label,
           style: const TextStyle(
             fontFamily: 'DMSans',
-            fontSize: 10,
-            color: Color(0xFF6B7280),
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: AppColors.textTertiary,
           ),
         ),
-        const SizedBox(height: 2),
+        Gaps.v4,
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'DMSans',
-            fontSize: 14,
+            fontSize: 18,
             fontWeight: FontWeight.w600,
-            color: Colors.white,
+            color: isPrice ? AppColors.chipBlueFg : AppColors.textPrimary,
           ),
         ),
       ],

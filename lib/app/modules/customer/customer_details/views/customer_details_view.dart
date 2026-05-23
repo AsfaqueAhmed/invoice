@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_getx_app/app/core/configs/theme/app_colors.dart';
+import 'package:flutter_getx_app/app/core/constants/gaps.dart';
+import 'package:flutter_getx_app/app/core/widgets/app_bar.dart';
 import 'package:flutter_getx_app/app/modules/customer/customer_list/model/customer_model.dart';
 import 'package:flutter_getx_app/app/modules/product/product_details/views/widgets/app_section_header.dart';
 
@@ -28,50 +30,16 @@ class _CustomerDetailContent extends StatelessWidget {
     final dateFmt = DateFormat('MMM dd, yyyy');
 
     return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: AppColors.surface,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded,
-              color: AppColors.textPrimary),
-          onPressed: () => Get.back(),
-        ),
-        title: Row(
-          children: [
-            Container(
-              width: 26,
-              height: 26,
-              decoration: BoxDecoration(
-                color: AppColors.primary,
-                borderRadius: BorderRadius.circular(7),
-              ),
-              child: const Icon(Icons.receipt_long_rounded,
-                  color: Colors.white, size: 14),
-            ),
-            const SizedBox(width: 8),
-            const Text(
-              'InvoiceFlow',
-              style: TextStyle(
-                fontFamily: 'DMSans',
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: AppColors.textPrimary,
-              ),
-            ),
-          ],
-        ),
-        actions: [
+      backgroundColor: AppColors.white,
+      appBar: CustomAppAppbar(
+        title: 'InvoiceFlow',
+        action: [
           IconButton(
             icon: const Icon(Icons.edit_outlined,
                 color: AppColors.textPrimary, size: 20),
             onPressed: () {},
           ),
         ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Container(height: 1, color: AppColors.border),
-        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -79,7 +47,7 @@ class _CustomerDetailContent extends StatelessWidget {
             // Profile Header
             Container(
               color: AppColors.surface,
-              padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
+              padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
               child: Column(
                 children: [
                   // Avatar
@@ -119,14 +87,14 @@ class _CustomerDetailContent extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Icon(Icons.phone_rounded,
-                          size: 13, color: AppColors.textSecondary),
+                          size: 14, color: AppColors.textTertiary),
                       const SizedBox(width: 4),
                       Text(
                         customer.phone,
                         style: const TextStyle(
-                          fontFamily: 'DMSans',
-                          fontSize: 13,
-                          color: AppColors.textSecondary,
+                          fontFamily: 'Inter',
+                          fontSize: 14,
+                          color: AppColors.textTertiary,
                         ),
                       ),
                     ],
@@ -137,15 +105,15 @@ class _CustomerDetailContent extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Icon(Icons.location_on_rounded,
-                            size: 13, color: AppColors.textSecondary),
+                            size: 14, color: AppColors.textTertiary),
                         const SizedBox(width: 4),
                         Flexible(
                           child: Text(
                             customer.address!,
                             style: const TextStyle(
-                              fontFamily: 'DMSans',
-                              fontSize: 12,
-                              color: AppColors.textSecondary,
+                              fontFamily: 'Inter',
+                              fontSize: 14,
+                              color: AppColors.textTertiary,
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -159,29 +127,25 @@ class _CustomerDetailContent extends StatelessWidget {
             // Stats Cards
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-              child: Row(
+              child: Column(
                 children: [
-                  Expanded(
-                    child: _MiniStat(
-                      icon: Icons.shopping_bag_rounded,
-                      label: 'TOTAL PURCHASES',
-                      value: fmt.format(customer.totalPurchases),
-                      iconColor: AppColors.primary,
-                    ),
+                  _MiniStat(
+                    icon: Icons.shopping_bag_outlined,
+                    label: 'TOTAL PURCHASES',
+                    value: fmt.format(customer.totalPurchases),
+                    iconColor: AppColors.primary,
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: _MiniStat(
-                      icon: Icons.check_circle_outline_rounded,
-                      label: 'TOTAL PAID',
-                      value: fmt.format(customer.totalPaid),
-                      iconColor: AppColors.paid,
-                    ),
+                  Gaps.v12,
+                  _MiniStat(
+                    icon: Icons.check_circle_outline_rounded,
+                    label: 'TOTAL PAID',
+                    value: fmt.format(customer.totalPaid),
+                    iconColor: AppColors.paid,
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 10),
+            Gaps.v12,
             // Total Due (large)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -354,17 +318,22 @@ class _MiniStat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.border),
-      ),
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 16,
+              offset: const Offset(0, 2),
+            )
+          ]),
       child: Row(
         children: [
           Container(
-            width: 36,
-            height: 36,
+            width: 44,
+            height: 44,
             decoration: BoxDecoration(
               color: iconColor.withOpacity(0.1),
               borderRadius: BorderRadius.circular(10),
@@ -379,20 +348,20 @@ class _MiniStat extends StatelessWidget {
                 Text(
                   label,
                   style: const TextStyle(
-                    fontFamily: 'DMSans',
-                    fontSize: 9,
-                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Inter',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
                     color: AppColors.textTertiary,
                     letterSpacing: 0.5,
                   ),
                 ),
-                const SizedBox(height: 3),
+                Gaps.v4,
                 Text(
                   value,
                   style: const TextStyle(
-                    fontFamily: 'DMSans',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Inter',
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -483,11 +452,17 @@ class _InvoiceRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = _statusColors;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.border),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 16,
+            offset: const Offset(0, 2),
+          )
+        ],
       ),
       child: Row(
         children: [

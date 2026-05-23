@@ -9,9 +9,9 @@ abstract class Routes {
   static const home = _Paths.home;
   static const invoices = _Paths.invoices;
   static const ONBOARDING = _Paths.ONBOARDING;
-  static const CUSTOMER_LIST = _Paths.CUSTOMER_LIST;
-  static const CUSTOMER_ADD = _Paths.CUSTOMER_ADD;
-  static const CUSTOMER_DETAILS = _Paths.CUSTOMER_DETAILS;
+  // static const CUSTOMER_LIST = _Paths.CUSTOMER_LIST;
+  // static const CUSTOMER_ADD = _Paths.CUSTOMER_ADD;
+  // static const CUSTOMER_DETAILS = _Paths.CUSTOMER_DETAILS;
   static const CUSTOMER_LIST = _Paths.CUSTOMER_LIST;
   static const CUSTOMER_DETAILS = _Paths.CUSTOMER_DETAILS;
   static const ADD_CUSTOMER = _Paths.ADD_CUSTOMER;
@@ -27,8 +27,8 @@ abstract class _Paths {
   static const home = '/home';
   static const invoices = '/invoices';
   static const ONBOARDING = '/onboarding';
-  static const CUSTOMER_LIST = '/customer-list';
-  static const CUSTOMER_DETAILS = '/customer-details';
+  // static const CUSTOMER_LIST = '/customer-list';
+  // static const CUSTOMER_DETAILS = '/customer-details';
   static const ADD_CUSTOMER = '/add-customer';
   static const ADD_PRODUCT = '/add-product';
   static const PRODUCT_LIST = '/product-list';

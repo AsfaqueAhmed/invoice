@@ -144,6 +144,11 @@ class InvoiceListController extends GetxController {
       return;
     }
 
+    if (destination == 'Products') {
+      Get.toNamed(Routes.PRODUCT_LIST);
+      return;
+    }
+
     Get.snackbar(
       destination,
       '$destination module is not connected yet.',

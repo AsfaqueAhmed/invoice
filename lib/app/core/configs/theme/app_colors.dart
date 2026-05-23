@@ -52,7 +52,7 @@ class AppColors {
   static const Color chipGray = Color(0xFFF3F4F6);
   static const Color chipGrayFg = Color(0xFF6B7280);
   static const Color darkBg = Color(0xFF0F0E1A);
-  static const Color darkCard = Color(0xFF1C1A2E);
+  static const Color darkCard = Color(0xFFF3F4F6);
   static const Color darkBorder = Color(0xFF2D2A45);
 
   // ─── Semantic ────────────────────────────────────────────────

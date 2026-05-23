@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_getx_app/app/core/configs/theme/app_colors.dart';
+import 'package:flutter_getx_app/app/core/widgets/app_bar.dart';
 import 'package:flutter_getx_app/app/modules/product/product_details/views/widgets/app_section_header.dart';
 import 'package:flutter_getx_app/app/modules/product/product_list/model/product_model.dart';
 import 'package:flutter_getx_app/app/modules/product/product_list/views/widgets/app_status_chip.dart';
@@ -44,50 +45,7 @@ class _ProductDetailContent extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.surface,
-      appBar: AppBar(
-        backgroundColor: AppColors.surface,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded,
-              color: AppColors.textPrimary),
-          onPressed: () => Get.back(),
-        ),
-        title: Row(
-          children: [
-            Container(
-              width: 26,
-              height: 26,
-              decoration: BoxDecoration(
-                color: AppColors.primary,
-                borderRadius: BorderRadius.circular(7),
-              ),
-              child: const Icon(Icons.receipt_long_rounded,
-                  color: Colors.white, size: 14),
-            ),
-            const SizedBox(width: 8),
-            const Text(
-              'InvoiceFlow',
-              style: TextStyle(
-                fontFamily: 'DMSans',
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: AppColors.textPrimary,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.edit_outlined,
-                color: AppColors.textPrimary, size: 20),
-            onPressed: () {},
-          ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Container(height: 1, color: AppColors.border),
-        ),
-      ),
+      appBar: const CustomAppAppbar(title: 'InvoiceFlow'),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,12 +109,15 @@ class _ProductDetailContent extends StatelessWidget {
                         child: _DetailItem(
                           label: 'Stock Level',
                           value: '${product.stockQty} units',
+                          needBg: true,
                         ),
                       ),
+                      const SizedBox(width: 12),
                       Expanded(
                         child: _DetailItem(
                           label: 'Unit Price',
                           value: fmt.format(product.price),
+                          needBg: true,
                         ),
                       ),
                     ],
@@ -216,42 +177,61 @@ class _ProductDetailContent extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
                   // Details section
-                  const Text(
-                    'Details',
-                    style: TextStyle(
-                      fontFamily: 'DMSans',
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  if (product.description != null)
-                    Text(
-                      product.description!,
-                      style: const TextStyle(
-                        fontFamily: 'DMSans',
-                        fontSize: 14,
-                        color: AppColors.textSecondary,
-                        height: 1.5,
-                      ),
-                    ),
-                  const SizedBox(height: 14),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _DetailItem(
-                          label: 'Category',
-                          value: product.category.label,
+                  Container(
+                    decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.05),
+                            blurRadius: 16,
+                            offset: const Offset(0, 2),
+                          )
+                        ]),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Details',
+                          style: TextStyle(
+                            fontFamily: 'DMSans',
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.textPrimary,
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: _DetailItem(
-                          label: 'Tax Rate',
-                          value: '${product.taxRate}%',
+                        const SizedBox(height: 10),
+                        if (product.description != null)
+                          Text(
+                            product.description!,
+                            style: const TextStyle(
+                              fontFamily: 'DMSans',
+                              fontSize: 14,
+                              color: AppColors.textSecondary,
+                              height: 1.5,
+                            ),
+                          ),
+                        const SizedBox(height: 14),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _DetailItem(
+                                label: 'Category',
+                                value: product.category.label,
+                              ),
+                            ),
+                            Expanded(
+                              child: _DetailItem(
+                                label: 'Tax Rate',
+                                value: '${product.taxRate}%',
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 24),
                   // Recent Invoices
@@ -264,7 +244,7 @@ class _ProductDetailContent extends StatelessWidget {
                     const SizedBox(height: 12),
                     ...product.recentInvoices.map(
                       (inv) => Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
+                        padding: const EdgeInsets.only(bottom: 12),
                         child: _ProductInvoiceRow(
                           invoice: inv,
                           fmt: fmt,
@@ -273,7 +253,6 @@ class _ProductDetailContent extends StatelessWidget {
                       ),
                     ),
                   ],
-                  const SizedBox(height: 40),
                 ],
               ),
             ),
@@ -287,33 +266,51 @@ class _ProductDetailContent extends StatelessWidget {
 class _DetailItem extends StatelessWidget {
   final String label;
   final String value;
+  final bool needBg;
 
-  const _DetailItem({required this.label, required this.value});
+  const _DetailItem(
+      {required this.label, required this.value,  this.needBg=false});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontFamily: 'DMSans',
-            fontSize: 12,
-            color: AppColors.textTertiary,
+    return Container(
+      decoration: needBg
+          ? BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 16,
+                    offset: const Offset(0, 2),
+                  )
+                ])
+          : null,
+      padding:needBg? const EdgeInsets.symmetric(horizontal: 12, vertical: 12):EdgeInsets.zero,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              fontFamily: 'DMSans',
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+              color: AppColors.textTertiary,
+            ),
           ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          value,
-          style: const TextStyle(
-            fontFamily: 'DMSans',
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            color: AppColors.textPrimary,
+          const SizedBox(height: 2),
+          Text(
+            value,
+            style: const TextStyle(
+              fontFamily: 'DMSans',
+              fontSize: 13,
+              // fontWeight: FontWeight.w500,
+              color: AppColors.grey600,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -333,19 +330,24 @@ class _ProductInvoiceRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final isPaid = invoice.status == 'PAID';
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.border),
-      ),
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 16,
+              offset: const Offset(0, 2),
+            )
+          ]),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
       child: Row(
         children: [
           Container(
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.08),
+              color: AppColors.primary.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(10),
             ),
             child: const Icon(Icons.receipt_outlined,

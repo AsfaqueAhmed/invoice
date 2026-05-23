@@ -85,12 +85,14 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           RichText(
             text: TextSpan(
               text: widget.title,
-              style: AppTextStyles.titleMedium,
+              style: AppTextStyles.titleSmall.copyWith(
+                color: AppColors.textPrimary
+              ),
               children: [
                 if (widget.isRequired)
                   TextSpan(
-                    text: "*",
-                    style: AppTextStyles.titleMedium.copyWith(
+                    text: " *",
+                    style: AppTextStyles.titleSmall.copyWith(
                       color: AppColors.error,
                     ),
                   ),
@@ -136,7 +138,9 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                               : true
                           : widget.isPassword
                       : widget.isPassword,
-                  style: AppTextStyles.titleLarge,
+                  style: AppTextStyles.bodyLarge.copyWith(
+                    color: AppColors.textSecondary
+                  ),
                   minLines: widget.minLines,
                   maxLines: widget.maxLines,
                   autovalidateMode: widget.autoValidateMode,

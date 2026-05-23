@@ -17,104 +17,106 @@ class CustomerListView extends GetView<CustomerListController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: Column(
-        children: [
-          // Search Bar
-          Padding(
-            padding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: AppSearchBar(
-              hint: 'Search by name or phone...',
-              onChanged: (v) => controller.searchQuery.value = v,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Search Bar
+            Padding(
+              padding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: AppSearchBar(
+                hint: 'Search by name or phone...',
+                onChanged: (v) => controller.searchQuery.value = v,
+              ),
             ),
-          ),
-          // Stats Row
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Obx(() => _StatsRow(
-              totalCustomers: controller.totalCustomers,
-              totalOverdue: controller.totalOverdue,
-              pendingCount: controller.pendingCount,
-            )),
-          ),
-          const SizedBox(height: 16),
-          // Section Header
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Active Customers',
-                  style: TextStyle(
-                    fontFamily: 'DMSans',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.border),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Row(
-                    children: [
-                      Icon(Icons.tune_rounded,
-                          size: 14, color: AppColors.textSecondary),
-                      SizedBox(width: 4),
-                      Text(
-                        'Filter',
-                        style: TextStyle(
-                          fontFamily: 'DMSans',
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+            // Stats Row
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Obx(() => _StatsRow(
+                totalCustomers: controller.totalCustomers,
+                totalOverdue: controller.totalOverdue,
+                pendingCount: controller.pendingCount,
+              )),
             ),
-          ),
-          const SizedBox(height: 12),
-          // Customer List
-          Expanded(
-            child: Obx(() {
-              if (controller.isLoading.value) {
-                return const Center(
-                    child: CircularProgressIndicator(
-                        color: AppColors.primary));
-              }
-              if (controller.filteredCustomers.isEmpty) {
-                return const Center(
-                  child: Text(
-                    'No customers found',
+            const SizedBox(height: 16),
+            // Section Header
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Active Customers',
                     style: TextStyle(
-                        fontFamily: 'DMSans',
-                        color: AppColors.textSecondary),
+                      fontFamily: 'DMSans',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textPrimary,
+                    ),
                   ),
-                );
-              }
-              return ListView.separated(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 100),
-                itemCount: controller.filteredCustomers.length,
-                separatorBuilder: (_, __) =>
-                const SizedBox(height: 10),
-                itemBuilder: (ctx, i) {
-                  final customer = controller.filteredCustomers[i];
-                  return _CustomerCard(
-                    customer: customer,
-                    onTap: () => controller.selectCustomer(customer),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppColors.border),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Row(
+                      children: [
+                        Icon(Icons.tune_rounded,
+                            size: 14, color: AppColors.textSecondary),
+                        SizedBox(width: 4),
+                        Text(
+                          'Filter',
+                          style: TextStyle(
+                            fontFamily: 'DMSans',
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+            // Customer List
+            Expanded(
+              child: Obx(() {
+                if (controller.isLoading.value) {
+                  return const Center(
+                      child: CircularProgressIndicator(
+                          color: AppColors.primary));
+                }
+                if (controller.filteredCustomers.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      'No customers found',
+                      style: TextStyle(
+                          fontFamily: 'DMSans',
+                          color: AppColors.textSecondary),
+                    ),
                   );
-                },
-              );
-            }),
-          ),
-        ],
+                }
+                return ListView.separated(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 100),
+                  itemCount: controller.filteredCustomers.length,
+                  separatorBuilder: (_, __) =>
+                  const SizedBox(height: 10),
+                  itemBuilder: (ctx, i) {
+                    final customer = controller.filteredCustomers[i];
+                    return _CustomerCard(
+                      customer: customer,
+                      onTap: () => controller.selectCustomer(customer),
+                    );
+                  },
+                );
+              }),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Get.toNamed(Routes.ADD_CUSTOMER),

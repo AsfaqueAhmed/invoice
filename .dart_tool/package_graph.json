@@ -10,7 +10,9 @@
         "cached_network_image",
         "flutter",
         "get",
-        "http"
+        "http",
+        "intl",
+        "shimmer"
       ],
       "devDependencies": [
         "flutter_lints",
@@ -51,6 +53,15 @@
         "flutter",
         "flutter_cache_manager",
         "octo_image"
+      ]
+    },
+    {
+      "name": "intl",
+      "version": "0.20.2",
+      "dependencies": [
+        "clock",
+        "meta",
+        "path"
       ]
     },
     {
@@ -148,7 +159,7 @@
     },
     {
       "name": "matcher",
-      "version": "0.12.17",
+      "version": "0.12.19",
       "dependencies": [
         "async",
         "meta",
@@ -159,7 +170,7 @@
     },
     {
       "name": "test_api",
-      "version": "0.7.7",
+      "version": "0.7.10",
       "dependencies": [
         "async",
         "boolean_selector",
@@ -243,14 +254,14 @@
     },
     {
       "name": "material_color_utilities",
-      "version": "0.11.1",
+      "version": "0.13.0",
       "dependencies": [
         "collection"
       ]
     },
     {
       "name": "characters",
-      "version": "1.4.0",
+      "version": "1.4.1",
       "dependencies": []
     },
     {
@@ -260,6 +271,17 @@
         "leak_tracker",
         "matcher",
         "meta"
+      ]
+    },
+    {
+      "name": "leak_tracker",
+      "version": "11.0.2",
+      "dependencies": [
+        "clock",
+        "collection",
+        "meta",
+        "path",
+        "vm_service"
       ]
     },
     {
@@ -342,6 +364,11 @@
       "dependencies": [
         "collection"
       ]
+    },
+    {
+      "name": "vm_service",
+      "version": "15.0.0",
+      "dependencies": []
     },
     {
       "name": "fixnum",
@@ -473,20 +500,11 @@
       ]
     },
     {
-      "name": "leak_tracker",
-      "version": "11.0.2",
+      "name": "shimmer",
+      "version": "3.0.0",
       "dependencies": [
-        "clock",
-        "collection",
-        "meta",
-        "path",
-        "vm_service"
+        "flutter"
       ]
-    },
-    {
-      "name": "vm_service",
-      "version": "15.0.0",
-      "dependencies": []
     }
   ],
   "configVersion": 1
