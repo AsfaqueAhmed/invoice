@@ -108,6 +108,16 @@ class DashboardController extends GetxController {
       return;
     }
 
+    if (destination == 'Customers') {
+      Get.toNamed(Routes.CUSTOMER_LIST);
+      return;
+    }
+
+    if (destination == 'Products') {
+      Get.toNamed(Routes.PRODUCT_LIST);
+      return;
+    }
+
     Get.snackbar(
       destination,
       '$destination module is not connected yet.',

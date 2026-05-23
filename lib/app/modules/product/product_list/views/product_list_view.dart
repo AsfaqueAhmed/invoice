@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_getx_app/app/core/configs/theme/app_colors.dart';
 import 'package:flutter_getx_app/app/core/constants/gaps.dart';
+import 'package:flutter_getx_app/app/core/widgets/app_bar.dart';
 import 'package:flutter_getx_app/app/core/widgets/custom_cache_network_image.dart';
 import 'package:flutter_getx_app/app/core/widgets/custom_text_field.dart';
 import 'package:flutter_getx_app/app/modules/product/product_list/model/product_model.dart';
@@ -20,6 +21,7 @@ class ProductListView extends GetView<ProductListController> {
     final fmt = NumberFormat.currency(symbol: '\$', decimalDigits: 0);
 
     return Scaffold(
+      appBar: const CustomAppAppbar(title: 'InvoiceFlow'),
       backgroundColor: AppColors.white,
       body: SafeArea(
         child: Column(

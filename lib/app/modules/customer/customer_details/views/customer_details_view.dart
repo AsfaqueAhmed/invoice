@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_getx_app/app/core/configs/theme/app_colors.dart';
 import 'package:flutter_getx_app/app/core/constants/gaps.dart';
 import 'package:flutter_getx_app/app/core/widgets/app_bar.dart';
+import 'package:flutter_getx_app/app/core/widgets/app_user_avatar.dart';
 import 'package:flutter_getx_app/app/modules/customer/customer_list/model/customer_model.dart';
 import 'package:flutter_getx_app/app/modules/product/product_details/views/widgets/app_section_header.dart';
 
@@ -30,7 +31,7 @@ class _CustomerDetailContent extends StatelessWidget {
     final dateFmt = DateFormat('MMM dd, yyyy');
 
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.surface,
       appBar: CustomAppAppbar(
         title: 'InvoiceFlow',
         action: [
@@ -51,25 +52,20 @@ class _CustomerDetailContent extends StatelessWidget {
               child: Column(
                 children: [
                   // Avatar
+
                   Container(
                     width: 80,
                     height: 80,
                     decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.12),
+                      color: AppColors.primary.withValues(alpha: 0.12),
                       shape: BoxShape.circle,
                       border: Border.all(
-                          color: AppColors.primary.withOpacity(0.2), width: 2),
+                          color: AppColors.primary.withValues(alpha: 0.2),
+                          width: 2),
                     ),
-                    child: Center(
-                      child: Text(
-                        customer.initials,
-                        style: const TextStyle(
-                          fontFamily: 'DMSans',
-                          fontSize: 28,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.primary,
-                        ),
-                      ),
+                    child: AppUserAvatar(
+                      initials: customer.initials,
+                      borderRadius: 100,
                     ),
                   ),
                   const SizedBox(height: 14),
@@ -145,7 +141,7 @@ class _CustomerDetailContent extends StatelessWidget {
                 ],
               ),
             ),
-            Gaps.v12,
+            Gaps.v16,
             // Total Due (large)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -283,7 +279,7 @@ class _CustomerDetailContent extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 itemCount: customer.invoices.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 8),
+                separatorBuilder: (_, __) => const SizedBox(height: 12),
                 itemBuilder: (ctx, i) {
                   final inv = customer.invoices[i];
                   return _InvoiceRow(

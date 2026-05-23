@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_getx_app/app/core/configs/theme/app_colors.dart';
 import 'package:flutter_getx_app/app/core/widgets/app_bar.dart';
+import 'package:flutter_getx_app/app/core/widgets/custom_cache_network_image.dart';
 import 'package:flutter_getx_app/app/modules/product/product_details/views/widgets/app_section_header.dart';
 import 'package:flutter_getx_app/app/modules/product/product_list/model/product_model.dart';
 import 'package:flutter_getx_app/app/modules/product/product_list/views/widgets/app_status_chip.dart';
@@ -53,16 +54,11 @@ class _ProductDetailContent extends StatelessWidget {
             // Product Image
             Stack(
               children: [
-                Container(
-                  width: double.infinity,
+                const CacheNetworkImage(
+                  imageUrl: '',
                   height: 220,
-                  color: const Color(0xFFF3F4F6),
-                  child: product.imageUrl != null
-                      ? Image.network(product.imageUrl!, fit: BoxFit.cover)
-                      : const Center(
-                          child: Icon(Icons.inventory_2_outlined,
-                              size: 60, color: AppColors.textTertiary),
-                        ),
+                  width: double.infinity,
+                  borderRadius: 16,
                 ),
                 Positioned(
                   top: 16,
@@ -269,7 +265,7 @@ class _DetailItem extends StatelessWidget {
   final bool needBg;
 
   const _DetailItem(
-      {required this.label, required this.value,  this.needBg=false});
+      {required this.label, required this.value, this.needBg = false});
 
   @override
   Widget build(BuildContext context) {
@@ -286,7 +282,9 @@ class _DetailItem extends StatelessWidget {
                   )
                 ])
           : null,
-      padding:needBg? const EdgeInsets.symmetric(horizontal: 12, vertical: 12):EdgeInsets.zero,
+      padding: needBg
+          ? const EdgeInsets.symmetric(horizontal: 12, vertical: 12)
+          : EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

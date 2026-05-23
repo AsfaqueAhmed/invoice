@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_getx_app/app/core/configs/theme/app_colors.dart';
+import 'package:flutter_getx_app/app/core/widgets/app_bar.dart';
+import 'package:flutter_getx_app/app/core/widgets/app_user_avatar.dart';
+import 'package:flutter_getx_app/app/modules/customer/customer_list/controllers/customer_list_controller.dart';
 import 'package:flutter_getx_app/app/modules/customer/customer_list/model/customer_model.dart';
-import 'package:flutter_getx_app/app/modules/customer/customer_list/views/widgets/app_avatar.dart';
 import 'package:flutter_getx_app/app/modules/customer/customer_list/views/widgets/app_search_bar.dart';
 import 'package:flutter_getx_app/app/modules/product/product_list/views/widgets/app_status_chip.dart';
 import 'package:flutter_getx_app/app/routes/app_pages.dart';
-
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../controllers/customer_list_controller.dart';
-
 class CustomerListView extends GetView<CustomerListController> {
   const CustomerListView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.scaffoldLight,
+      appBar: const CustomAppAppbar(title: 'InvoiceFlow'),
       body: SafeArea(
         child: Column(
           children: [
             // Search Bar
             Padding(
-              padding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: AppSearchBar(
                 hint: 'Search by name or phone...',
                 onChanged: (v) => controller.searchQuery.value = v,
@@ -33,10 +33,10 @@ class CustomerListView extends GetView<CustomerListController> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Obx(() => _StatsRow(
-                totalCustomers: controller.totalCustomers,
-                totalOverdue: controller.totalOverdue,
-                pendingCount: controller.pendingCount,
-              )),
+                    totalCustomers: controller.totalCustomers,
+                    totalOverdue: controller.totalOverdue,
+                    pendingCount: controller.pendingCount,
+                  )),
             ),
             const SizedBox(height: 16),
             // Section Header
@@ -55,8 +55,8 @@ class CustomerListView extends GetView<CustomerListController> {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       border: Border.all(color: AppColors.border),
                       borderRadius: BorderRadius.circular(8),
@@ -87,24 +87,22 @@ class CustomerListView extends GetView<CustomerListController> {
               child: Obx(() {
                 if (controller.isLoading.value) {
                   return const Center(
-                      child: CircularProgressIndicator(
-                          color: AppColors.primary));
+                      child:
+                          CircularProgressIndicator(color: AppColors.primary));
                 }
                 if (controller.filteredCustomers.isEmpty) {
                   return const Center(
                     child: Text(
                       'No customers found',
                       style: TextStyle(
-                          fontFamily: 'DMSans',
-                          color: AppColors.textSecondary),
+                          fontFamily: 'DMSans', color: AppColors.textSecondary),
                     ),
                   );
                 }
                 return ListView.separated(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 100),
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 60),
                   itemCount: controller.filteredCustomers.length,
-                  separatorBuilder: (_, __) =>
-                  const SizedBox(height: 10),
+                  separatorBuilder: (_, __) => const SizedBox(height: 10),
                   itemBuilder: (ctx, i) {
                     final customer = controller.filteredCustomers[i];
                     return _CustomerCard(
@@ -126,6 +124,7 @@ class CustomerListView extends GetView<CustomerListController> {
     );
   }
 }
+
 class _StatsRow extends StatelessWidget {
   final int totalCustomers;
   final double totalOverdue;
@@ -185,12 +184,17 @@ class _StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.border),
-      ),
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 16,
+              offset: const Offset(0, 2),
+            )
+          ]),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -211,8 +215,7 @@ class _StatCard extends StatelessWidget {
               fontFamily: 'DMSans',
               fontSize: 22,
               fontWeight: FontWeight.w700,
-              color:
-              isOverdue ? AppColors.overdue : AppColors.textPrimary,
+              color: isOverdue ? AppColors.overdue : AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 6),
@@ -268,10 +271,7 @@ class _CustomerCard extends StatelessWidget {
       case CustomerStatus.overdue:
         return (AppColors.chipRed, AppColors.chipRedFg);
       case CustomerStatus.vip:
-        return (
-        const Color(0xFFF5F3FF),
-        const Color(0xFF7C3AED)
-        );
+        return (const Color(0xFFF5F3FF), const Color(0xFF7C3AED));
       case CustomerStatus.inactive:
         return (AppColors.chipGray, AppColors.chipGrayFg);
     }
@@ -279,27 +279,31 @@ class _CustomerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fmt =
-    NumberFormat.currency(symbol: '\$', decimalDigits: 2);
+    final fmt = NumberFormat.currency(symbol: '\$', decimalDigits: 2);
     final dateFmt = DateFormat('MMM dd, yyyy');
     final chips = _chipColors;
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
         decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.border),
-        ),
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 16,
+                offset: const Offset(0, 2),
+              )
+            ]),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header row
             Row(
               children: [
-                AppAvatar(
+                AppUserAvatar(
                   imageUrl: customer.avatarUrl,
                   initials: customer.initials,
                   color: _avatarColor,

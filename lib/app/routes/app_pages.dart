@@ -40,7 +40,7 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const initial = Routes.invoices;
+  static const initial = Routes.dashboard;
 
   static final routes = [
     GetPage(
