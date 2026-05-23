@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_getx_app/app/core/configs/theme/app_colors.dart';
 import 'package:flutter_getx_app/app/modules/product/product_list/model/product_model.dart';
 import 'package:flutter_getx_app/app/modules/product/product_list/views/widgets/app_status_chip.dart';
+import 'package:flutter_getx_app/app/routes/app_pages.dart';
 
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -74,7 +75,7 @@ class ProductListView extends GetView<ProductListController> {
       ),
       // bottomNavigationBar: _BottomNav(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.toNamed('/products/add'),
+        onPressed: () => Get.toNamed(Routes.ADD_PRODUCT),
         backgroundColor: AppColors.primary,
         child: const Icon(Icons.add_rounded, color: Colors.white),
       ),

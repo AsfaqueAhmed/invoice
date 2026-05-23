@@ -4,6 +4,7 @@ import 'package:flutter_getx_app/app/modules/customer/customer_list/model/custom
 import 'package:flutter_getx_app/app/modules/customer/customer_list/views/widgets/app_avatar.dart';
 import 'package:flutter_getx_app/app/modules/customer/customer_list/views/widgets/app_search_bar.dart';
 import 'package:flutter_getx_app/app/modules/product/product_list/views/widgets/app_status_chip.dart';
+import 'package:flutter_getx_app/app/routes/app_pages.dart';
 
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -116,7 +117,7 @@ class CustomerListView extends GetView<CustomerListController> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.toNamed('/customers/add'),
+        onPressed: () => Get.toNamed(Routes.ADD_CUSTOMER),
         backgroundColor: AppColors.primary,
         child: const Icon(Icons.add_rounded, color: Colors.white),
       ),
