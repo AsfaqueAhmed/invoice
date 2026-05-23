@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_getx_app/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 
 import '../models/invoice_item.dart';
@@ -137,6 +138,11 @@ class InvoiceListController extends GetxController {
 
   void onNavTapped(String destination) {
     if (destination == 'Invoices') return;
+
+    if (destination == 'Customers') {
+      Get.toNamed(Routes.CUSTOMER_LIST);
+      return;
+    }
 
     Get.snackbar(
       destination,
