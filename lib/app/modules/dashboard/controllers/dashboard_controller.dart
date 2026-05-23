@@ -85,7 +85,14 @@ class DashboardController extends GetxController {
 
   void openInvoices() => Get.toNamed(Routes.invoices);
 
+  void openCreateInvoice() => Get.toNamed(Routes.createInvoice);
+
   void onQuickAction(String label) {
+    if (label == 'New Invoice') {
+      openCreateInvoice();
+      return;
+    }
+
     Get.snackbar(
       label,
       '$label flow is not connected yet.',

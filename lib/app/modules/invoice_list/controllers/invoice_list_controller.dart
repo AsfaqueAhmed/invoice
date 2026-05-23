@@ -132,11 +132,7 @@ class InvoiceListController extends GetxController {
   }
 
   void addInvoice() {
-    Get.snackbar(
-      'New invoice',
-      'Invoice creation flow is not connected yet.',
-      snackPosition: SnackPosition.BOTTOM,
-    );
+    Get.toNamed(Routes.createInvoice);
   }
 
   void onNavTapped(String destination) {
