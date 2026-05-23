@@ -30,9 +30,13 @@ The current user flow is:
    - Native Flutter version of the invoice list UI.
    - Includes search, status filters, receivable summary cards, invoice cards, swipe/tap card actions, FAB, and bottom navigation.
    - The FAB opens invoice creation.
+   - Tapping an invoice opens invoice details.
 
 6. `CreateInvoiceView`
    - Invoice creation form with customer selection, product search, line items, quantity controls, totals, discount, amount paid, due amount, and save/share/print actions.
+
+7. `InvoiceDetailsView`
+   - Paid invoice preview with status banner, invoice canvas, itemized table, payment summary, footer note, and share/print/edit/payment actions.
 
 ## Project Structure
 
@@ -80,6 +84,13 @@ Note: there is also an older duplicate splash folder using plural names (`views`
 - Binding: `lib/app/modules/create_invoice/bindings/create_invoice_binding.dart`
 - Model: `lib/app/modules/create_invoice/models/create_invoice_item.dart`
 
+### Invoice Details
+
+- View: `lib/app/modules/invoice_details/views/invoice_details_view.dart`
+- Controller: `lib/app/modules/invoice_details/controllers/invoice_details_controller.dart`
+- Binding: `lib/app/modules/invoice_details/bindings/invoice_details_binding.dart`
+- Model: `lib/app/modules/invoice_details/models/invoice_detail_item.dart`
+
 ### Dashboard
 
 - View: `lib/app/modules/dashboard/views/dashboard_view.dart`
@@ -106,6 +117,7 @@ Routes are managed with GetX named routing:
 - `/dashboard`: Dashboard screen.
 - `/invoices`: Invoice list screen.
 - `/create-invoice`: Create invoice screen.
+- `/invoice-details`: Invoice details screen.
 - `/home`: Placeholder home screen.
 
 Route registration lives in:
@@ -146,4 +158,5 @@ flutter analyze
 - Dashboard data is currently static sample data in `DashboardController`.
 - Invoice data is currently static sample data in `InvoiceListController`.
 - Create invoice line items are currently static sample data in `CreateInvoiceController`.
+- Invoice details are currently static sample data in `InvoiceDetailsController`.
 - Dashboard and invoice bottom navigation have placeholder actions for modules that are not connected yet.

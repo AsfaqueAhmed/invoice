@@ -64,7 +64,10 @@ class InvoiceListView extends GetView<InvoiceListController> {
               ...controller.filteredInvoices.map(
                 (invoice) => Padding(
                   padding: AppMargin.bottom16,
-                  child: _InvoiceCard(invoice: invoice),
+                  child: _InvoiceCard(
+                    invoice: invoice,
+                    onOpen: () => controller.openInvoiceDetails(invoice),
+                  ),
                 ),
               ),
           ],
@@ -275,9 +278,13 @@ class _SummaryCard extends StatelessWidget {
 }
 
 class _InvoiceCard extends StatefulWidget {
-  const _InvoiceCard({required this.invoice});
+  const _InvoiceCard({
+    required this.invoice,
+    required this.onOpen,
+  });
 
   final InvoiceItem invoice;
+  final VoidCallback onOpen;
 
   @override
   State<_InvoiceCard> createState() => _InvoiceCardState();
@@ -302,9 +309,12 @@ class _InvoiceCardState extends State<_InvoiceCard> {
         });
       },
       onTap: () {
-        setState(() {
-          _dragOffset = _dragOffset == 0 ? -actionWidth : 0;
-        });
+        if (_dragOffset != 0) {
+          setState(() => _dragOffset = 0);
+          return;
+        }
+
+        widget.onOpen();
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(24),

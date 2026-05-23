@@ -135,6 +135,10 @@ class InvoiceListController extends GetxController {
     Get.toNamed(Routes.createInvoice);
   }
 
+  void openInvoiceDetails(InvoiceItem invoice) {
+    Get.toNamed(Routes.invoiceDetails, arguments: invoice);
+  }
+
   void onNavTapped(String destination) {
     if (destination == 'Invoices') return;
 

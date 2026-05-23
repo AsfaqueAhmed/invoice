@@ -8,6 +8,8 @@ import '../modules/dashboard/bindings/dashboard_binding.dart';
 import '../modules/dashboard/views/dashboard_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/invoice_details/bindings/invoice_details_binding.dart';
+import '../modules/invoice_details/views/invoice_details_view.dart';
 import '../modules/invoice_list/bindings/invoice_list_binding.dart';
 import '../modules/invoice_list/views/invoice_list_view.dart';
 import '../modules/onboarding/bindings/onboarding_binding.dart';
@@ -51,6 +53,12 @@ class AppPages {
       name: Routes.createInvoice,
       page: () => const CreateInvoiceView(),
       binding: CreateInvoiceBinding(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: Routes.invoiceDetails,
+      page: () => const InvoiceDetailsView(),
+      binding: InvoiceDetailsBinding(),
       transition: Transition.rightToLeft,
     ),
     GetPage(
