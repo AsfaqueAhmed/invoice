@@ -8,6 +8,12 @@ import '../modules/customer/customer_details/bindings/customer_details_binding.d
 import '../modules/customer/customer_details/views/customer_details_view.dart';
 import '../modules/customer/customer_list/bindings/customer_list_binding.dart';
 import '../modules/customer/customer_list/views/customer_list_view.dart';
+import '../modules/customer_add/bindings/customer_add_binding.dart';
+import '../modules/customer_add/views/customer_add_view.dart';
+import '../modules/customer_details/bindings/customer_details_binding.dart';
+import '../modules/customer_details/views/customer_details_view.dart';
+import '../modules/customer_list/bindings/customer_list_binding.dart';
+import '../modules/customer_list/views/customer_list_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/invoice_list/bindings/invoice_list_binding.dart';
@@ -28,7 +34,7 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const initial = Routes.CUSTOMER_LIST;
+  static const initial = Routes.splash;
 
   static final routes = [
     GetPage(
@@ -65,6 +71,21 @@ class AppPages {
       name: _Paths.ONBOARDING,
       page: () => const OnboardingView(),
       binding: OnboardingBinding(),
+    ),
+    GetPage(
+      name: _Paths.CUSTOMER_LIST,
+      page: () => const CustomerListView(),
+      binding: CustomerListBinding(),
+    ),
+    GetPage(
+      name: _Paths.CUSTOMER_ADD,
+      page: () => const CustomerAddView(),
+      binding: CustomerAddBinding(),
+    ),
+    GetPage(
+      name: _Paths.CUSTOMER_DETAILS,
+      page: () => const CustomerDetailsView(),
+      binding: CustomerDetailsBinding(),
     ),
     GetPage(
       name: _Paths.CUSTOMER_LIST,
