@@ -63,7 +63,7 @@ class BusinessSetupController extends GetxController {
 
       await Future.delayed(const Duration(milliseconds: 600));
 
-      Get.offAllNamed(Routes.home);
+      Get.offAllNamed(Routes.invoices);
     } catch (e) {
       Get.snackbar(
         'Error',

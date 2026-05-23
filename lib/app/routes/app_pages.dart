@@ -10,6 +10,8 @@ import '../modules/customer/customer_list/bindings/customer_list_binding.dart';
 import '../modules/customer/customer_list/views/customer_list_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/invoice_list/bindings/invoice_list_binding.dart';
+import '../modules/invoice_list/views/invoice_list_view.dart';
 import '../modules/onboarding/bindings/onboarding_binding.dart';
 import '../modules/onboarding/views/onboarding_view.dart';
 import '../modules/product/add_product/bindings/add_product_binding.dart';
@@ -39,6 +41,12 @@ class AppPages {
       name: Routes.home,
       page: () => const HomeView(),
       binding: HomeBinding(),
+      transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: Routes.invoices,
+      page: () => const InvoiceListView(),
+      binding: InvoiceListBinding(),
       transition: Transition.fadeIn,
     ),
     GetPage(
