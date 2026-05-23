@@ -7,6 +7,7 @@ class AppTheme {
 
   static ThemeData get light => ThemeData(
         useMaterial3: true,
+        fontFamily: AppTextStyles.fontFamily,
         brightness: Brightness.light,
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppColors.primary,
@@ -52,22 +53,27 @@ class AppTheme {
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         ),
-        textTheme: TextTheme(
+        textTheme: const TextTheme(
           displayLarge: AppTextStyles.displayLarge,
           displayMedium: AppTextStyles.displayMedium,
           headlineLarge: AppTextStyles.headlineLarge,
           headlineMedium: AppTextStyles.headlineMedium,
+          headlineSmall: AppTextStyles.headlineSmall,
           titleLarge: AppTextStyles.titleLarge,
           titleMedium: AppTextStyles.titleMedium,
+          titleSmall: AppTextStyles.titleSmall,
           bodyLarge: AppTextStyles.bodyLarge,
           bodyMedium: AppTextStyles.bodyMedium,
+          bodySmall: AppTextStyles.bodySmall,
           labelLarge: AppTextStyles.labelLarge,
           labelMedium: AppTextStyles.labelMedium,
+          labelSmall: AppTextStyles.labelSmall,
         ),
       );
 
   static ThemeData get dark => ThemeData(
         useMaterial3: true,
+        fontFamily: AppTextStyles.fontFamily,
         brightness: Brightness.dark,
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppColors.primary,
@@ -113,6 +119,22 @@ class AppTheme {
           fillColor: AppColors.grey800,
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        ),
+        textTheme: const TextTheme(
+          displayLarge: AppTextStyles.displayLarge,
+          displayMedium: AppTextStyles.displayMedium,
+          headlineLarge: AppTextStyles.headlineLarge,
+          headlineMedium: AppTextStyles.headlineMedium,
+          headlineSmall: AppTextStyles.headlineSmall,
+          titleLarge: AppTextStyles.titleLarge,
+          titleMedium: AppTextStyles.titleMedium,
+          titleSmall: AppTextStyles.titleSmall,
+          bodyLarge: AppTextStyles.bodyLarge,
+          bodyMedium: AppTextStyles.bodyMedium,
+          bodySmall: AppTextStyles.bodySmall,
+          labelLarge: AppTextStyles.labelLarge,
+          labelMedium: AppTextStyles.labelMedium,
+          labelSmall: AppTextStyles.labelSmall,
         ),
       );
 }

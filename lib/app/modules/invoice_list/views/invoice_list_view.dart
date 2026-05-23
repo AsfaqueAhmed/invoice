@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import '../../../core/configs/text_style/app_text_styles.dart';
 import '../../../core/configs/theme/app_colors.dart';
 import '../../../core/constants/gaps.dart';
+import '../../../core/constants/margin.dart';
+import '../../../core/constants/padding.dart';
 import '../controllers/invoice_list_controller.dart';
 import '../models/invoice_item.dart';
 
@@ -48,7 +50,7 @@ class InvoiceListView extends GetView<InvoiceListController> {
       ),
       body: Obx(
         () => ListView(
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 120),
+          padding: AppPadding.page.copyWith(bottom: 120),
           children: [
             _SearchField(controller: controller),
             Gaps.v16,
@@ -61,7 +63,7 @@ class InvoiceListView extends GetView<InvoiceListController> {
             else
               ...controller.filteredInvoices.map(
                 (invoice) => Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
+                  padding: AppMargin.bottom16,
                   child: _InvoiceCard(invoice: invoice),
                 ),
               ),
@@ -113,8 +115,7 @@ class _SearchField extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 17),
+        contentPadding: AppPadding.h16.add(AppPadding.v16),
       ),
     );
   }
@@ -135,7 +136,7 @@ class _FilterChips extends StatelessWidget {
             .map(
               (filter) => Obx(
                 () => Padding(
-                  padding: const EdgeInsets.only(right: 8),
+                  padding: AppPadding.right8,
                   child: ChoiceChip(
                     selected: controller.selectedFilter.value == filter,
                     label: Text(filter),
@@ -149,8 +150,7 @@ class _FilterChips extends StatelessWidget {
                     ),
                     side: BorderSide.none,
                     shape: const StadiumBorder(),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: AppPadding.h12.add(AppPadding.v8),
                   ),
                 ),
               ),
@@ -235,7 +235,7 @@ class _SummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       constraints: const BoxConstraints(minHeight: 104),
-      padding: const EdgeInsets.all(16),
+      padding: AppPadding.all16,
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(24),
@@ -288,7 +288,7 @@ class _InvoiceCardState extends State<_InvoiceCard> {
 
   @override
   Widget build(BuildContext context) {
-    final actionWidth = 80.0;
+    const actionWidth = 80.0;
 
     return GestureDetector(
       onHorizontalDragUpdate: (details) {
@@ -337,7 +337,7 @@ class _InvoiceCardState extends State<_InvoiceCard> {
               duration: const Duration(milliseconds: 180),
               curve: Curves.easeOut,
               transform: Matrix4.translationValues(_dragOffset, 0, 0),
-              padding: const EdgeInsets.all(16),
+              padding: AppPadding.all16,
               decoration: BoxDecoration(
                 color: AppColors.white,
                 borderRadius: BorderRadius.circular(24),
@@ -426,7 +426,7 @@ class _StatusBadge extends StatelessWidget {
     final style = _statusStyle(status);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: AppPadding.h12.add(AppPadding.v4),
       decoration: BoxDecoration(
         color: style.backgroundColor,
         borderRadius: BorderRadius.circular(999),
@@ -512,7 +512,7 @@ class _EmptyInvoices extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: AppPadding.all24,
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(24),

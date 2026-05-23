@@ -7,6 +7,7 @@ abstract class Routes {
   static const onboarding = _Paths.onboarding;
   static const businessSetup = _Paths.businessSetup;
   static const home = _Paths.home;
+  static const dashboard = _Paths.dashboard;
   static const invoices = _Paths.invoices;
   static const ONBOARDING = _Paths.ONBOARDING;
 }
@@ -16,6 +17,7 @@ abstract class _Paths {
   static const onboarding = '/onboarding';
   static const businessSetup = '/business-setup';
   static const home = '/home';
+  static const dashboard = '/dashboard';
   static const invoices = '/invoices';
   static const ONBOARDING = '/onboarding';
 }

@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import '../modules/business_setup/bindings/business_setup_binding.dart';
 import '../modules/business_setup/views/business_setup_view.dart';
+import '../modules/dashboard/bindings/dashboard_binding.dart';
+import '../modules/dashboard/views/dashboard_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/invoice_list/bindings/invoice_list_binding.dart';
@@ -29,6 +31,12 @@ class AppPages {
       name: Routes.home,
       page: () => const HomeView(),
       binding: HomeBinding(),
+      transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: Routes.dashboard,
+      page: () => const DashboardView(),
+      binding: DashboardBinding(),
       transition: Transition.fadeIn,
     ),
     GetPage(

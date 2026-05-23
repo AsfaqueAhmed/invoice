@@ -253,14 +253,3 @@ class _Dot extends StatelessWidget {
     );
   }
 }
-
-// ─── Missing label style extension ──────────────────────────────
-
-extension _TextStyleX on AppTextStyles {
-  static TextStyle get labelSmall => const TextStyle(
-        fontSize: 11,
-        fontWeight: FontWeight.w500,
-        letterSpacing: 0.5,
-        height: 1.45,
-      );
-}
