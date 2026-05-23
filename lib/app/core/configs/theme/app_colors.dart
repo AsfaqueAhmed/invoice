@@ -27,6 +27,34 @@ class AppColors {
   static const Color grey800 = Color(0xFF1F2937);
   static const Color grey900 = Color(0xFF111827);
 
+  //for customer and product
+  static const Color background = Color(0xFFF8F7FF);
+  static const Color surface = Color(0xFFFFFFFF);
+  static const Color cardBg = Color(0xFFFFFFFF);
+  static const Color textPrimary = Color(0xFF1A1A2E);
+  static const Color textSecondary = Color(0xFF6B7280);
+  static const Color textTertiary = Color(0xFF9CA3AF);
+  static const Color border = Color(0xFFE5E7EB);
+  static const Color overdue = Color(0xFFEF4444);
+  static const Color paid = Color(0xFF10B981);
+  static const Color pending = Color(0xFFF59E0B);
+  static const Color lowStock = Color(0xFFF59E0B);
+  static const Color outOfStock = Color(0xFFEF4444);
+  static const Color inStock = Color(0xFF10B981);
+  static const Color chipBlue = Color(0xFFEEF2FF);
+  static const Color chipBlueFg = Color(0xFF5B4CF5);
+  static const Color chipGreen = Color(0xFFECFDF5);
+  static const Color chipGreenFg = Color(0xFF059669);
+  static const Color chipRed = Color(0xFFFEF2F2);
+  static const Color chipRedFg = Color(0xFFDC2626);
+  static const Color chipAmber = Color(0xFFFFFBEB);
+  static const Color chipAmberFg = Color(0xFFD97706);
+  static const Color chipGray = Color(0xFFF3F4F6);
+  static const Color chipGrayFg = Color(0xFF6B7280);
+  static const Color darkBg = Color(0xFF0F0E1A);
+  static const Color darkCard = Color(0xFF1C1A2E);
+  static const Color darkBorder = Color(0xFF2D2A45);
+
   // ─── Semantic ────────────────────────────────────────────────
   static const Color success = Color(0xFF10B981);
   static const Color warning = Color(0xFFF59E0B);
