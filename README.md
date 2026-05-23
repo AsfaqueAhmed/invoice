@@ -19,11 +19,24 @@ The current user flow is:
 3. `BusinessSetupView`
    - Collects business name, phone number, address, currency, and optional logo.
    - Form submission is currently simulated.
-   - Successful setup opens the invoice list.
+   - Successful setup opens the dashboard.
 
-4. `InvoiceListView`
+4. `DashboardView`
+   - Shows business summary cards, quick actions, recent invoices, FAB, and bottom navigation.
+   - The `New Invoice` quick action opens invoice creation.
+   - The `Invoices` tab and `See All` action open the invoice list.
+
+5. `InvoiceListView`
    - Native Flutter version of the invoice list UI.
    - Includes search, status filters, receivable summary cards, invoice cards, swipe/tap card actions, FAB, and bottom navigation.
+   - The FAB opens invoice creation.
+   - Tapping an invoice opens invoice details.
+
+6. `CreateInvoiceView`
+   - Invoice creation form with customer selection, product search, line items, quantity controls, totals, discount, amount paid, due amount, and save/share/print actions.
+
+7. `InvoiceDetailsView`
+   - Paid invoice preview with status banner, invoice canvas, itemized table, payment summary, footer note, and share/print/edit/payment actions.
 
 ## Project Structure
 
@@ -64,13 +77,34 @@ Note: there is also an older duplicate splash folder using plural names (`views`
 - Binding: `lib/app/modules/invoice_list/bindings/invoice_list_binding.dart`
 - Model: `lib/app/modules/invoice_list/models/invoice_item.dart`
 
+### Create Invoice
+
+- View: `lib/app/modules/create_invoice/views/create_invoice_view.dart`
+- Controller: `lib/app/modules/create_invoice/controllers/create_invoice_controller.dart`
+- Binding: `lib/app/modules/create_invoice/bindings/create_invoice_binding.dart`
+- Model: `lib/app/modules/create_invoice/models/create_invoice_item.dart`
+
+### Invoice Details
+
+- View: `lib/app/modules/invoice_details/views/invoice_details_view.dart`
+- Controller: `lib/app/modules/invoice_details/controllers/invoice_details_controller.dart`
+- Binding: `lib/app/modules/invoice_details/bindings/invoice_details_binding.dart`
+- Model: `lib/app/modules/invoice_details/models/invoice_detail_item.dart`
+
+### Dashboard
+
+- View: `lib/app/modules/dashboard/views/dashboard_view.dart`
+- Controller: `lib/app/modules/dashboard/controllers/dashboard_controller.dart`
+- Binding: `lib/app/modules/dashboard/bindings/dashboard_binding.dart`
+- Models: `lib/app/modules/dashboard/models/dashboard_summary.dart`
+
 ### Home
 
 - View: `lib/app/modules/home/views/home_view.dart`
 - Controller: `lib/app/modules/home/controllers/home_controller.dart`
 - Binding: `lib/app/modules/home/bindings/home_binding.dart`
 
-The home module is still mostly the default scaffold screen. The main product flow now lands on the invoice list after business setup.
+The home module is still mostly the default scaffold screen. The main product flow now lands on the dashboard after business setup.
 
 ## Routing
 
@@ -80,7 +114,10 @@ Routes are managed with GetX named routing:
 - `/splash`: Splash screen.
 - `/onboarding`: Onboarding screen.
 - `/business-setup`: Business setup form.
+- `/dashboard`: Dashboard screen.
 - `/invoices`: Invoice list screen.
+- `/create-invoice`: Create invoice screen.
+- `/invoice-details`: Invoice details screen.
 - `/home`: Placeholder home screen.
 
 Route registration lives in:
@@ -118,5 +155,8 @@ flutter analyze
 
 - Business profile persistence is not implemented yet.
 - Logo picking is a placeholder and needs an image picker integration.
+- Dashboard data is currently static sample data in `DashboardController`.
 - Invoice data is currently static sample data in `InvoiceListController`.
-- The invoice bottom navigation has placeholder actions for modules that are not connected yet.
+- Create invoice line items are currently static sample data in `CreateInvoiceController`.
+- Invoice details are currently static sample data in `InvoiceDetailsController`.
+- Dashboard and invoice bottom navigation have placeholder actions for modules that are not connected yet.

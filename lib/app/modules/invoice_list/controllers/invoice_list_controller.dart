@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_getx_app/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 
+import '../../../core/configs/text_style/app_text_styles.dart';
+import '../../../core/constants/gaps.dart';
+import '../../../core/constants/padding.dart';
+import '../../../routes/app_pages.dart';
 import '../models/invoice_item.dart';
 
 class InvoiceListController extends GetxController {
@@ -91,16 +95,16 @@ class InvoiceListController extends GetxController {
     Get.bottomSheet<void>(
       SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+          padding: AppPadding.page.copyWith(bottom: 24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
                 'Filter invoices',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                style: AppTextStyles.titleLarge,
               ),
-              const SizedBox(height: 12),
+              Gaps.v12,
               ...filters.map(
                 (filter) => Obx(
                   () => RadioListTile<String>(
@@ -129,11 +133,11 @@ class InvoiceListController extends GetxController {
   }
 
   void addInvoice() {
-    Get.snackbar(
-      'New invoice',
-      'Invoice creation flow is not connected yet.',
-      snackPosition: SnackPosition.BOTTOM,
-    );
+    Get.toNamed(Routes.createInvoice);
+  }
+
+  void openInvoiceDetails(InvoiceItem invoice) {
+    Get.toNamed(Routes.invoiceDetails, arguments: invoice);
   }
 
   void onNavTapped(String destination) {
@@ -146,6 +150,11 @@ class InvoiceListController extends GetxController {
 
     if (destination == 'Products') {
       Get.toNamed(Routes.PRODUCT_LIST);
+      return;
+    }
+
+    if (destination == 'Home') {
+      Get.offNamed(Routes.dashboard);
       return;
     }
 

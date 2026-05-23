@@ -120,7 +120,8 @@ class BusinessSetupView extends GetView<BusinessSetupController> {
                   maxLines: 3,
                   textInputAction: TextInputAction.newline,
                   decoration: _inputDecoration(
-                    hint: '123 Creative Way, Suite 400\nSan Francisco, CA 94103',
+                    hint:
+                        '123 Creative Way, Suite 400\nSan Francisco, CA 94103',
                     prefixIcon: Icons.location_on_outlined,
                   ),
                 ),
@@ -210,8 +211,7 @@ class BusinessSetupView extends GetView<BusinessSetupController> {
         borderRadius: BorderRadius.circular(12),
         borderSide: const BorderSide(color: AppColors.error, width: 2),
       ),
-      contentPadding:
-          const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
     );
   }
 }
@@ -399,10 +399,10 @@ class _SubmitButton extends StatelessWidget {
         child: ElevatedButton(
           onPressed: (isLoading || isSuccess) ? null : onTap,
           style: ElevatedButton.styleFrom(
-            backgroundColor:
-                isSuccess ? AppColors.success : AppColors.primary,
-            disabledBackgroundColor:
-                isSuccess ? AppColors.success : AppColors.primary.withOpacity(0.7),
+            backgroundColor: isSuccess ? AppColors.success : AppColors.primary,
+            disabledBackgroundColor: isSuccess
+                ? AppColors.success
+                : AppColors.primary.withOpacity(0.7),
             foregroundColor: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(99),
@@ -449,22 +449,4 @@ class _SubmitButton extends StatelessWidget {
       ),
     );
   }
-}
-
-// ─── Missing style shims ──────────────────────────────────────────
-
-extension on AppTextStyles {
-  static TextStyle get bodySmall => const TextStyle(
-        fontSize: 12,
-        fontWeight: FontWeight.w400,
-        letterSpacing: 0.4,
-        height: 1.33,
-      );
-
-  static TextStyle get labelMedium => const TextStyle(
-        fontSize: 12,
-        fontWeight: FontWeight.w500,
-        letterSpacing: 0.5,
-        height: 1.33,
-      );
 }

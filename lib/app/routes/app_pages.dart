@@ -14,8 +14,14 @@ import '../modules/customer_details/bindings/customer_details_binding.dart' hide
 import '../modules/customer_details/views/customer_details_view.dart' hide CustomerDetailsView;
 import '../modules/customer_list/bindings/customer_list_binding.dart' hide CustomerListBinding;
 import '../modules/customer_list/views/customer_list_view.dart' hide CustomerListView;
+import '../modules/create_invoice/bindings/create_invoice_binding.dart';
+import '../modules/create_invoice/views/create_invoice_view.dart';
+import '../modules/dashboard/bindings/dashboard_binding.dart';
+import '../modules/dashboard/views/dashboard_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/invoice_details/bindings/invoice_details_binding.dart';
+import '../modules/invoice_details/views/invoice_details_view.dart';
 import '../modules/invoice_list/bindings/invoice_list_binding.dart';
 import '../modules/invoice_list/views/invoice_list_view.dart';
 import '../modules/onboarding/bindings/onboarding_binding.dart';
@@ -50,10 +56,28 @@ class AppPages {
       transition: Transition.fadeIn,
     ),
     GetPage(
+      name: Routes.dashboard,
+      page: () => const DashboardView(),
+      binding: DashboardBinding(),
+      transition: Transition.fadeIn,
+    ),
+    GetPage(
       name: Routes.invoices,
       page: () => const InvoiceListView(),
       binding: InvoiceListBinding(),
       transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: Routes.createInvoice,
+      page: () => const CreateInvoiceView(),
+      binding: CreateInvoiceBinding(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: Routes.invoiceDetails,
+      page: () => const InvoiceDetailsView(),
+      binding: InvoiceDetailsBinding(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: Routes.onboarding,

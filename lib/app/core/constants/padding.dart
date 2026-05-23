@@ -20,6 +20,9 @@ class AppPadding {
   static const EdgeInsets h24 = EdgeInsets.symmetric(horizontal: 24);
   static const EdgeInsets h32 = EdgeInsets.symmetric(horizontal: 32);
 
+  // Directional
+  static const EdgeInsets right8 = EdgeInsets.only(right: 8);
+
   // All
   static const EdgeInsets all4 = EdgeInsets.all(4);
   static const EdgeInsets all8 = EdgeInsets.all(8);
@@ -30,6 +33,8 @@ class AppPadding {
   static const EdgeInsets all32 = EdgeInsets.all(32);
 
   // Page / Screen padding
-  static const EdgeInsets page = EdgeInsets.symmetric(horizontal: 20, vertical: 16);
-  static const EdgeInsets pageLarge = EdgeInsets.symmetric(horizontal: 24, vertical: 24);
+  static const EdgeInsets page =
+      EdgeInsets.symmetric(horizontal: 20, vertical: 16);
+  static const EdgeInsets pageLarge =
+      EdgeInsets.symmetric(horizontal: 24, vertical: 24);
 }
