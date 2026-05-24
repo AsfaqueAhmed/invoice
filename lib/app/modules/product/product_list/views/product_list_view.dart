@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_getx_app/app/core/configs/theme/app_color.dart';
 import 'package:flutter_getx_app/app/core/configs/theme/app_colors.dart';
 import 'package:flutter_getx_app/app/core/constants/gaps.dart';
 import 'package:flutter_getx_app/app/core/widgets/app_bar.dart';
+import 'package:flutter_getx_app/app/core/widgets/app_bottom_nav.dart';
+import 'package:flutter_getx_app/app/core/widgets/app_card.dart';
 import 'package:flutter_getx_app/app/core/widgets/custom_cache_network_image.dart';
 import 'package:flutter_getx_app/app/core/widgets/custom_text_field.dart';
 import 'package:flutter_getx_app/app/modules/product/product_list/model/product_model.dart';
@@ -18,350 +21,102 @@ class ProductListView extends GetView<ProductListController> {
 
   @override
   Widget build(BuildContext context) {
-    final fmt = NumberFormat.currency(symbol: '\$', decimalDigits: 0);
-
+    final cs = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      appBar: const CustomAppAppbar(title: 'InvoiceFlow'),
-      backgroundColor: AppColors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Search
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
-              child: _DarkSearchBar(
-                onChanged: (v) => controller.searchQuery.value = v,
-              ),
-            ),
-            // Stats Row
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-              child: Obx(() => Row(
-                    children: [
-                      Expanded(
-                        child: _DarkStatCard(
-                          label: 'TOTAL VALUE',
-                          value: fmt.format(controller.totalInventoryValue),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: _DarkStatCard(
-                          label: 'LOW STOCK ITEMS',
-                          value: '${controller.lowStockCount}',
-                          isAlert: true,
-                        ),
-                      ),
-                    ],
-                  )),
-            ),
-            Gaps.v16,
-            // Product list
-            Expanded(
-              child: Obx(() {
-                if (controller.isLoading.value) {
-                  return const Center(
-                      child:
-                          CircularProgressIndicator(color: AppColors.primary));
-                }
-                return ListView.separated(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 100),
-                  itemCount: controller.filteredProducts.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 10),
-                  itemBuilder: (ctx, i) {
-                    final product = controller.filteredProducts[i];
-                    return _ProductCard(
-                      product: product,
-                      onTap: () => controller.selectProduct(product),
-                    );
-                  },
-                );
-              }),
-            ),
-          ],
+      floatingActionButton: FloatingActionButton(onPressed: controller.onAddProduct, child: const Icon(Icons.add_rounded, size: 28)),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 3),
+      body: CustomScrollView(slivers: [
+        SliverAppBar(
+          floating: true, snap: true,
+          backgroundColor: isDark ? AppColor.darkSurface : AppColors.surface, elevation: 0,
+          title: Text('Products', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: cs.primary)),
+          actions: [IconButton(icon: Icon(Icons.add_rounded, color: cs.onSurfaceVariant), onPressed: controller.onAddProduct)],
         ),
-      ),
-      // bottomNavigationBar: _BottomNav(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.toNamed(Routes.ADD_PRODUCT),
-        backgroundColor: AppColors.primary,
-        child: const Icon(Icons.add_rounded, color: Colors.white),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        SliverToBoxAdapter(child: Padding(padding: const EdgeInsets.all(20), child: Column(children: [
+          // Search + filter
+          Row(children: [
+            Expanded(child: TextField(controller: controller.searchController, onChanged: controller.onSearch,
+                decoration: InputDecoration(hintText: 'Search products...', prefixIcon: const Icon(Icons.search_rounded), contentPadding: const EdgeInsets.symmetric(vertical: 14)))),
+            const SizedBox(width: 10),
+            Container(width: 52, height: 52, decoration: BoxDecoration(color: cs.surfaceContainer, borderRadius: BorderRadius.circular(14)),
+                child: Icon(Icons.filter_list_rounded, color: cs.primary)),
+          ]),
+          const SizedBox(height: 16),
+          // Stats
+          Row(children: [
+            Expanded(child: Container(padding: const EdgeInsets.all(16), decoration: BoxDecoration(color: cs.surfaceContainerLow, borderRadius: BorderRadius.circular(20), border: Border.all(color: cs.outlineVariant.withOpacity(0.3))),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text('Total Value', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: cs.secondary, letterSpacing: 0.8)),
+                  const SizedBox(height: 4),
+                  Text(controller.totalValue, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: cs.onSurface)),
+                ]))),
+            const SizedBox(width: 12),
+            Expanded(child: Container(padding: const EdgeInsets.all(16), decoration: BoxDecoration(color: cs.surfaceContainerLow, borderRadius: BorderRadius.circular(20), border: Border.all(color: cs.outlineVariant.withOpacity(0.3))),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text('Low Stock', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: cs.secondary, letterSpacing: 0.8)),
+                  const SizedBox(height: 4),
+                  Row(children: [
+                    Text('${controller.lowStockCount}', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: cs.error)),
+                    const SizedBox(width: 6),
+                    Container(width: 8, height: 8, decoration: BoxDecoration(color: cs.error, shape: BoxShape.circle)),
+                  ]),
+                ]))),
+          ]),
+          const SizedBox(height: 20),
+          // Product cards
+          Obx(() => Column(children: controller.filtered.map((p) => Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: AppCard(onTap: () => controller.onProductTap(p), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text(p['name'], style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15, color: p['status'] == 'outofstock' ? cs.onSurface.withOpacity(0.5) : cs.onSurface)),
+                  Text('SKU: ${p['sku']}', style: TextStyle(fontSize: 11, color: cs.outline)),
+                ])),
+                _StockBadge(status: p['status']),
+              ]),
+              const SizedBox(height: 14),
+              Row(children: [
+                Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text('Stock Level', style: TextStyle(fontSize: 11, color: cs.secondary)),
+                  Row(crossAxisAlignment: CrossAxisAlignment.baseline, textBaseline: TextBaseline.alphabetic, children: [
+                    Text('${p['stock']}', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700,
+                        color: p['status'] == 'outofstock' ? cs.outline : p['status'] == 'lowstock' ? cs.error : cs.onSurface)),
+                    const SizedBox(width: 4),
+                    Text('units', style: TextStyle(fontSize: 11, color: cs.outline)),
+                  ]),
+                ])),
+                Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+                  Text('Unit Price', style: TextStyle(fontSize: 11, color: cs.secondary)),
+                  Text(p['price'], style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: cs.primary)),
+                ]),
+                const SizedBox(width: 12),
+                Container(width: 72, height: 72, decoration: BoxDecoration(color: cs.surfaceContainerLow, borderRadius: BorderRadius.circular(16), border: Border.all(color: cs.outlineVariant.withOpacity(0.3))),
+                    child: Icon(Icons.inventory_2_rounded, color: cs.outlineVariant, size: 28)),
+              ]),
+            ])),
+          )).toList())),
+          const SizedBox(height: 80),
+        ]))),
+      ]),
     );
   }
 }
 
-class _DarkSearchBar extends StatelessWidget {
-  final ValueChanged<String> onChanged;
-
-  const _DarkSearchBar({required this.onChanged});
-
+class _StockBadge extends StatelessWidget {
+  final String status;
+  const _StockBadge({required this.status});
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: CustomTextFormField(
-            hintText: 'Search products...',
-            onChanged: onChanged,
-            prefixIcon: const Padding(
-              padding: EdgeInsets.only(left: 12, right: 8),
-              child: Icon(
-                Icons.search_rounded,
-                size: 20,
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(width: 10),
-        Container(
-          width: 48,
-          height: 48,
-          decoration: BoxDecoration(
-            color: AppColors.cardBg,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.grey100),
-          ),
-          child: const Icon(
-            Icons.tune_rounded,
-            color: Color(0xFF9CA3AF),
-            size: 20,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _DarkStatCard extends StatelessWidget {
-  final String label;
-  final String value;
-  final bool isAlert;
-
-  const _DarkStatCard({
-    required this.label,
-    required this.value,
-    this.isAlert = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: AppColors.grey50,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.grey100),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textTertiary,
-              letterSpacing: 0.5,
-            ),
-          ),
-          Gaps.v4,
-          Row(
-            children: [
-              Text(
-                value,
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: !isAlert ? AppColors.textPrimary : AppColors.overdue,
-                ),
-              ),
-              if (isAlert) ...[
-                const SizedBox(width: 6),
-                Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: AppColors.overdue,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ProductCard extends StatelessWidget {
-  final ProductModel product;
-  final VoidCallback onTap;
-
-  const _ProductCard({required this.product, required this.onTap});
-
-  (Color, Color) get _stockColors {
-    switch (product.stockStatus) {
-      case StockStatus.inStock:
-        return (AppColors.chipGreen, AppColors.chipGreenFg);
-      case StockStatus.lowStock:
-        return (AppColors.chipAmber, AppColors.chipAmberFg);
-      case StockStatus.outOfStock:
-        return (AppColors.chipRed, AppColors.chipRedFg);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final fmt = NumberFormat.currency(symbol: '\$', decimalDigits: 2);
-    final colors = _stockColors;
-
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: AppColors.cardBg,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 16,
-              offset: const Offset(0, 2),
-            )
-          ],
-        ),
-        child: Column(
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        product.name,
-                        style: const TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                      Gaps.v4,
-                      Text(
-                        'SKU: ${product.sku}',
-                        style: const TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFF6B7280),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                AppStatusChip(
-                  label: product.stockStatus.label,
-                  bg: colors.$1,
-                  fg: colors.$2,
-                ),
-              ],
-            ),
-            Gaps.v4,
-            Row(
-              children: [
-                Expanded(
-                  child: _ProductMeta(
-                      label: 'Stock Level', value: '${product.stockQty} units'),
-                ),
-                const SizedBox(width: 24),
-                Expanded(
-                  child: _ProductMeta(
-                    label: 'Unit Price',
-                    value: fmt.format(product.price),
-                    isPrice: true,
-                  ),
-                ),
-                Gaps.h8,
-                Container(
-                  width: 70,
-                  height: 70,
-                  decoration: BoxDecoration(
-                    color: AppColors.grey100,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const CacheNetworkImage(
-                    imageUrl: '',
-                    height: 70,
-                    width: 70,
-                    borderRadius: 12,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            if (product.stockStatus == StockStatus.lowStock)
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
-                  child: LinearProgressIndicator(
-                    value: product.stockQty / 20,
-                    backgroundColor: AppColors.grey100,
-                    color: AppColors.overdue,
-                    minHeight: 4,
-                  ),
-                ),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ProductMeta extends StatelessWidget {
-  final String label;
-  final String value;
-  final bool isPrice;
-
-  const _ProductMeta({
-    required this.label,
-    required this.value,
-    this.isPrice = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontFamily: 'Inter',
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            color: AppColors.textTertiary,
-          ),
-        ),
-        Gaps.v4,
-        Text(
-          value,
-          style: TextStyle(
-            fontFamily: 'Inter',
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: isPrice ? AppColors.chipBlueFg : AppColors.textPrimary,
-          ),
-        ),
-      ],
-    );
+    final cs = Theme.of(context).colorScheme;
+    final (bg, fg, label) = switch (status) {
+      'instock'    => (const Color(0xFFE8F5E9), const Color(0xFF2E7D32), 'In Stock'),
+      'lowstock'   => (const Color(0xFFFFF8E1), const Color(0xFFF57F17), 'Low Stock'),
+      'outofstock' => (const Color(0xFFFFEBEE), const Color(0xFFC62828), 'Out of Stock'),
+      _ => (cs.surfaceContainerHigh, cs.onSurfaceVariant, 'Unknown'),
+    };
+    return Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(99)),
+        child: Text(label, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: fg)));
   }
 }

@@ -5,28 +5,57 @@ import 'package:get/get.dart';
 
 class AppBottomNav extends StatelessWidget {
   final int currentIndex;
+
   const AppBottomNav({super.key, required this.currentIndex});
 
   static const _items = [
-    _NavItem(icon: Icons.home_outlined, activeIcon: Icons.home_rounded, label: 'Home', route: Routes.home),
-    _NavItem(icon: Icons.description_outlined, activeIcon: Icons.description_rounded, label: 'Invoices', route: Routes.invoices),
-    _NavItem(icon: Icons.group_outlined, activeIcon: Icons.group_rounded, label: 'Customers', route: Routes.CUSTOMER_LIST),
-    _NavItem(icon: Icons.inventory_2_outlined, activeIcon: Icons.inventory_2_rounded, label: 'Products', route: Routes.PRODUCT_LIST),
-    _NavItem(icon: Icons.settings_outlined, activeIcon: Icons.settings_rounded, label: 'Settings', route: ''),
+    _NavItem(
+        icon: Icons.home_outlined,
+        activeIcon: Icons.home_rounded,
+        label: 'Home',
+        route: Routes.dashboard),
+    _NavItem(
+        icon: Icons.description_outlined,
+        activeIcon: Icons.description_rounded,
+        label: 'Invoices',
+        route: Routes.invoices),
+    _NavItem(
+        icon: Icons.group_outlined,
+        activeIcon: Icons.group_rounded,
+        label: 'Customers',
+        route: Routes.CUSTOMER_LIST),
+    _NavItem(
+        icon: Icons.inventory_2_outlined,
+        activeIcon: Icons.inventory_2_rounded,
+        label: 'Products',
+        route: Routes.PRODUCT_LIST),
+    _NavItem(
+        icon: Icons.settings_outlined,
+        activeIcon: Icons.settings_rounded,
+        label: 'Settings',
+        route: Routes.SETTINGS),
   ];
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bg = isDark ? AppColor.darkSurfaceContainer : AppColor.surfaceContainerLowest;
+    final bg = isDark
+        ? AppColor.darkSurfaceContainer
+        : AppColor.surfaceContainerLowest;
     final activeColor = isDark ? AppColor.primaryFixedDim : AppColor.primary;
-    final inactiveColor = isDark ? AppColor.secondaryFixedDim : AppColor.secondary;
+    final inactiveColor =
+        isDark ? AppColor.secondaryFixedDim : AppColor.secondary;
 
     return Container(
       height: 72,
       decoration: BoxDecoration(
         color: bg,
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 12, offset: const Offset(0, -4))],
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withOpacity(0.06),
+              blurRadius: 12,
+              offset: const Offset(0, -4))
+        ],
       ),
       child: Row(
         children: List.generate(_items.length, (i) {
@@ -45,12 +74,13 @@ class AppBottomNav extends StatelessWidget {
                   children: [
                     AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 4),
                       decoration: isActive
                           ? BoxDecoration(
-                        color: activeColor.withOpacity(0.12),
-                        borderRadius: BorderRadius.circular(20),
-                      )
+                              color: activeColor.withOpacity(0.12),
+                              borderRadius: BorderRadius.circular(20),
+                            )
                           : null,
                       child: Icon(
                         isActive ? item.activeIcon : item.icon,
@@ -63,7 +93,8 @@ class AppBottomNav extends StatelessWidget {
                       item.label,
                       style: TextStyle(
                         fontSize: 10,
-                        fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+                        fontWeight:
+                            isActive ? FontWeight.w600 : FontWeight.w500,
                         color: isActive ? activeColor : inactiveColor,
                         letterSpacing: 0.4,
                       ),
@@ -84,5 +115,10 @@ class _NavItem {
   final IconData activeIcon;
   final String label;
   final String route;
-  const _NavItem({required this.icon, required this.activeIcon, required this.label, required this.route});
+
+  const _NavItem(
+      {required this.icon,
+      required this.activeIcon,
+      required this.label,
+      required this.route});
 }

@@ -1,32 +1,46 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_getx_app/app/modules/product/product_list/model/product_model.dart';
 import 'package:get/get.dart';
 
 class AddProductController extends GetxController {
-final TextEditingController productNameCtrl=TextEditingController();
-final TextEditingController stockQtyCtrl=TextEditingController();
-final TextEditingController priceCtrl=TextEditingController();
-final TextEditingController skuCtrl=TextEditingController();
-final TextEditingController descriptionCtrl=TextEditingController();
-final Rx<ProductCategory?> selectedCategory = Rx<ProductCategory?>(null);
-  @override
-  void onInit() {
-    super.onInit();
+  final nameController = TextEditingController();
+  final skuController = TextEditingController();
+  final priceController = TextEditingController();
+  final stockController = TextEditingController();
+  final descController = TextEditingController();
+  final RxString selectedCategory = 'Beverages'.obs;
+  final RxBool isSaving = false.obs;
+  final formKey = GlobalKey<FormState>();
+  final categories = [
+    'Beverages',
+    'Bakery',
+    'Dairy',
+    'Merchandise',
+    'Hardware',
+    'Services'
+  ];
+
+  void onCategorySelect(String c) => selectedCategory(c);
+
+  Future<void> onSave() async {
+    if (!formKey.currentState!.validate()) return;
+    isSaving(true);
+    await Future.delayed(const Duration(milliseconds: 1500));
+    isSaving(false);
+    Get.back();
+    Get.snackbar('Success', 'Product saved successfully',
+        snackPosition: SnackPosition.BOTTOM);
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
+  String? validateRequired(String? v) =>
+      (v == null || v.trim().isEmpty) ? 'This field is required' : null;
 
   @override
   void onClose() {
-    productNameCtrl.dispose();
-    stockQtyCtrl.dispose();
-    priceCtrl.dispose();
-    descriptionCtrl.dispose();
+    nameController.dispose();
+    skuController.dispose();
+    priceController.dispose();
+    stockController.dispose();
+    descController.dispose();
     super.onClose();
   }
-
-  void addProduct() {}
 }

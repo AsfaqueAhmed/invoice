@@ -1,465 +1,299 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_getx_app/app/core/configs/theme/app_color.dart';
+import 'package:flutter_getx_app/app/core/configs/theme/app_colors.dart';
+import 'package:flutter_getx_app/app/core/widgets/app_bottom_nav.dart';
+import 'package:flutter_getx_app/app/core/widgets/app_card.dart';
+import 'package:flutter_getx_app/app/core/widgets/status_badge.dart';
+import 'package:flutter_getx_app/app/modules/dashboard/controllers/dashboard_controller.dart';
 import 'package:get/get.dart';
-
-import '../../../core/configs/text_style/app_text_styles.dart';
-import '../../../core/configs/theme/app_colors.dart';
-import '../../../core/constants/gaps.dart';
-import '../../../core/constants/margin.dart';
-import '../../../core/constants/padding.dart';
-import '../controllers/dashboard_controller.dart';
-import '../models/dashboard_summary.dart';
 
 class DashboardView extends GetView<DashboardController> {
   const DashboardView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.scaffoldLight,
-      appBar: AppBar(
-        toolbarHeight: 64,
-        backgroundColor: AppColors.scaffoldLight,
-        surfaceTintColor: AppColors.scaffoldLight,
-        titleSpacing: 20,
-        title: Row(
-          children: [
+      floatingActionButton: FloatingActionButton(
+          onPressed: controller.onNewInvoice,
+          child: const Icon(Icons.add_rounded, size: 28)),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 0),
+      body: CustomScrollView(slivers: [
+        SliverAppBar(
+          floating: true,
+          snap: true,
+          backgroundColor: isDark ? AppColor.darkSurface : AppColors.surface,
+          elevation: 0,
+          title: Row(children: [
             Container(
-              width: 40,
-              height: 40,
-              decoration: const BoxDecoration(
-                color: Color(0xFFD0E1FB),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.business_rounded,
-                color: Color(0xFF54647A),
-              ),
-            ),
-            Gaps.h12,
-            Text(
-              'InvoiceFlow',
-              style: AppTextStyles.headlineSmall.copyWith(
-                color: AppColors.primary,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                    color: cs.secondaryContainer, shape: BoxShape.circle),
+                child: Icon(Icons.business_rounded,
+                    color: cs.onSecondaryContainer, size: 20)),
+            const SizedBox(width: 10),
+            Text('InvoiceFlow',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    color: cs.primary)),
+          ]),
+          actions: [
+            IconButton(
+                icon: Icon(Icons.notifications_outlined, color: cs.primary),
+                onPressed: () {})
           ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_none_rounded),
-            color: AppColors.primary,
-            onPressed: () {},
-          ),
-          Gaps.h8,
-        ],
-      ),
-      body: ListView(
-        padding: AppPadding.page.copyWith(bottom: 120),
-        children: [
-          _SummaryScroller(summaries: controller.summaries),
-          Gaps.v24,
-          const Text('Quick Actions', style: AppTextStyles.headlineSmall),
-          Gaps.v16,
-          _QuickActionGrid(controller: controller),
-          Gaps.v24,
-          _RecentInvoicesHeader(onSeeAll: controller.openInvoices),
-          Gaps.v16,
-          ...controller.recentInvoices.map(
-            (invoice) => Padding(
-              padding: AppMargin.bottom16,
-              child: _RecentInvoiceCard(invoice: invoice),
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => controller.onQuickAction('New Invoice'),
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.white,
-        shape: const CircleBorder(),
-        child: const Icon(Icons.add_rounded, size: 32),
-      ),
-      bottomNavigationBar: _DashboardBottomNav(controller: controller),
-    );
-  }
-}
-
-class _SummaryScroller extends StatelessWidget {
-  const _SummaryScroller({required this.summaries});
-
-  final List<DashboardSummary> summaries;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 170,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        clipBehavior: Clip.none,
-        itemCount: summaries.length,
-        separatorBuilder: (_, __) => Gaps.h16,
-        itemBuilder: (context, index) {
-          return _SummaryCard(
-            summary: summaries[index],
-            width: index == 0 ? 280 : 240,
-          );
-        },
-      ),
+        SliverToBoxAdapter(child: Obx(() {
+          if (controller.isLoading.value)
+            return const SizedBox(
+                height: 400, child: Center(child: CircularProgressIndicator()));
+          return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 8),
+                SizedBox(
+                    height: 155,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      children: [
+                        _SummaryCard(
+                            label: 'Today Sales',
+                            value: controller.todaySales.value,
+                            sub: '+12% from yesterday',
+                            subIcon: Icons.trending_up_rounded,
+                            subColor: AppColor.tertiary,
+                            valueColor: cs.primary,
+                            valueSize: 26,
+                            width: 230),
+                        const SizedBox(width: 12),
+                        _SummaryCard(
+                            label: 'Due Amount',
+                            value: controller.dueAmount.value,
+                            sub: '8 invoices pending',
+                            valueColor: cs.error,
+                            width: 200),
+                        const SizedBox(width: 12),
+                        _SummaryCard(
+                            label: 'Collected',
+                            value: controller.collected.value,
+                            sub: 'This month',
+                            valueColor: cs.primary,
+                            width: 200),
+                        const SizedBox(width: 12),
+                        _SummaryCard(
+                            label: 'Total Invoices',
+                            value: '${controller.totalInvoices.value}',
+                            sub: 'All time',
+                            width: 200),
+                        const SizedBox(width: 20),
+                      ],
+                    )),
+                const SizedBox(height: 24),
+                const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Text('Quick Actions',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w600))),
+                const SizedBox(height: 12),
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: GridView.count(
+                      crossAxisCount: 2,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisSpacing: 12,
+                      mainAxisSpacing: 12,
+                      childAspectRatio: 1.5,
+                      children: [
+                        _QuickAction(
+                            icon: Icons.add_circle_outline_rounded,
+                            label: 'New Invoice',
+                            bg: cs.primaryContainer,
+                            fg: cs.onPrimaryContainer,
+                            onTap: controller.onNewInvoice),
+                        _QuickAction(
+                            icon: Icons.person_add_outlined,
+                            label: 'New Customer',
+                            bg: AppColor.secondaryFixed,
+                            fg: AppColor.onSecondaryFixed,
+                            onTap: controller.onNewCustomer),
+                        _QuickAction(
+                            icon: Icons.inventory_2_outlined,
+                            label: 'Add Product',
+                            bg: cs.surfaceContainerHigh,
+                            fg: cs.onSurfaceVariant,
+                            onTap: controller.onAddProduct),
+                        _QuickAction(
+                            icon: Icons.payments_outlined,
+                            label: 'Collect Payment',
+                            bg: AppColor.tertiaryFixed,
+                            fg: AppColor.onTertiaryFixed,
+                            onTap: controller.onCollectPayment),
+                      ],
+                    )),
+                const SizedBox(height: 24),
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text('Recent Invoices',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w600)),
+                          TextButton(
+                              onPressed: controller.onSeeAllInvoices,
+                              child: Text('See All',
+                                  style: TextStyle(
+                                      color: cs.primary,
+                                      fontWeight: FontWeight.w600))),
+                        ])),
+                ...controller.recentInvoices.map((inv) => Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 5),
+                      child: AppCard(
+                          onTap: () => controller.onInvoiceTap(inv),
+                          child: Row(children: [
+                            Container(
+                                width: 44,
+                                height: 44,
+                                decoration: BoxDecoration(
+                                    color: cs.surfaceContainer,
+                                    borderRadius: BorderRadius.circular(12)),
+                                child: Icon(Icons.description_outlined,
+                                    color: cs.primary)),
+                            const SizedBox(width: 12),
+                            Expanded(
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                  Text(inv['number']!,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 14)),
+                                  Text(inv['client']!,
+                                      style: TextStyle(
+                                          color: cs.onSurfaceVariant,
+                                          fontSize: 13)),
+                                ])),
+                            Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(inv['amount']!,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 14)),
+                                  const SizedBox(height: 4),
+                                  StatusBadge(
+                                      status: StatusBadge.fromString(
+                                          inv['status']!)),
+                                ]),
+                          ])),
+                    )),
+                const SizedBox(height: 100),
+              ]);
+        })),
+      ]),
     );
   }
 }
 
 class _SummaryCard extends StatelessWidget {
-  const _SummaryCard({
-    required this.summary,
-    required this.width,
-  });
+  final String label, value, sub;
+  final Color? valueColor, subColor;
+  final IconData? subIcon;
+  final double width, valueSize;
 
-  final DashboardSummary summary;
-  final double width;
+  const _SummaryCard(
+      {required this.label,
+      required this.value,
+      required this.sub,
+      this.valueColor,
+      this.subColor,
+      this.subIcon,
+      this.width = 200,
+      this.valueSize = 20});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      padding: AppPadding.all24,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.grey200.withValues(alpha: 0.45)),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.05),
-            blurRadius: 24,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            summary.label.toUpperCase(),
-            style: AppTextStyles.labelSmall.copyWith(
-              color: AppColors.grey600,
-              letterSpacing: 1.1,
-            ),
-          ),
-          Gaps.v8,
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            alignment: Alignment.centerLeft,
-            child: Text(
-              summary.value,
-              style: AppTextStyles.displayMedium.copyWith(
-                color: summary.valueColor,
-                fontSize: summary.label == 'Today Sales' ? 36 : 24,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-          const Spacer(),
-          if (summary.trend != null && summary.trendIcon != null)
-            Row(
+    final cs = Theme.of(context).colorScheme;
+    return AppCard(
+        padding: const EdgeInsets.all(16),
+        child: SizedBox(
+          width: width,
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(
-                  summary.trendIcon,
-                  color: const Color(0xFF943700),
-                  size: 18,
-                ),
-                Gaps.h4,
-                Text(
-                  summary.trend!,
-                  style: AppTextStyles.bodySmall.copyWith(
-                    color: const Color(0xFF943700),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            )
-          else
-            Text(
-              summary.detail,
-              style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.grey600,
-              ),
-            ),
-        ],
-      ),
-    );
+                Text(label.toUpperCase(),
+                    style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                        color: cs.secondary,
+                        letterSpacing: 0.8)),
+                Text(value,
+                    style: TextStyle(
+                        fontSize: valueSize,
+                        fontWeight: FontWeight.w700,
+                        color: valueColor ?? cs.onSurface,
+                        letterSpacing: -0.5)),
+                Row(children: [
+                  if (subIcon != null) ...[
+                    Icon(subIcon,
+                        size: 13, color: subColor ?? cs.onSurfaceVariant),
+                    const SizedBox(width: 4)
+                  ],
+                  Text(sub,
+                      style: TextStyle(
+                          fontSize: 11,
+                          color: subColor ?? cs.onSurfaceVariant)),
+                ]),
+              ]),
+        ));
   }
 }
 
-class _QuickActionGrid extends StatelessWidget {
-  const _QuickActionGrid({required this.controller});
-
-  final DashboardController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: controller.actions.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
-        mainAxisExtent: 128,
-      ),
-      itemBuilder: (context, index) {
-        final action = controller.actions[index];
-
-        return _QuickActionButton(
-          action: action,
-          onTap: () => controller.onQuickAction(action.label),
-        );
-      },
-    );
-  }
-}
-
-class _QuickActionButton extends StatelessWidget {
-  const _QuickActionButton({
-    required this.action,
-    required this.onTap,
-  });
-
-  final DashboardAction action;
+class _QuickAction extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color bg, fg;
   final VoidCallback onTap;
 
+  const _QuickAction(
+      {required this.icon,
+      required this.label,
+      required this.bg,
+      required this.fg,
+      required this.onTap});
+
   @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: action.backgroundColor,
-      borderRadius: BorderRadius.circular(24),
-      elevation: 0,
-      child: InkWell(
+  Widget build(BuildContext context) => GestureDetector(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(24),
-        child: Padding(
-          padding: AppPadding.all20,
+        child: Container(
+          decoration: BoxDecoration(
+            color: bg,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.06),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4))
+            ],
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(action.icon, size: 34, color: action.foregroundColor),
-              Gaps.v8,
-              Text(
-                action.label,
-                textAlign: TextAlign.center,
-                style: AppTextStyles.labelMedium.copyWith(
-                  color: action.foregroundColor,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
+              Icon(icon, color: fg, size: 26),
+              const SizedBox(height: 6),
+              Text(label,
+                  style: TextStyle(
+                      color: fg, fontSize: 12, fontWeight: FontWeight.w600)),
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _RecentInvoicesHeader extends StatelessWidget {
-  const _RecentInvoicesHeader({required this.onSeeAll});
-
-  final VoidCallback onSeeAll;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const Expanded(
-          child: Text('Recent Invoices', style: AppTextStyles.headlineSmall),
-        ),
-        TextButton(
-          onPressed: onSeeAll,
-          child: Text(
-            'See All',
-            style: AppTextStyles.labelLarge.copyWith(
-              color: AppColors.primary,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _RecentInvoiceCard extends StatelessWidget {
-  const _RecentInvoiceCard({required this.invoice});
-
-  final RecentInvoice invoice;
-
-  @override
-  Widget build(BuildContext context) {
-    final statusStyle = _recentStatusStyle(invoice.status);
-
-    return Container(
-      padding: AppPadding.all16,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.grey200.withValues(alpha: 0.45)),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.05),
-            blurRadius: 24,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: const BoxDecoration(
-              color: Color(0xFFEDEDF9),
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.description_outlined,
-              color: AppColors.primary,
-            ),
-          ),
-          Gaps.h16,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  invoice.number,
-                  style: AppTextStyles.titleSmall.copyWith(
-                    color: AppColors.grey900,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                Gaps.v4,
-                Text(
-                  invoice.customerName,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.grey600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Gaps.h12,
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                invoice.amount,
-                style: AppTextStyles.titleSmall.copyWith(
-                  color: AppColors.grey900,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              Gaps.v8,
-              Container(
-                padding: AppPadding.h12.add(AppPadding.v4),
-                decoration: BoxDecoration(
-                  color: statusStyle.backgroundColor,
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: Text(
-                  invoice.status.toUpperCase(),
-                  style: AppTextStyles.labelSmall.copyWith(
-                    color: statusStyle.textColor,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _DashboardBottomNav extends StatelessWidget {
-  const _DashboardBottomNav({required this.controller});
-
-  final DashboardController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return NavigationBar(
-      height: 72,
-      selectedIndex: 0,
-      backgroundColor: AppColors.white,
-      indicatorColor: AppColors.primary.withValues(alpha: 0.12),
-      labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-      onDestinationSelected: (index) {
-        final labels = [
-          'Home',
-          'Invoices',
-          'Customers',
-          'Products',
-          'Settings'
-        ];
-        controller.onNavTapped(labels[index]);
-      },
-      destinations: const [
-        NavigationDestination(
-          selectedIcon: Icon(Icons.home_rounded),
-          icon: Icon(Icons.home_outlined),
-          label: 'Home',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.description_outlined),
-          label: 'Invoices',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.group_outlined),
-          label: 'Customers',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.inventory_2_outlined),
-          label: 'Products',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.settings_outlined),
-          label: 'Settings',
-        ),
-      ],
-    );
-  }
-}
-
-class _RecentStatusStyle {
-  const _RecentStatusStyle({
-    required this.backgroundColor,
-    required this.textColor,
-  });
-
-  final Color backgroundColor;
-  final Color textColor;
-}
-
-_RecentStatusStyle _recentStatusStyle(String status) {
-  return switch (status) {
-    'Paid' => const _RecentStatusStyle(
-        backgroundColor: Color(0xFFD1FAE5),
-        textColor: Color(0xFF047857),
-      ),
-    'Pending' => const _RecentStatusStyle(
-        backgroundColor: Color(0xFFFEF3C7),
-        textColor: Color(0xFFB45309),
-      ),
-    'Overdue' => const _RecentStatusStyle(
-        backgroundColor: Color(0xFFFEE2E2),
-        textColor: Color(0xFFB91C1C),
-      ),
-    _ => const _RecentStatusStyle(
-        backgroundColor: AppColors.grey100,
-        textColor: AppColors.grey700,
-      ),
-  };
+      );
 }
