@@ -57,7 +57,7 @@ class AddProductView extends GetView<AddProductController> {
       body: Form(
         key: controller.formKey,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
               // Image upload
@@ -165,20 +165,22 @@ class AddProductView extends GetView<AddProductController> {
                                       duration:
                                           const Duration(milliseconds: 200),
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 16, vertical: 8),
+                                          horizontal: 20, vertical: 8),
                                       decoration: BoxDecoration(
                                           color: active
                                               ? cs.primaryContainer
                                               : cs.surfaceContainerHigh,
                                           borderRadius:
                                               BorderRadius.circular(99)),
-                                      child: Text(cat,
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w600,
-                                              color: active
-                                                  ? cs.onPrimaryContainer
-                                                  : cs.onSurfaceVariant)))));
+                                      child: Center(
+                                        child: Text(cat,
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w600,
+                                                color: active
+                                                    ? cs.onPrimaryContainer
+                                                    : cs.onSurfaceVariant)),
+                                      ))));
                         }),
                         GestureDetector(
                             onTap: () {},
@@ -240,7 +242,7 @@ class AddProductView extends GetView<AddProductController> {
                             fontWeight: FontWeight.w700,
                             color: Color(0xFF2E7D32)))),
               ])),
-              const SizedBox(height: 80),
+              const SizedBox(height: 16),
             ],
           ),
         ),
