@@ -72,7 +72,7 @@ class _CustomerDetailContent extends StatelessWidget {
                   Text(
                     customer.name,
                     style: const TextStyle(
-                      fontFamily: 'DMSans',
+                      fontFamily: 'Inter',
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
                       color: AppColors.textPrimary,
@@ -165,7 +165,7 @@ class _CustomerDetailContent extends StatelessWidget {
                           const Text(
                             'TOTAL DUE',
                             style: TextStyle(
-                              fontFamily: 'DMSans',
+                              fontFamily: 'Inter',
                               fontSize: 10,
                               fontWeight: FontWeight.w600,
                               color: Colors.white70,
@@ -176,7 +176,7 @@ class _CustomerDetailContent extends StatelessWidget {
                           Text(
                             fmt.format(customer.totalDue),
                             style: const TextStyle(
-                              fontFamily: 'DMSans',
+                              fontFamily: 'Inter',
                               fontSize: 26,
                               fontWeight: FontWeight.w700,
                               color: Colors.white,
@@ -201,7 +201,7 @@ class _CustomerDetailContent extends StatelessWidget {
                             Text(
                               '${customer.overdueCount} Overdue',
                               style: const TextStyle(
-                                fontFamily: 'DMSans',
+                                fontFamily: 'Inter',
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
@@ -224,7 +224,7 @@ class _CustomerDetailContent extends StatelessWidget {
                   const Text(
                     'Quick Actions',
                     style: TextStyle(
-                      fontFamily: 'DMSans',
+                      fontFamily: 'Inter',
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
                       color: AppColors.textPrimary,
@@ -409,7 +409,7 @@ class _ActionButton extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
-                fontFamily: 'DMSans',
+                fontFamily: 'Inter',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: outlined ? AppColors.textPrimary : Colors.white,
@@ -480,7 +480,7 @@ class _InvoiceRow extends StatelessWidget {
                 Text(
                   invoice.invoiceNumber,
                   style: const TextStyle(
-                    fontFamily: 'DMSans',
+                    fontFamily: 'Inter',
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
@@ -490,7 +490,7 @@ class _InvoiceRow extends StatelessWidget {
                 Text(
                   dateFmt.format(invoice.date),
                   style: const TextStyle(
-                    fontFamily: 'DMSans',
+                    fontFamily: 'Inter',
                     fontSize: 12,
                     color: AppColors.textSecondary,
                   ),
@@ -504,7 +504,7 @@ class _InvoiceRow extends StatelessWidget {
               Text(
                 fmt.format(invoice.amount),
                 style: const TextStyle(
-                  fontFamily: 'DMSans',
+                  fontFamily: 'Inter',
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: AppColors.textPrimary,
@@ -520,7 +520,7 @@ class _InvoiceRow extends StatelessWidget {
                 child: Text(
                   invoice.status.label,
                   style: TextStyle(
-                    fontFamily: 'DMSans',
+                    fontFamily: 'Inter',
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
                     color: colors.$2,

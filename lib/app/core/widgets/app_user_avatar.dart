@@ -32,7 +32,7 @@ class AppUserAvatar extends StatelessWidget {
               child: Text(
                 initials,
                 style: TextStyle(
-                  fontFamily: 'DMSans',
+                  fontFamily: 'Inter',
                   fontWeight: FontWeight.w700,
                   fontSize: size * 0.35,
                   color: color,

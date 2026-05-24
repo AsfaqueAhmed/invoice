@@ -23,7 +23,7 @@ class AddCustomerView extends GetView<AddCustomerController> {
             const Text(
               'New Customer',
               style: TextStyle(
-                fontFamily: 'DMSans',
+                fontFamily: 'Inter',
                 fontSize: 22,
                 fontWeight: FontWeight.w700,
                 color: AppColors.textPrimary,
@@ -33,7 +33,7 @@ class AddCustomerView extends GetView<AddCustomerController> {
             const Text(
               'Create a professional profile for your client.',
               style: TextStyle(
-                fontFamily: 'DMSans',
+                fontFamily: 'Inter',
                 fontSize: 14,
                 color: AppColors.textSecondary,
               ),
@@ -97,7 +97,7 @@ class AddCustomerView extends GetView<AddCustomerController> {
                     child: Text(
                       'Select profile photo',
                       style: TextStyle(
-                        fontFamily: 'DMSans',
+                        fontFamily: 'Inter',
                         fontSize: 12,
                         color: AppColors.textSecondary,
                       ),
@@ -271,7 +271,7 @@ class AddCustomerView extends GetView<AddCustomerController> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               textStyle: const TextStyle(
-                fontFamily: 'DMSans',
+                fontFamily: 'Inter',
                 fontSize: 15,
                 fontWeight: FontWeight.w700,
               ),
@@ -293,7 +293,7 @@ class _SectionLabel extends StatelessWidget {
     return Text(
       label,
       style: const TextStyle(
-        fontFamily: 'DMSans',
+        fontFamily: 'Inter',
         fontSize: 11,
         fontWeight: FontWeight.w700,
         color: AppColors.textSecondary,

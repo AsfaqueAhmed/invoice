@@ -26,7 +26,7 @@ class AppStatusChip extends StatelessWidget {
           fontSize: 11,
           fontWeight: FontWeight.w600,
           color: fg,
-          fontFamily: 'DMSans',
+          fontFamily: 'Inter',
         ),
       ),
     );

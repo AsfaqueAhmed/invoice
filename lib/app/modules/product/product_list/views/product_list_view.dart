@@ -173,7 +173,7 @@ class _DarkStatCard extends StatelessWidget {
               Text(
                 value,
                 style: TextStyle(
-                  fontFamily: 'DMSans',
+                  fontFamily: 'Inter',
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: !isAlert ? AppColors.textPrimary : AppColors.overdue,
@@ -247,7 +247,7 @@ class _ProductCard extends StatelessWidget {
                       Text(
                         product.name,
                         style: const TextStyle(
-                          fontFamily: 'DMSans',
+                          fontFamily: 'Inter',
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
                           color: AppColors.textPrimary,
@@ -257,7 +257,7 @@ class _ProductCard extends StatelessWidget {
                       Text(
                         'SKU: ${product.sku}',
                         style: const TextStyle(
-                          fontFamily: 'DMSans',
+                          fontFamily: 'Inter',
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                           color: Color(0xFF6B7280),
@@ -345,7 +345,7 @@ class _ProductMeta extends StatelessWidget {
         Text(
           label,
           style: const TextStyle(
-            fontFamily: 'DMSans',
+            fontFamily: 'Inter',
             fontSize: 12,
             fontWeight: FontWeight.w500,
             color: AppColors.textTertiary,
@@ -355,7 +355,7 @@ class _ProductMeta extends StatelessWidget {
         Text(
           value,
           style: TextStyle(
-            fontFamily: 'DMSans',
+            fontFamily: 'Inter',
             fontSize: 18,
             fontWeight: FontWeight.w600,
             color: isPrice ? AppColors.chipBlueFg : AppColors.textPrimary,

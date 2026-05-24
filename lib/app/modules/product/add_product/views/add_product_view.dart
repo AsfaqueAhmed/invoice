@@ -24,7 +24,7 @@ class AddProductView extends GetView<AddProductController> {
               const Text(
                 'Add Product',
                 style: TextStyle(
-                  fontFamily: 'DMSans',
+                  fontFamily: 'Inter',
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
                   color: AppColors.textPrimary,
@@ -60,7 +60,7 @@ class AddProductView extends GetView<AddProductController> {
                       const Text(
                         'Add Image',
                         style: TextStyle(
-                          fontFamily: 'DMSans',
+                          fontFamily: 'Inter',
                           fontSize: 13,
                           color: AppColors.textSecondary,
                           fontWeight: FontWeight.w500,
@@ -103,7 +103,7 @@ class AddProductView extends GetView<AddProductController> {
                         const Text(
                           'Barcode',
                           style: TextStyle(
-                            fontFamily: 'DMSans',
+                            fontFamily: 'Inter',
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
                             color: AppColors.textPrimary,
@@ -129,7 +129,7 @@ class AddProductView extends GetView<AddProductController> {
                               Text(
                                 'Scan',
                                 style: TextStyle(
-                                  fontFamily: 'DMSans',
+                                  fontFamily: 'Inter',
                                   fontSize: 14,
                                   color: AppColors.primary,
                                 ),
@@ -186,7 +186,7 @@ class AddProductView extends GetView<AddProductController> {
               const Text(
                 'Category',
                 style: TextStyle(
-                  fontFamily: 'DMSans',
+                  fontFamily: 'Inter',
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
                   color: AppColors.textPrimary,
@@ -223,7 +223,7 @@ class AddProductView extends GetView<AddProductController> {
                           child: Text(
                             cat.label,
                             style: TextStyle(
-                              fontFamily: 'DMSans',
+                              fontFamily: 'Inter',
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
                               color: isSelected
@@ -274,7 +274,7 @@ class AddProductView extends GetView<AddProductController> {
                           Text(
                             'Inventory Preview',
                             style: TextStyle(
-                              fontFamily: 'DMSans',
+                              fontFamily: 'Inter',
                               fontSize: 13,
                               color: AppColors.textSecondary,
                             ),
@@ -282,7 +282,7 @@ class AddProductView extends GetView<AddProductController> {
                           Text(
                             'Live Preview',
                             style: TextStyle(
-                              fontFamily: 'DMSans',
+                              fontFamily: 'Inter',
                               fontSize: 15,
                               fontWeight: FontWeight.w700,
                               color: AppColors.textPrimary,
@@ -301,7 +301,7 @@ class AddProductView extends GetView<AddProductController> {
                       child: const Text(
                         'Active',
                         style: TextStyle(
-                          fontFamily: 'DMSans',
+                          fontFamily: 'Inter',
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
                           color: AppColors.chipGreenFg,
@@ -331,7 +331,7 @@ class AddProductView extends GetView<AddProductController> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14)),
                 textStyle: const TextStyle(
-                  fontFamily: 'DMSans',
+                  fontFamily: 'Inter',
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
                 ),

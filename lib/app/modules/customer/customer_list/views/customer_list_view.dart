@@ -48,7 +48,7 @@ class CustomerListView extends GetView<CustomerListController> {
                   const Text(
                     'Active Customers',
                     style: TextStyle(
-                      fontFamily: 'DMSans',
+                      fontFamily: 'Inter',
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                       color: AppColors.textPrimary,
@@ -69,7 +69,7 @@ class CustomerListView extends GetView<CustomerListController> {
                         Text(
                           'Filter',
                           style: TextStyle(
-                            fontFamily: 'DMSans',
+                            fontFamily: 'Inter',
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
                             color: AppColors.textSecondary,
@@ -95,7 +95,7 @@ class CustomerListView extends GetView<CustomerListController> {
                     child: Text(
                       'No customers found',
                       style: TextStyle(
-                          fontFamily: 'DMSans', color: AppColors.textSecondary),
+                          fontFamily: 'Inter', color: AppColors.textSecondary),
                     ),
                   );
                 }
@@ -201,7 +201,7 @@ class _StatCard extends StatelessWidget {
           Text(
             label,
             style: const TextStyle(
-              fontFamily: 'DMSans',
+              fontFamily: 'Inter',
               fontSize: 10,
               fontWeight: FontWeight.w600,
               color: AppColors.textTertiary,
@@ -212,7 +212,7 @@ class _StatCard extends StatelessWidget {
           Text(
             value,
             style: TextStyle(
-              fontFamily: 'DMSans',
+              fontFamily: 'Inter',
               fontSize: 22,
               fontWeight: FontWeight.w700,
               color: isOverdue ? AppColors.overdue : AppColors.textPrimary,
@@ -228,7 +228,7 @@ class _StatCard extends StatelessWidget {
             child: Text(
               badge,
               style: TextStyle(
-                fontFamily: 'DMSans',
+                fontFamily: 'Inter',
                 fontSize: 10,
                 fontWeight: FontWeight.w600,
                 color: badgeFg ?? AppColors.chipRedFg,
@@ -316,7 +316,7 @@ class _CustomerCard extends StatelessWidget {
                       Text(
                         customer.name,
                         style: const TextStyle(
-                          fontFamily: 'DMSans',
+                          fontFamily: 'Inter',
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
                           color: AppColors.textPrimary,
@@ -326,7 +326,7 @@ class _CustomerCard extends StatelessWidget {
                       Text(
                         customer.phone,
                         style: const TextStyle(
-                          fontFamily: 'DMSans',
+                          fontFamily: 'Inter',
                           fontSize: 12,
                           color: AppColors.textSecondary,
                         ),
@@ -352,7 +352,7 @@ class _CustomerCard extends StatelessWidget {
                     const Text(
                       'LAST INVOICE',
                       style: TextStyle(
-                        fontFamily: 'DMSans',
+                        fontFamily: 'Inter',
                         fontSize: 9,
                         fontWeight: FontWeight.w600,
                         color: AppColors.textTertiary,
@@ -365,7 +365,7 @@ class _CustomerCard extends StatelessWidget {
                           ? dateFmt.format(customer.lastInvoiceDate!)
                           : 'No invoices',
                       style: const TextStyle(
-                        fontFamily: 'DMSans',
+                        fontFamily: 'Inter',
                         fontSize: 13,
                         fontWeight: FontWeight.w500,
                         color: AppColors.textPrimary,
@@ -379,7 +379,7 @@ class _CustomerCard extends StatelessWidget {
                     const Text(
                       'DUE AMOUNT',
                       style: TextStyle(
-                        fontFamily: 'DMSans',
+                        fontFamily: 'Inter',
                         fontSize: 9,
                         fontWeight: FontWeight.w600,
                         color: AppColors.textTertiary,
@@ -390,7 +390,7 @@ class _CustomerCard extends StatelessWidget {
                     Text(
                       fmt.format(customer.totalDue),
                       style: TextStyle(
-                        fontFamily: 'DMSans',
+                        fontFamily: 'Inter',
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
                         color: customer.totalDue > 0

@@ -80,7 +80,7 @@ class _ProductDetailContent extends StatelessWidget {
                   Text(
                     'SKU ${product.sku}',
                     style: const TextStyle(
-                      fontFamily: 'DMSans',
+                      fontFamily: 'Inter',
                       fontSize: 12,
                       color: AppColors.textTertiary,
                       fontWeight: FontWeight.w500,
@@ -91,7 +91,7 @@ class _ProductDetailContent extends StatelessWidget {
                   Text(
                     product.name,
                     style: const TextStyle(
-                      fontFamily: 'DMSans',
+                      fontFamily: 'Inter',
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
                       color: AppColors.textPrimary,
@@ -192,7 +192,7 @@ class _ProductDetailContent extends StatelessWidget {
                         const Text(
                           'Details',
                           style: TextStyle(
-                            fontFamily: 'DMSans',
+                            fontFamily: 'Inter',
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
                             color: AppColors.textPrimary,
@@ -203,7 +203,7 @@ class _ProductDetailContent extends StatelessWidget {
                           Text(
                             product.description!,
                             style: const TextStyle(
-                              fontFamily: 'DMSans',
+                              fontFamily: 'Inter',
                               fontSize: 14,
                               color: AppColors.textSecondary,
                               height: 1.5,
@@ -291,7 +291,7 @@ class _DetailItem extends StatelessWidget {
           Text(
             label,
             style: const TextStyle(
-              fontFamily: 'DMSans',
+              fontFamily: 'Inter',
               fontSize: 13,
               fontWeight: FontWeight.w500,
               color: AppColors.textTertiary,
@@ -301,7 +301,7 @@ class _DetailItem extends StatelessWidget {
           Text(
             value,
             style: const TextStyle(
-              fontFamily: 'DMSans',
+              fontFamily: 'Inter',
               fontSize: 13,
               // fontWeight: FontWeight.w500,
               color: AppColors.grey600,
@@ -359,7 +359,7 @@ class _ProductInvoiceRow extends StatelessWidget {
                 Text(
                   invoice.invoiceNumber,
                   style: const TextStyle(
-                    fontFamily: 'DMSans',
+                    fontFamily: 'Inter',
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
@@ -369,7 +369,7 @@ class _ProductInvoiceRow extends StatelessWidget {
                 Text(
                   '${dateFmt.format(invoice.date)} • ${invoice.units} units',
                   style: const TextStyle(
-                    fontFamily: 'DMSans',
+                    fontFamily: 'Inter',
                     fontSize: 12,
                     color: AppColors.textSecondary,
                   ),
@@ -383,7 +383,7 @@ class _ProductInvoiceRow extends StatelessWidget {
               Text(
                 fmt.format(invoice.amount),
                 style: const TextStyle(
-                  fontFamily: 'DMSans',
+                  fontFamily: 'Inter',
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: AppColors.textPrimary,
@@ -399,7 +399,7 @@ class _ProductInvoiceRow extends StatelessWidget {
                 child: Text(
                   invoice.status,
                   style: TextStyle(
-                    fontFamily: 'DMSans',
+                    fontFamily: 'Inter',
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
                     color:
