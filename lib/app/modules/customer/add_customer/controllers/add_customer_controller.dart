@@ -3,24 +3,18 @@ import 'package:get/get.dart';
 
 class AddCustomerController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final TextEditingController fullNameCtrl= TextEditingController();
-  final TextEditingController businessNameCtrl= TextEditingController();
-  final TextEditingController phoneCtrl= TextEditingController();
-  final TextEditingController emailCtrl= TextEditingController();
-  final TextEditingController addressCtrl= TextEditingController();
-  final TextEditingController stateCtrl= TextEditingController();
-  final TextEditingController postalCtrl= TextEditingController();
-  final TextEditingController cityCtrl= TextEditingController();
+  final TextEditingController fullNameCtrl = TextEditingController();
+  final TextEditingController businessNameCtrl = TextEditingController();
+  final TextEditingController phoneCtrl = TextEditingController();
+  final TextEditingController emailCtrl = TextEditingController();
+  final TextEditingController addressCtrl = TextEditingController();
+  final TextEditingController stateCtrl = TextEditingController();
+  final TextEditingController postalCtrl = TextEditingController();
+  final TextEditingController cityCtrl = TextEditingController();
+  final RxBool isSaving = false.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
+  String? validateRequired(String? v) =>
+      (v == null || v.trim().isEmpty) ? 'This field is required' : null;
 
   @override
   void onClose() {
@@ -33,4 +27,6 @@ class AddCustomerController extends GetxController {
     cityCtrl.dispose();
     super.onClose();
   }
+
+  void onSave() {}
 }

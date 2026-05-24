@@ -1,18 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_getx_app/app/core/configs/theme/app_color.dart';
-import 'package:flutter_getx_app/app/core/configs/theme/app_colors.dart';
 import 'package:flutter_getx_app/app/core/widgets/app_bar.dart';
 import 'package:flutter_getx_app/app/core/widgets/app_card.dart';
-import 'package:flutter_getx_app/app/core/widgets/custom_cache_network_image.dart';
 import 'package:flutter_getx_app/app/core/widgets/status_badge.dart';
-import 'package:flutter_getx_app/app/modules/product/product_details/views/widgets/app_section_header.dart';
-import 'package:flutter_getx_app/app/modules/product/product_list/model/product_model.dart';
-import 'package:flutter_getx_app/app/modules/product/product_list/views/widgets/app_status_chip.dart';
-
+import 'package:flutter_getx_app/app/modules/product/product_details/controllers/product_details_controller.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-
-import '../controllers/product_details_controller.dart';
 
 class ProductDetailsView extends GetView<ProductDetailsController> {
   const ProductDetailsView({super.key});
@@ -23,21 +15,16 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final p = controller.product;
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back_rounded, color: cs.primary),
-            onPressed: Get.back),
-        title: Text('InvoiceFlow',
-            style: TextStyle(
-                fontSize: 18, fontWeight: FontWeight.w700, color: cs.primary)),
-        actions: [
+      appBar: CustomAppAppbar(
+        title: 'Product Details',
+        action: [
           IconButton(
               icon: Icon(Icons.edit_outlined, color: cs.secondary),
               onPressed: () {})
         ],
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
         decoration: BoxDecoration(
             color: isDark ? AppColor.darkSurfaceContainer : Colors.white,
             boxShadow: [

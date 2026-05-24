@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_getx_app/app/core/configs/theme/app_color.dart';
+import 'package:flutter_getx_app/app/core/widgets/app_bar.dart';
 import 'package:flutter_getx_app/app/core/widgets/app_card.dart';
 
 import 'package:get/get.dart';
@@ -14,14 +15,7 @@ class BackupRestoreView extends GetView<BackupRestoreController> {
     final cs = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back_rounded, color: cs.primary),
-            onPressed: Get.back),
-        title: Text('Backup & Restore',
-            style: TextStyle(
-                fontSize: 18, fontWeight: FontWeight.w700, color: cs.primary)),
-      ),
+      appBar: const CustomAppAppbar(title: 'Backup & Restore'),
       body: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child: Column(children: [
@@ -210,7 +204,7 @@ class BackupRestoreView extends GetView<BackupRestoreController> {
                       color: cs.secondary.withValues(alpha: 0.7),
                       height: 1.5)),
             ]),
-            const SizedBox(height: 80),
+            const SizedBox(height: 16),
           ])),
     );
   }

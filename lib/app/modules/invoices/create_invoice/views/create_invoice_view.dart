@@ -14,6 +14,7 @@ class CreateInvoiceView extends GetView<CreateInvoiceController> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
+        forceMaterialTransparency: true,
         leading: IconButton(
             icon: Icon(Icons.arrow_back_rounded, color: cs.onSurface),
             onPressed: Get.back),
@@ -134,7 +135,7 @@ class CreateInvoiceView extends GetView<CreateInvoiceController> {
             // Items
             Align(
                 alignment: Alignment.centerLeft,
-                child: Text('Added Items',
+                child: Text('ADDED ITEMS',
                     style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,

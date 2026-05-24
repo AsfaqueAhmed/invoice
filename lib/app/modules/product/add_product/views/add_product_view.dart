@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_getx_app/app/core/configs/theme/app_color.dart';
+import 'package:flutter_getx_app/app/core/widgets/app_bar.dart';
 import 'package:flutter_getx_app/app/core/widgets/app_card.dart';
 import 'package:get/get.dart';
 
@@ -13,33 +14,30 @@ class AddProductView extends GetView<AddProductController> {
     final cs = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back_rounded, color: cs.primary),
-            onPressed: Get.back),
-        title: Text('Add Product',
-            style: TextStyle(
-                fontSize: 18, fontWeight: FontWeight.w700, color: cs.primary)),
-        actions: [
+      appBar: CustomAppAppbar(
+        title: 'Add Product',
+        action: [
           Container(
-              width: 36,
-              height: 36,
-              margin: const EdgeInsets.only(right: 12),
-              decoration: BoxDecoration(
-                  color: cs.surfaceContainerLow, shape: BoxShape.circle),
-              child: Icon(Icons.person_rounded, color: cs.primary, size: 18))
+            width: 36,
+            height: 36,
+            margin: const EdgeInsets.only(right: 12),
+            decoration: BoxDecoration(
+                color: cs.surfaceContainerLow, shape: BoxShape.circle),
+            child: Icon(Icons.person_rounded, color: cs.primary, size: 18),
+          )
         ],
       ),
       bottomNavigationBar: Container(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
         decoration: BoxDecoration(
-            color: isDark ? AppColor.darkSurfaceContainer : Colors.white,
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black.withOpacity(0.08),
-                  blurRadius: 16,
-                  offset: const Offset(0, -4))
-            ]),
+          color: isDark ? AppColor.darkSurfaceContainer : Colors.white,
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black.withOpacity(0.08),
+                blurRadius: 16,
+                offset: const Offset(0, -4))
+          ],
+        ),
         child: Obx(() => ElevatedButton.icon(
             onPressed: controller.isSaving.value ? null : controller.onSave,
             icon: controller.isSaving.value

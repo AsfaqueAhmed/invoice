@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_getx_app/app/core/configs/theme/app_color.dart';
+import 'package:flutter_getx_app/app/core/widgets/app_bar.dart';
 import 'package:flutter_getx_app/app/core/widgets/app_card.dart';
 import 'package:get/get.dart';
 
@@ -13,14 +14,10 @@ class AddPaymentView extends GetView<AddPaymentController> {
     final cs = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back_rounded, color: cs.primary),
-            onPressed: Get.back),
-        title: Text('Add Payment',
-            style: TextStyle(
-                fontSize: 18, fontWeight: FontWeight.w700, color: cs.primary)),
-        actions: [
+      appBar: CustomAppAppbar(
+        title: 'Add Payment',
+        needTitleCentre: true,
+        action: [
           IconButton(
               icon:
                   Icon(Icons.info_outline_rounded, color: cs.onSurfaceVariant),
@@ -54,7 +51,7 @@ class AddPaymentView extends GetView<AddPaymentController> {
                     borderRadius: BorderRadius.circular(16))))),
       ),
       body: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(16),
           child: Column(children: [
             // Amount display
             Column(children: [
@@ -83,94 +80,111 @@ class AddPaymentView extends GetView<AddPaymentController> {
             const SizedBox(height: 24),
             // Invoice + Date + Note card
             AppCard(
-                child: Column(children: [
-              // Invoice selector
-              Row(children: [
-                Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                        color: AppColor.tertiaryFixed.withOpacity(0.4),
-                        borderRadius: BorderRadius.circular(12)),
-                    child: Icon(Icons.receipt_long_rounded,
-                        color: AppColor.tertiary)),
-                const SizedBox(width: 12),
-                Expanded(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                      Text('Select Invoice',
-                          style: TextStyle(
-                              fontSize: 11,
-                              color: cs.secondary,
-                              fontWeight: FontWeight.w600)),
-                      Text('Choose an invoice...',
-                          style: TextStyle(color: cs.outline, fontSize: 14)),
-                      Text('Outstanding Due: \$0.00',
-                          style: TextStyle(
-                              fontSize: 10,
-                              color: AppColor.tertiary,
-                              fontWeight: FontWeight.w600)),
-                    ])),
-                Icon(Icons.expand_more_rounded, color: cs.outlineVariant),
-              ]),
-              Divider(height: 20, color: cs.outlineVariant.withOpacity(0.4)),
-              // Date
-              Row(children: [
-                Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                        color: cs.primary.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12)),
-                    child:
-                        Icon(Icons.calendar_today_rounded, color: cs.primary)),
-                const SizedBox(width: 12),
-                Expanded(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                      Text('Payment Date',
-                          style: TextStyle(
-                              fontSize: 11,
-                              color: cs.secondary,
-                              fontWeight: FontWeight.w600)),
-                      Obx(() => Text(controller.selectedDate.value,
-                          style: const TextStyle(fontSize: 14))),
-                    ])),
-              ]),
-              Divider(height: 20, color: cs.outlineVariant.withOpacity(0.4)),
-              // Note
-              Row(children: [
-                Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                        color: cs.secondaryContainer.withOpacity(0.4),
-                        borderRadius: BorderRadius.circular(12)),
-                    child: Icon(Icons.edit_note_rounded, color: cs.secondary)),
-                const SizedBox(width: 12),
-                Expanded(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                      Text('Note / Description',
-                          style: TextStyle(
-                              fontSize: 11,
-                              color: cs.secondary,
-                              fontWeight: FontWeight.w600)),
-                      TextField(
-                          controller: controller.noteController,
-                          decoration: InputDecoration(
-                              hintText: 'Add a short reference...',
-                              hintStyle:
-                                  TextStyle(color: cs.outline, fontSize: 14),
-                              border: InputBorder.none,
-                              isDense: true,
-                              contentPadding: EdgeInsets.zero)),
-                    ])),
-              ]),
-            ])),
+              child: Column(
+                children: [
+                  // Invoice selector
+                  Row(children: [
+                    Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                            color: AppColor.tertiaryFixed.withOpacity(0.4),
+                            borderRadius: BorderRadius.circular(12)),
+                        child: const Icon(Icons.receipt_long_rounded,
+                            color: AppColor.tertiary)),
+                    const SizedBox(width: 12),
+                    Expanded(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                          Text('Select Invoice',
+                              style: TextStyle(
+                                  fontSize: 11,
+                                  color: cs.secondary,
+                                  fontWeight: FontWeight.w600)),
+                          Text('Choose an invoice...',
+                              style:
+                                  TextStyle(color: cs.outline, fontSize: 14)),
+                          const Text('Outstanding Due: \$0.00',
+                              style: TextStyle(
+                                  fontSize: 10,
+                                  color: AppColor.tertiary,
+                                  fontWeight: FontWeight.w600)),
+                        ])),
+                    Icon(Icons.expand_more_rounded, color: cs.outlineVariant),
+                  ]),
+                  Divider(
+                      height: 20, color: cs.outlineVariant.withOpacity(0.4)),
+                  // Date
+                  Row(children: [
+                    Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                            color: cs.primary.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Icon(Icons.calendar_today_rounded,
+                            color: cs.primary)),
+                    const SizedBox(width: 12),
+                    Expanded(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                          Text('Payment Date',
+                              style: TextStyle(
+                                  fontSize: 11,
+                                  color: cs.secondary,
+                                  fontWeight: FontWeight.w600)),
+                          Obx(() => Text(controller.selectedDate.value,
+                              style: const TextStyle(fontSize: 14))),
+                        ])),
+                  ]),
+                  Divider(
+                      height: 20, color: cs.outlineVariant.withOpacity(0.4)),
+                  // Note
+                  Row(
+                    children: [
+                      Container(
+                          width: 44,
+                          height: 44,
+                          decoration: BoxDecoration(
+                              color: cs.secondaryContainer.withOpacity(0.4),
+                              borderRadius: BorderRadius.circular(12)),
+                          child: Icon(Icons.edit_note_rounded,
+                              color: cs.secondary)),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Note / Description',
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: cs.secondary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            TextField(
+                              controller: controller.noteController,
+                              decoration: InputDecoration(
+                                hintText: 'Add a short reference...',
+                                hintStyle:
+                                    TextStyle(color: cs.outline, fontSize: 14),
+                                border: InputBorder.none,
+                                isDense: true,
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 4, vertical: 8),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(height: 20),
             // Payment method
             Align(
@@ -229,7 +243,7 @@ class AddPaymentView extends GetView<AddPaymentController> {
                 }).toList())),
             const SizedBox(height: 24),
             // Numpad
-            AppCard(
+            /*AppCard(
                 child: Column(children: [
               // Row 1-3
               ...['123', '456', '789'].map((row) => Padding(
@@ -273,7 +287,7 @@ class AddPaymentView extends GetView<AddPaymentController> {
                                     color: cs.error, size: 22))))),
               ]),
             ])),
-            const SizedBox(height: 80),
+            const SizedBox(height: 80),*/
           ])),
     );
   }

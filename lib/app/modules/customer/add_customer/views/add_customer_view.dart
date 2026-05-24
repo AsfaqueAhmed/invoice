@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_getx_app/app/core/configs/theme/app_color.dart';
 import 'package:flutter_getx_app/app/core/configs/theme/app_colors.dart';
+import 'package:flutter_getx_app/app/core/constants/gaps.dart';
 import 'package:flutter_getx_app/app/core/widgets/app_bar.dart';
+import 'package:flutter_getx_app/app/core/widgets/app_card.dart';
 import 'package:flutter_getx_app/app/core/widgets/custom_text_field.dart';
 
 import 'package:get/get.dart';
@@ -12,46 +15,36 @@ class AddCustomerView extends GetView<AddCustomerController> {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: const CustomAppAppbar(title: 'InvoiceFlow'),
+      appBar: const CustomAppAppbar(title: 'Add Customer'),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'New Customer',
               style: TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 22,
                 fontWeight: FontWeight.w700,
-                color: AppColors.textPrimary,
+                color: cs.onSurfaceVariant,
               ),
             ),
             const SizedBox(height: 4),
-            const Text(
+            Text(
               'Create a professional profile for your client.',
               style: TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 14,
-                color: AppColors.textSecondary,
+                color: cs.onSurfaceVariant,
               ),
             ),
             const SizedBox(height: 24),
             // Avatar Picker
-            Container(
-              decoration: BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 16,
-                      offset: const Offset(0, 2),
-                    )
-                  ]),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+            AppCard(
               child: Column(
                 children: [
                   Center(
@@ -93,13 +86,13 @@ class AddCustomerView extends GetView<AddCustomerController> {
                     ),
                   ),
                   const SizedBox(height: 6),
-                  const Center(
+                  Center(
                     child: Text(
                       'Select profile photo',
                       style: TextStyle(
                         fontFamily: 'Inter',
                         fontSize: 12,
-                        color: AppColors.textSecondary,
+                        color: cs.onSurfaceVariant,
                       ),
                     ),
                   ),
@@ -109,140 +102,99 @@ class AddCustomerView extends GetView<AddCustomerController> {
 
             const SizedBox(height: 24),
             // Basic Details
-            Container(
-              decoration: BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 16,
-                      offset: const Offset(0, 2),
-                    )
-                  ]),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+            AppCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const _SectionLabel(label: 'BASIC DETAILS'),
                   const SizedBox(height: 12),
-                  CustomTextFormField(
-                    title: 'Full Name',
-                    hintText: 'John Doe',
-                    controller: controller.fullNameCtrl,
-                    prefixIcon: const Padding(
-                      padding: EdgeInsets.only(left: 12, right: 8),
-                      child: Icon(
-                        Icons.person_outline_rounded,
-                        size: 20,
-                      ),
+                  _Field(
+                    label: 'Product Name',
+                    child: TextFormField(
+                      controller: controller.fullNameCtrl,
+                      validator: controller.validateRequired,
+                      decoration:
+                          _dec('John Doe', Icons.person_outline_rounded, cs),
                     ),
                   ),
                   const SizedBox(height: 12),
-                  CustomTextFormField(
-                    title: 'Business Name (Optional)',
-                    hintText: 'Acme Corp',
-                    controller: controller.businessNameCtrl,
-                    prefixIcon: const Padding(
-                      padding: EdgeInsets.only(left: 12, right: 8),
-                      child: Icon(
-                        Icons.business_outlined,
-                        size: 20,
-                      ),
+                  _Field(
+                    label: 'Business Name (Optional)',
+                    child: TextFormField(
+                      controller: controller.businessNameCtrl,
+                      decoration:
+                          _dec('Acme Corp', Icons.business_outlined, cs),
                     ),
                   ),
                   const SizedBox(height: 12),
-                  CustomTextFormField(
-                    title: 'Email Address',
-                    hintText: 'john@example.com',
-                    controller: controller.emailCtrl,
-                    prefixIcon: const Padding(
-                      padding: EdgeInsets.only(left: 12, right: 8),
-                      child: Icon(
-                        Icons.email_outlined,
-                        size: 20,
-                      ),
+                  _Field(
+                    label: 'Email Address',
+                    child: TextFormField(
+                      controller: controller.emailCtrl,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration:
+                          _dec('john@example.com', Icons.email_outlined, cs),
                     ),
-                    keyboardType: TextInputType.emailAddress,
                   ),
                   const SizedBox(height: 12),
-                  CustomTextFormField(
-                    title: 'Phone Number',
-                    hintText: '+1 (555) 000-0000',
-                    controller: controller.phoneCtrl,
-                    prefixIcon: const Padding(
-                      padding: EdgeInsets.only(left: 12, right: 8),
-                      child: Icon(
-                        Icons.phone_outlined,
-                        size: 20,
-                      ),
+                  _Field(
+                    label: 'Phone Number',
+                    child: TextFormField(
+                      controller: controller.phoneCtrl,
+                      keyboardType: TextInputType.phone,
+                      decoration:
+                          _dec('+1 (555) 000-0000', Icons.phone_outlined, cs),
                     ),
-                    keyboardType: TextInputType.phone,
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 24),
             // Address Details
-            Container(
-              decoration: BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 16,
-                      offset: const Offset(0, 2),
-                    )
-                  ]),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+            AppCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const _SectionLabel(label: 'ADDRESS DETAILS'),
                   const SizedBox(height: 12),
-                  CustomTextFormField(
-                    title: 'Street Address',
-                    hintText: '123 Financial Way',
-                    controller: controller.addressCtrl,
-                    prefixIcon: const Padding(
-                      padding: EdgeInsets.only(left: 12, right: 8),
-                      child: Icon(
-                        Icons.location_on_outlined,
-                        size: 20,
-                      ),
+                  _Field(
+                    label: 'Street Address',
+                    child: TextFormField(
+                      controller: controller.addressCtrl,
+                      decoration: _dec(
+                          '123 Financial Way', Icons.location_on_outlined, cs),
                     ),
                   ),
                   const SizedBox(height: 12),
-                  CustomTextFormField(
-                    title: 'City',
-                    hintText: 'New York',
-                    controller: controller.cityCtrl,
+                  _Field(
+                    label: 'City',
+                    child: TextFormField(
+                      controller: controller.cityCtrl,
+                      decoration: _dec('New York', null, cs),
+                    ),
                   ),
                   const SizedBox(height: 12),
                   Row(
                     children: [
                       Expanded(
-                        child: CustomTextFormField(
-                          title: 'State / Province',
-                          hintText: 'NY',
-                          controller: controller.stateCtrl,
+                        child: _Field(
+                          label: 'State / Province',
+                          child: TextFormField(
+                            controller: controller.stateCtrl,
+                            decoration: _dec('NY', null, cs),
+                          ),
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      Gaps.h12,
                       Expanded(
-                        child: CustomTextFormField(
-                          title: 'Postal Code',
-                          hintText: '10001',
-                          controller: controller.postalCtrl,
-                          prefixIcon: const Padding(
-                            padding: EdgeInsets.only(left: 12, right: 8),
-                            child: Icon(
-                              Icons.markunread_mailbox_outlined,
-                              size: 20,
-                            ),
+                        child: _Field(
+                          label: 'Postal Code',
+                          child: TextFormField(
+                            controller: controller.postalCtrl,
+                            keyboardType: TextInputType.number,
+                            decoration: _dec(
+                                '10001', Icons.markunread_mailbox_outlined, cs),
                           ),
-                          keyboardType: TextInputType.number,
                         ),
                       ),
                     ],
@@ -256,18 +208,28 @@ class AddCustomerView extends GetView<AddCustomerController> {
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-            border: Border.all(color: AppColors.grey100, width: 1)),
+          color: isDark ? AppColor.darkSurfaceContainer : Colors.white,
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black.withOpacity(0.08),
+                blurRadius: 16,
+                offset: const Offset(0, -4))
+          ],
+        ),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         child: SizedBox(
           width: double.infinity,
           child: ElevatedButton.icon(
-            onPressed: () {},
-            icon: const Icon(Icons.save_rounded, size: 18),
-            label: const Text('Save Customer'),
+            onPressed: controller.isSaving.value ? null : controller.onSave,
+            icon: controller.isSaving.value
+                ? const SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(
+                    strokeWidth: 2, color: Colors.white))
+                : const Icon(Icons.save_rounded, size: 20),
+            label:  Text(controller.isSaving.value ? 'Saving...' : 'Save Product'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               textStyle: const TextStyle(
@@ -281,6 +243,28 @@ class AddCustomerView extends GetView<AddCustomerController> {
       ),
     );
   }
+
+  InputDecoration _dec(String hint, IconData? icon, ColorScheme cs) =>
+      InputDecoration(
+          hintText: hint,
+          prefixIcon:
+              icon != null ? Icon(icon, color: cs.outline, size: 20) : null,
+          filled: true,
+          fillColor: const Color(0xFFF1F5F9),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide.none),
+          enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide.none),
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: cs.primary, width: 2)),
+          errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: cs.error, width: 1.5)),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 16));
 }
 
 class _SectionLabel extends StatelessWidget {
@@ -300,5 +284,28 @@ class _SectionLabel extends StatelessWidget {
         letterSpacing: 1.0,
       ),
     );
+  }
+}
+
+class _Field extends StatelessWidget {
+  final String label;
+  final Widget child;
+
+  const _Field({required this.label, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: 6),
+          child: Text(label,
+              style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: cs.onSurfaceVariant,
+                  letterSpacing: 0.4))),
+      child,
+    ]);
   }
 }

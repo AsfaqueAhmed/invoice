@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_getx_app/app/core/configs/theme/app_color.dart';
+import 'package:flutter_getx_app/app/core/widgets/app_bar.dart';
 import 'package:flutter_getx_app/app/core/widgets/app_card.dart';
 import 'package:get/get.dart';
 
@@ -13,13 +14,9 @@ class InvoiceDetailsView extends GetView<InvoiceDetailsController> {
     final cs = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back_rounded, color: cs.primary),
-            onPressed: Get.back),
-        title: Text('Invoice #1024',
-            style: TextStyle(fontWeight: FontWeight.w700, color: cs.primary)),
-        actions: [
+      appBar: CustomAppAppbar(
+        title: 'Invoice #1024',
+        action: [
           Container(
               width: 36,
               height: 36,

@@ -59,7 +59,9 @@ class InvoiceListController extends GetxController {
     return list;
   }
 
-  void onSearch(String v) => searchQuery(v);
+  void onSearch(String v) {
+    searchQuery(v);
+  }
 
   void onFilter(String f) => selectedFilter(f);
 

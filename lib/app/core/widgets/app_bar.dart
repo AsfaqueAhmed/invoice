@@ -4,6 +4,8 @@ import 'package:flutter_getx_app/app/core/configs/text_style/app_text_styles.dar
 import 'package:flutter_getx_app/app/core/configs/theme/app_colors.dart';
 import 'package:get/get.dart';
 
+import '../configs/theme/app_color.dart';
+
 class CustomAppAppbar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final String? subTitle;
@@ -38,21 +40,24 @@ class CustomAppAppbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return AppBar(
-      backgroundColor: AppColors.surface,
+      backgroundColor: isDark ? AppColor.darkSurface : AppColor.surface,
       elevation: 0,
       centerTitle: needTitleCentre,
       scrolledUnderElevation: 0,
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(1),
-        child: Container(
-          height: 1,
-          color: AppColors.grey100,
-        ),
-      ),
+      // bottom: PreferredSize(
+      //   preferredSize: const Size.fromHeight(1),
+      //   child: Container(
+      //     height: 1,
+      //     color: isDark ? AppColors.grey700 : AppColors.grey100,
+      //   ),
+      // ),
       leading: needLeadingIcon
           ? Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8).copyWith(left: 16),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8).copyWith(left: 16),
               child: IconButton(
                 onPressed: backTap ?? Get.back,
                 icon: Padding(
@@ -60,7 +65,7 @@ class CustomAppAppbar extends StatelessWidget implements PreferredSizeWidget {
                   child: Icon(
                     leadingIcon ?? Icons.arrow_back,
                     size: 20,
-                    color: AppColors.primary,
+                    color: cs.primary,
                   ),
                 ),
               ),
@@ -68,7 +73,8 @@ class CustomAppAppbar extends StatelessWidget implements PreferredSizeWidget {
           : null,
       title: Text(
         title,
-        style: AppTextStyles.titleLarge.copyWith(color: AppColors.primary),
+        style: TextStyle(
+            fontSize: 18, fontWeight: FontWeight.w700, color: cs.primary),
         textAlign: TextAlign.left,
       ),
       actions: action,
