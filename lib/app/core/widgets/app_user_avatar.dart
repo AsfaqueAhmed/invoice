@@ -1,45 +1,56 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_getx_app/app/core/configs/theme/app_colors.dart';
-import 'package:flutter_getx_app/app/core/widgets/custom_cache_network_image.dart';
+import '../configs/theme/app_colors.dart';
+import '../constants/app_decorations.dart';
 
+/// A simple circular avatar that shows initials or a network image.
 class AppUserAvatar extends StatelessWidget {
+  final String name;
   final String? imageUrl;
-  final String initials;
   final double size;
-  final double borderRadius;
-  final Color color;
 
   const AppUserAvatar({
     super.key,
+    required this.name,
     this.imageUrl,
-    required this.initials,
     this.size = 44,
-    this.color = AppColors.primary,
-    this.borderRadius = 12,
   });
+
+  String get _initials {
+    final parts = name.trim().split(' ');
+    if (parts.length >= 2) {
+      return '${parts[0][0]}${parts[1][0]}'.toUpperCase();
+    }
+    return name.isNotEmpty ? name[0].toUpperCase() : '?';
+  }
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Container(
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: color.withOpacity(0.12),
-        borderRadius: BorderRadius.circular(borderRadius),
+        color: colors.primaryContainer,
+        shape: BoxShape.circle,
       ),
-      child: imageUrl == null
-          ? Center(
-              child: Text(
-                initials,
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w700,
-                  fontSize: size * 0.35,
-                  color: color,
-                ),
-              ),
-            )
-          : CacheNetworkImage(imageUrl: imageUrl ?? ''),
+      child: imageUrl != null
+          ? ClipOval(
+              child: Image.network(imageUrl!, fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => _fallback(colors)))
+          : _fallback(colors),
+    );
+  }
+
+  Widget _fallback(AppColorBase colors) {
+    return Center(
+      child: Text(
+        _initials,
+        style: TextStyle(
+          fontWeight: FontWeight.w700,
+          fontSize: size * 0.36,
+          color: colors.primary,
+        ),
+      ),
     );
   }
 }

@@ -1,59 +1,76 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_getx_app/app/routes/app_pages.dart';
 import 'package:get/get.dart';
+
+import '../../../../core/database/database_service.dart';
+import '../../../../data/datasources/local/product_local_datasource.dart';
+import '../../../../data/entities/product_entity.dart';
+import '../../../../routes/app_pages.dart';
 
 class ProductListController extends GetxController {
   final searchController = TextEditingController();
   final RxString searchQuery = ''.obs;
-  final totalValue = r'$124,500';
-  final lowStockCount = 12;
-  final allProducts = <Map<String, dynamic>>[
-    {
-      'name': 'Premium Laptop Stand',
-      'sku': 'PLS-990-BLK',
-      'stock': 450,
-      'price': r'$89.00',
-      'status': 'instock'
-    },
-    {
-      'name': 'Wireless Ergo Mouse',
-      'sku': 'WEM-102-SLV',
-      'stock': 8,
-      'price': r'$55.00',
-      'status': 'lowstock'
-    },
-    {
-      'name': 'Mechanical Keyboard V2',
-      'sku': 'MKV2-RGB-PRO',
-      'stock': 0,
-      'price': r'$149.50',
-      'status': 'outofstock'
-    },
-    {
-      'name': 'USB-C Hub 8-in-1',
-      'sku': 'HUB-81-GRY',
-      'stock': 1240,
-      'price': r'$42.99',
-      'status': 'instock'
-    },
-  ].obs;
+  final RxBool isLoading = true.obs;
+  final RxList<ProductEntity> _allProducts =
+      <ProductEntity>[].obs;
 
-  List<Map<String, dynamic>> get filtered {
-    final q = searchQuery.value.toLowerCase();
-    if (q.isEmpty) return allProducts;
-    return allProducts
+  late final ProductLocalDatasource _datasource;
+
+  // Computed
+  String get totalValue {
+    final total = _allProducts.fold<double>(
+      0,
+      (sum, p) => sum + (p.sellingPrice * p.stock),
+    );
+    return _fmt(total);
+  }
+
+  int get lowStockCount =>
+      _allProducts.where((p) => p.stock > 0 && p.stock <= 10).length;
+
+  List<ProductEntity> get filtered {
+    final q = searchQuery.value.toLowerCase().trim();
+    if (q.isEmpty) return _allProducts;
+    return _allProducts
         .where((p) =>
-            (p['name'] as String).toLowerCase().contains(q) ||
-            (p['sku'] as String).toLowerCase().contains(q))
+            p.name.toLowerCase().contains(q) ||
+            p.sku.toLowerCase().contains(q) ||
+            p.category.toLowerCase().contains(q))
         .toList();
   }
 
+  @override
+  void onInit() {
+    super.onInit();
+    _datasource = ProductLocalDatasource(DatabaseService());
+    _loadProducts();
+  }
+
+  Future<void> _loadProducts() async {
+    isLoading(true);
+    try {
+      _allProducts.value = await _datasource.getAll();
+    } catch (_) {
+      _allProducts.value = [];
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  Future<void> refresh() => _loadProducts();
+
   void onSearch(String v) => searchQuery(v);
 
-  void onProductTap(Map<String, dynamic> p) =>
+  void onProductTap(ProductEntity p) =>
       Get.toNamed(Routes.PRODUCT_DETAILS, arguments: p);
 
   void onAddProduct() => Get.toNamed(Routes.ADD_PRODUCT);
+
+  String _fmt(double val) {
+    if (val >= 1000) {
+      return '\$${val.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]},')}';
+    }
+    return '\$${val.toStringAsFixed(2)}';
+  }
 
   @override
   void onClose() {

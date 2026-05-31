@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_getx_app/app/core/configs/text_style/app_text_styles.dart';
-import 'package:flutter_getx_app/app/core/configs/theme/app_colors.dart';
 import 'package:get/get.dart';
+
+import '../configs/text_style/app_text_styles.dart';
+import '../configs/theme/app_colors.dart';
 
 class CustomAppAppbar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -38,38 +39,54 @@ class CustomAppAppbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return AppBar(
-      backgroundColor: AppColors.surface,
+      backgroundColor: colors.surface,
       elevation: 0,
-      centerTitle: needTitleCentre,
       scrolledUnderElevation: 0,
+      centerTitle: needTitleCentre,
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1),
         child: Container(
           height: 1,
-          color: AppColors.grey100,
+          color: colors.outlineVariant.withOpacity(0.3),
         ),
       ),
       leading: needLeadingIcon
           ? Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8).copyWith(left: 16),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8).copyWith(left: 16),
               child: IconButton(
                 onPressed: backTap ?? Get.back,
                 icon: Padding(
                   padding: const EdgeInsets.only(right: 8.0),
                   child: Icon(
-                    leadingIcon ?? Icons.arrow_back,
+                    leadingIcon ?? Icons.arrow_back_rounded,
                     size: 20,
-                    color: AppColors.primary,
+                    color: colors.primary,
                   ),
                 ),
               ),
             )
           : null,
-      title: Text(
-        title,
-        style: AppTextStyles.titleLarge.copyWith(color: AppColors.primary),
-        textAlign: TextAlign.left,
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            title,
+            style: AppTextStyles.titleLarge.copyWith(color: colors.primary),
+            textAlign: TextAlign.left,
+          ),
+          if (subTitle != null)
+            Text(
+              subTitle!,
+              style: AppTextStyles.bodySmall.copyWith(
+                color: subtitleColor ?? colors.textSecondary,
+              ),
+            ),
+        ],
       ),
       actions: action,
       systemOverlayStyle: isWhiteStatusBar
@@ -87,5 +104,5 @@ class CustomAppAppbar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight + 1);
 }

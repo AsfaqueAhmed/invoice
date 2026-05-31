@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_getx_app/app/core/configs/theme/app_color.dart';
-import 'package:flutter_getx_app/app/core/configs/theme/app_colors.dart';
-import 'package:flutter_getx_app/app/core/widgets/app_bar.dart';
-import 'package:flutter_getx_app/app/core/widgets/app_card.dart';
-import 'package:flutter_getx_app/app/core/widgets/custom_cache_network_image.dart';
-import 'package:flutter_getx_app/app/core/widgets/status_badge.dart';
-import 'package:flutter_getx_app/app/modules/product/product_details/views/widgets/app_section_header.dart';
-import 'package:flutter_getx_app/app/modules/product/product_list/model/product_model.dart';
-import 'package:flutter_getx_app/app/modules/product/product_list/views/widgets/app_status_chip.dart';
-
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
+import '../../../../core/configs/theme/app_colors.dart';
+import '../../../../core/constants/gaps.dart';
+import '../../../../core/constants/app_decorations.dart';
+import '../../../../core/widgets/app_card.dart';
+import '../../../../core/widgets/status_badge.dart';
 import '../controllers/product_details_controller.dart';
 
 class ProductDetailsView extends GetView<ProductDetailsController> {
@@ -19,305 +13,457 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colors = context.appColors;
     final p = controller.product;
+
     return Scaffold(
+      backgroundColor: colors.scaffold,
       appBar: AppBar(
+        backgroundColor: colors.surface,
         leading: IconButton(
-            icon: Icon(Icons.arrow_back_rounded, color: cs.primary),
-            onPressed: Get.back),
-        title: Text('InvoiceFlow',
-            style: TextStyle(
-                fontSize: 18, fontWeight: FontWeight.w700, color: cs.primary)),
+          icon: Icon(Icons.arrow_back_rounded, color: colors.primary),
+          onPressed: Get.back,
+        ),
+        title: Text(
+          'InvoiceFlow',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: colors.primary,
+          ),
+        ),
         actions: [
           IconButton(
-              icon: Icon(Icons.edit_outlined, color: cs.secondary),
-              onPressed: () {})
+            icon: Icon(Icons.edit_outlined, color: colors.textSecondary),
+            onPressed: () {},
+          ),
         ],
       ),
       bottomNavigationBar: Container(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
         decoration: BoxDecoration(
-            color: isDark ? AppColor.darkSurfaceContainer : Colors.white,
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black.withOpacity(0.08),
-                  blurRadius: 16,
-                  offset: const Offset(0, -4))
-            ]),
+          color: colors.cardBg,
+          boxShadow: AppDecorations.bottomSheetShadow,
+        ),
         child: Row(children: [
           Expanded(
-              child: OutlinedButton.icon(
-                  onPressed: controller.onShare,
-                  icon: const Icon(Icons.share_outlined, size: 18),
-                  label: const Text('Share'),
-                  style: OutlinedButton.styleFrom(
-                      minimumSize: const Size(0, 52),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14))))),
-          const SizedBox(width: 12),
+            child: OutlinedButton.icon(
+              onPressed: controller.onShare,
+              icon: const Icon(Icons.share_outlined, size: 18),
+              label: const Text('Share'),
+              style: OutlinedButton.styleFrom(
+                minimumSize: const Size(0, 52),
+                shape: RoundedRectangleBorder(
+                  borderRadius: AppDecorations.borderRadiusSM,
+                ),
+              ),
+            ),
+          ),
+          Gaps.h12,
           Expanded(
-              flex: 2,
-              child: ElevatedButton.icon(
-                  onPressed: controller.onAddToInvoice,
-                  icon: const Icon(Icons.add_circle_rounded, size: 18),
-                  label: const Text('Add to Invoice'),
-                  style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(0, 52),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14))))),
+            flex: 2,
+            child: ElevatedButton.icon(
+              onPressed: controller.onAddToInvoice,
+              icon: const Icon(Icons.add_circle_rounded, size: 18),
+              label: const Text('Add to Invoice'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: colors.primary,
+                foregroundColor: colors.onPrimary,
+                minimumSize: const Size(0, 52),
+                shape: RoundedRectangleBorder(
+                  borderRadius: AppDecorations.borderRadiusSM,
+                ),
+              ),
+            ),
+          ),
         ]),
       ),
       body: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            // Hero image
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // ── Hero image ──────────────────────────────────
             Stack(children: [
               Container(
-                  width: double.infinity,
-                  height: 220,
-                  decoration: BoxDecoration(
-                      color: cs.surfaceContainerLowest,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black.withOpacity(0.06),
-                            blurRadius: 16)
-                      ]),
-                  child: Icon(Icons.inventory_2_rounded,
-                      size: 80, color: cs.outlineVariant)),
+                width: double.infinity,
+                height: 220,
+                decoration: BoxDecoration(
+                  color: colors.surfaceContainerLowest,
+                  borderRadius: AppDecorations.borderRadiusXL,
+                  boxShadow: AppDecorations.cardShadow(
+                    Theme.of(context).brightness == Brightness.dark,
+                  ),
+                ),
+                child: Icon(Icons.inventory_2_rounded,
+                    size: 80, color: colors.outlineVariant),
+              ),
               Positioned(
-                  top: 12, right: 12, child: _statusBadge(p['status'], cs)),
+                top: 12,
+                right: 12,
+                child: _StatusBadge(
+                    status: p['status'] ?? 'instock', colors: colors),
+              ),
             ]),
-            const SizedBox(height: 16),
-            Text('SKU: ${p['sku']}',
-                style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: cs.secondary,
-                    letterSpacing: 0.8)),
-            const SizedBox(height: 4),
-            Text(p['name'],
-                style:
-                    const TextStyle(fontSize: 22, fontWeight: FontWeight.w700)),
-            const SizedBox(height: 16),
-            // Metrics
+
+            Gaps.v16,
+
+            Text(
+              'SKU: ${p['sku']}',
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                color: colors.textSecondary,
+                letterSpacing: 0.8,
+              ),
+            ),
+            Gaps.v4,
+            Text(
+              p['name'],
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                color: colors.textPrimary,
+              ),
+            ),
+
+            Gaps.v16,
+
+            // ── Metrics ─────────────────────────────────────
             Row(children: [
               Expanded(
-                  child: AppCard(
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                    Text('Stock Level',
+                child: AppCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Stock Level',
                         style: TextStyle(
-                            fontSize: 11,
-                            color: cs.secondary,
-                            fontWeight: FontWeight.w600)),
-                    const SizedBox(height: 4),
-                    Row(
+                          fontSize: 11,
+                          color: colors.textSecondary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Gaps.v4,
+                      Row(
                         crossAxisAlignment: CrossAxisAlignment.baseline,
                         textBaseline: TextBaseline.alphabetic,
                         children: [
-                          Text('${p['stock']}',
-                              style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w700,
-                                  color: cs.onSurface)),
-                          const SizedBox(width: 4),
+                          Text(
+                            '${p['stock']}',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w700,
+                              color: colors.textPrimary,
+                            ),
+                          ),
+                          Gaps.h4,
                           Text('units',
-                              style:
-                                  TextStyle(fontSize: 11, color: cs.outline)),
-                        ]),
-                  ]))),
-              const SizedBox(width: 12),
+                              style: TextStyle(
+                                  fontSize: 11, color: colors.outline)),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Gaps.h12,
               Expanded(
-                  child: AppCard(
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                    Text('Unit Price',
-                        style: TextStyle(
-                            fontSize: 11,
-                            color: cs.secondary,
-                            fontWeight: FontWeight.w600)),
-                    const SizedBox(height: 4),
-                    Text(p['price'],
-                        style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w700,
-                            color: cs.primary)),
-                  ]))),
-            ]),
-            const SizedBox(height: 12),
-            Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                    color: cs.primaryContainer,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                          color: cs.primary.withOpacity(0.2),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4))
-                    ]),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Total Inventory Value',
-                                style: TextStyle(
-                                    fontSize: 11,
-                                    color:
-                                        cs.onPrimaryContainer.withOpacity(0.8),
-                                    fontWeight: FontWeight.w600)),
-                            const SizedBox(height: 4),
-                            Text('\$${(p['stock'] * 89).toStringAsFixed(2)}',
-                                style: TextStyle(
-                                    fontSize: 26,
-                                    fontWeight: FontWeight.w700,
-                                    color: cs.onPrimaryContainer,
-                                    letterSpacing: -0.5)),
-                          ]),
-                      Container(
-                          width: 48,
-                          height: 48,
-                          decoration: BoxDecoration(
-                              color: cs.onPrimaryContainer.withOpacity(0.15),
-                              shape: BoxShape.circle),
-                          child: Icon(Icons.account_balance_wallet_rounded,
-                              color: cs.onPrimaryContainer, size: 26)),
-                    ])),
-            const SizedBox(height: 20),
-            // Details
-            AppCard(
-                child: Column(
+                child: AppCard(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                  const Text('Details',
-                      style:
-                          TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
-                  const SizedBox(height: 8),
+                      Text(
+                        'Unit Price',
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: colors.textSecondary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Gaps.v4,
+                      Text(
+                        p['price'],
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w700,
+                          color: colors.primary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ]),
+
+            Gaps.v12,
+
+            // ── Total inventory value ────────────────────────
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: colors.primaryContainer,
+                borderRadius: AppDecorations.borderRadiusMD,
+                boxShadow: AppDecorations.buttonShadow(colors.primary),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Total Inventory Value',
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: colors.onPrimaryContainer
+                              .withOpacity(0.8),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Gaps.v4,
+                      Text(
+                        '\$${(p['stock'] * 89).toStringAsFixed(2)}',
+                        style: TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.w700,
+                          color: colors.onPrimaryContainer,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: colors.onPrimaryContainer.withOpacity(0.15),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                        Icons.account_balance_wallet_rounded,
+                        color: colors.onPrimaryContainer,
+                        size: 26),
+                  ),
+                ],
+              ),
+            ),
+
+            Gaps.v20,
+
+            // ── Details card ────────────────────────────────
+            AppCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Text(
-                      'Sleek aluminum product with premium build quality. Compatible with a wide range of use cases.',
-                      style: TextStyle(
-                          fontSize: 14,
-                          color: cs.onSurfaceVariant,
-                          height: 1.5)),
-                  const SizedBox(height: 12),
+                    'Details',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                      color: colors.textPrimary,
+                    ),
+                  ),
+                  Gaps.v8,
+                  Text(
+                    'Sleek product with premium build quality. Compatible with a wide range of use cases.',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: colors.textSecondary,
+                      height: 1.5,
+                    ),
+                  ),
+                  Gaps.v12,
                   Row(children: [
                     Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Category',
-                              style: TextStyle(
-                                  fontSize: 11,
-                                  color: cs.secondary,
-                                  fontWeight: FontWeight.w600)),
-                          const Text('Hardware / Accessories',
-                              style: TextStyle(fontSize: 13)),
-                        ]),
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Category',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: colors.textSecondary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Text(
+                          'Hardware / Accessories',
+                          style: TextStyle(
+                              fontSize: 13, color: colors.textPrimary),
+                        ),
+                      ],
+                    ),
                     Container(
-                        width: 1,
-                        height: 36,
-                        margin: const EdgeInsets.symmetric(horizontal: 20),
-                        color: cs.outlineVariant),
+                      width: 1,
+                      height: 36,
+                      margin:
+                          const EdgeInsets.symmetric(horizontal: 20),
+                      color: colors.outlineVariant.withOpacity(0.5),
+                    ),
                     Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Tax Rate',
-                              style: TextStyle(
-                                  fontSize: 11,
-                                  color: cs.secondary,
-                                  fontWeight: FontWeight.w600)),
-                          const Text('8.5%', style: TextStyle(fontSize: 13)),
-                        ]),
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Tax Rate',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: colors.textSecondary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Text(
+                          '8.5%',
+                          style: TextStyle(
+                              fontSize: 13, color: colors.textPrimary),
+                        ),
+                      ],
+                    ),
                   ]),
-                ])),
-            const SizedBox(height: 20),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              const Text('Recent Invoices',
-                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
-              TextButton(onPressed: () {}, child: const Text('View All')),
-            ]),
-            const SizedBox(height: 8),
-            ...controller.recentInvoices.map((inv) => Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: AppCard(
-                      child: Row(children: [
+                ],
+              ),
+            ),
+
+            Gaps.v20,
+
+            // ── Recent invoices ──────────────────────────────
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Recent Invoices',
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600,
+                    color: colors.textPrimary,
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {},
+                  child: const Text('View All'),
+                ),
+              ],
+            ),
+            Gaps.v8,
+            ...controller.recentInvoices.map(
+              (inv) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: AppCard(
+                  child: Row(children: [
                     Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                            color: cs.secondaryContainer,
-                            shape: BoxShape.circle),
-                        child: Icon(Icons.description_outlined,
-                            color: cs.onSecondaryContainer, size: 20)),
-                    const SizedBox(width: 12),
+                      width: 40,
+                      height: 40,
+                      decoration: AppDecorations.avatarDecoration(
+                          color: colors.secondaryContainer),
+                      child: Icon(Icons.description_outlined,
+                          color: colors.onSecondaryContainer, size: 20),
+                    ),
+                    Gaps.h12,
                     Expanded(
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                          Text(inv['number'],
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w600, fontSize: 13)),
-                          Text('${inv['date']} • ${inv['qty']} units',
-                              style: TextStyle(
-                                  fontSize: 11, color: cs.onSurfaceVariant)),
-                        ])),
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(inv['amount'],
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w700, fontSize: 13)),
-                          const SizedBox(height: 4),
-                          StatusBadge(
-                              status: StatusBadge.fromString(inv['status'])),
-                        ]),
-                  ])),
-                )),
+                          Text(
+                            inv['number'],
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                              color: colors.textPrimary,
+                            ),
+                          ),
+                          Text(
+                            '${inv['date']} • ${inv['qty']} units',
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: colors.textSecondary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          inv['amount'],
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13,
+                            color: colors.textPrimary,
+                          ),
+                        ),
+                        Gaps.v4,
+                        StatusBadge(
+                          status: StatusBadge.fromString(inv['status']),
+                        ),
+                      ],
+                    ),
+                  ]),
+                ),
+              ),
+            ),
             const SizedBox(height: 80),
-          ])),
+          ],
+        ),
+      ),
     );
   }
+}
 
-  Widget _statusBadge(String status, ColorScheme cs) {
-    final (bg, fg, label) = switch (status) {
-      'instock' => (
-          const Color(0xFFE8F5E9),
-          const Color(0xFF2E7D32),
-          'In Stock'
-        ),
-      'lowstock' => (
-          const Color(0xFFFFF8E1),
-          const Color(0xFFF57F17),
-          'Low Stock'
-        ),
-      'outofstock' => (
-          const Color(0xFFFFEBEE),
-          const Color(0xFFC62828),
-          'Out of Stock'
-        ),
-      _ => (cs.surfaceContainerHigh, cs.onSurfaceVariant, 'Unknown'),
-    };
+class _StatusBadge extends StatelessWidget {
+  final String status;
+  final AppColorBase colors;
+
+  const _StatusBadge({required this.status, required this.colors});
+
+  @override
+  Widget build(BuildContext context) {
+    final Color bg;
+    final Color fg;
+    final String label;
+
+    switch (status) {
+      case 'instock':
+        bg = colors.chipGreenBg;
+        fg = colors.chipGreenFg;
+        label = 'In Stock';
+        break;
+      case 'lowstock':
+        bg = colors.chipAmberBg;
+        fg = colors.chipAmberFg;
+        label = 'Low Stock';
+        break;
+      case 'outofstock':
+        bg = colors.chipRedBg;
+        fg = colors.chipRedFg;
+        label = 'Out of Stock';
+        break;
+      default:
+        bg = colors.chipGrayBg;
+        fg = colors.chipGrayFg;
+        label = 'Unknown';
+    }
+
     return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        decoration:
-            BoxDecoration(color: bg, borderRadius: BorderRadius.circular(99)),
-        child: Row(children: [
-          Container(
-              width: 6,
-              height: 6,
-              margin: const EdgeInsets.only(right: 6),
-              decoration: BoxDecoration(color: fg, shape: BoxShape.circle)),
-          Text(label,
-              style: TextStyle(
-                  fontSize: 11, fontWeight: FontWeight.w700, color: fg)),
-        ]));
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration:
+          AppDecorations.chipDecoration(bg: bg),
+      child: Row(children: [
+        Container(
+          width: 6,
+          height: 6,
+          margin: const EdgeInsets.only(right: 6),
+          decoration: BoxDecoration(color: fg, shape: BoxShape.circle),
+        ),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w700,
+            color: fg,
+          ),
+        ),
+      ]),
+    );
   }
 }

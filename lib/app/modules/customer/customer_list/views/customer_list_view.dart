@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_getx_app/app/core/configs/theme/app_color.dart';
-import 'package:flutter_getx_app/app/core/widgets/app_bottom_nav.dart';
-import 'package:flutter_getx_app/app/core/widgets/app_card.dart';
-import 'package:flutter_getx_app/app/modules/customer/customer_list/controllers/customer_list_controller.dart';
 import 'package:get/get.dart';
+
+import '../../../../core/configs/theme/app_colors.dart';
+import '../../../../core/constants/gaps.dart';
+import '../../../../core/constants/padding.dart';
+import '../../../../core/constants/app_decorations.dart';
+import '../../../../core/widgets/app_card.dart';
+import '../../../../core/widgets/app_bottom_nav.dart';
+import '../../../../core/widgets/app_text_field.dart';
+import '../../../../data/entities/customer_entity.dart';
+import '../controllers/customer_list_controller.dart';
 
 class CustomerListView extends GetView<CustomerListController> {
   const CustomerListView({super.key});
@@ -11,313 +17,428 @@ class CustomerListView extends GetView<CustomerListController> {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colors = context.appColors;
+
     return Scaffold(
+      backgroundColor: colors.scaffold,
       floatingActionButton: FloatingActionButton(
-          onPressed: controller.onAddCustomer,
-          child: const Icon(Icons.add_rounded, size: 28)),
+        onPressed: controller.onAddCustomer,
+        backgroundColor: colors.primary,
+        foregroundColor: colors.onPrimary,
+        child: const Icon(Icons.add_rounded, size: 28),
+      ),
       bottomNavigationBar: const AppBottomNav(currentIndex: 2),
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            floating: true,
-            snap: true,
-            backgroundColor: isDark ? AppColor.darkSurface : AppColor.surface,
-            elevation: 0,
-            title: Row(
-              children: [
-                Icon(Icons.account_balance_wallet_rounded, color: cs.primary),
-                const SizedBox(width: 8),
+      body: RefreshIndicator(
+        onRefresh: controller.refresh,
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              floating: true,
+              snap: true,
+              backgroundColor: colors.surface,
+              elevation: 0,
+              title: Row(children: [
+                Icon(Icons.account_balance_wallet_rounded,
+                    color: colors.primary),
+                Gaps.h8,
                 Text(
-                  'InvoiceFlow',
+                  'Customers',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
-                    color: cs.primary,
+                    color: colors.primary,
                   ),
                 ),
-              ],
+              ]),
             ),
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Search
-                  TextField(
-                    controller: controller.searchController,
-                    onChanged: controller.onSearch,
-                    decoration: const InputDecoration(
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: AppPadding.all20,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // ── Search ─────────────────────────────────
+                    AppTextField(
                       hintText: 'Search by name or phone...',
-                      prefixIcon: Icon(Icons.search_rounded),
-                      contentPadding: EdgeInsets.symmetric(vertical: 14),
+                      controller: controller.searchController,
+                      onChanged: controller.onSearch,
+                      prefixIcon: Icon(Icons.search_rounded,
+                          color: colors.outline),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  // Stats
-                  Row(children: [
-                    Expanded(
-                      child: AppCard(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Total Customers',
-                                style: TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w600,
-                                    color: cs.secondary,
-                                    letterSpacing: 0.8)),
-                            const SizedBox(height: 4),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.baseline,
-                              textBaseline: TextBaseline.alphabetic,
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    '${controller.totalCustomers}',
+
+                    Gaps.v16,
+
+                    // ── Stats ──────────────────────────────────
+                    Obx(() => Row(children: [
+                          Expanded(
+                            child: AppCard(
+                              child: Column(
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'TOTAL CUSTOMERS',
                                     style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w700,
-                                      color: cs.primary,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w600,
+                                      color: colors.textSecondary,
+                                      letterSpacing: 0.8,
                                     ),
                                   ),
-                                ),
-                                const SizedBox(width: 6),
-                                Text(
-                                  '+12% this month',
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    color: cs.primary.withOpacity(0.6),
+                                  Gaps.v4,
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.baseline,
+                                    textBaseline:
+                                        TextBaseline.alphabetic,
+                                    children: [
+                                      Text(
+                                        '${controller.totalCustomers}',
+                                        style: TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w700,
+                                          color: colors.primary,
+                                        ),
+                                      ),
+                                      Gaps.h6,
+                                      Text(
+                                        '+12% this month',
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          color: colors.primary
+                                              .withOpacity(0.6),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
+                            ),
+                          ),
+                          Gaps.h12,
+                          Expanded(
+                            child: AppCard(
+                              color: colors.errorContainer
+                                  .withOpacity(0.3),
+                              child: Column(
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'TOTAL OVERDUE',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w600,
+                                      color: colors.error,
+                                      letterSpacing: 0.8,
+                                    ),
+                                  ),
+                                  Gaps.v4,
+                                  Text(
+                                    controller.totalOverdue,
+                                    style: TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w700,
+                                      color: colors.error,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ])),
+
+                    Gaps.v20,
+
+                    Row(
+                      mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Active Customers',
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                            color: colors.textPrimary,
+                          ),
+                        ),
+                        TextButton.icon(
+                          onPressed: () {},
+                          icon: Icon(Icons.filter_list_rounded,
+                              size: 16, color: colors.primary),
+                          label: Text(
+                            'Filter',
+                            style: TextStyle(color: colors.primary),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    Gaps.v8,
+
+                    // ── Customer Cards ─────────────────────────
+                    Obx(() {
+                      if (controller.isLoading.value) {
+                        return Center(
+                          child: Padding(
+                            padding: AppPadding.v32,
+                            child: CircularProgressIndicator(
+                                color: colors.primary),
+                          ),
+                        );
+                      }
+                      final list = controller.filtered;
+                      if (list.isEmpty) {
+                        return _EmptyState(
+                          icon: Icons.group_outlined,
+                          message: 'No customers found.',
+                          colors: colors,
+                        );
+                      }
+                      return Column(
+                        children: list
+                            .map((c) => Padding(
+                                  padding: const EdgeInsets.only(
+                                      bottom: 12),
+                                  child: _CustomerCard(
+                                    customer: c,
+                                    colors: colors,
+                                    onTap: () =>
+                                        controller.onCustomerTap(c),
+                                  ),
+                                ))
+                            .toList(),
+                      );
+                    }),
+
+                    // ── Add new button ─────────────────────────
+                    GestureDetector(
+                      onTap: controller.onAddCustomer,
+                      child: Container(
+                        height: 120,
+                        decoration: AppDecorations
+                            .addButtonDecoration(context: context),
+                        child: Column(
+                          mainAxisAlignment:
+                              MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 44,
+                              height: 44,
+                              decoration: BoxDecoration(
+                                color: colors.surfaceContainer,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.add_rounded,
+                                color: colors.outline,
+                              ),
+                            ),
+                            Gaps.v8,
+                            Text(
+                              'Add New Customer',
+                              style: TextStyle(
+                                color: colors.outline,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ],
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                        child: AppCard(
-                            color: cs.errorContainer.withOpacity(0.3),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Total Overdue',
-                                      style: TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w600,
-                                          color: cs.error,
-                                          letterSpacing: 0.8)),
-                                  const SizedBox(height: 4),
-                                  Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.baseline,
-                                      textBaseline: TextBaseline.alphabetic,
-                                      children: [
-                                        Flexible(
-                                          child: Text(controller.totalOverdue,
-                                              style: TextStyle(
-                                                  fontSize: 22,
-                                                  fontWeight: FontWeight.w700,
-                                                  color: cs.error)),
-                                        ),
-                                        const SizedBox(width: 6),
-                                        Text('24 Pending',
-                                            style: TextStyle(
-                                                fontSize: 11,
-                                                color:
-                                                    cs.error.withOpacity(0.6))),
-                                      ]),
-                                ]))),
-                  ]),
-                  const SizedBox(height: 20),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text('Active Customers',
-                            style: TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.w600)),
-                        TextButton.icon(
-                            onPressed: () {},
-                            icon:
-                                const Icon(Icons.filter_list_rounded, size: 16),
-                            label: const Text('Filter')),
-                      ]),
-                  const SizedBox(height: 8),
-                  // Customer cards
-                  Obx(() => Column(
-                      children: controller.filtered
-                          .map((c) => Padding(
-                                padding: const EdgeInsets.only(bottom: 12),
-                                child: AppCard(
-                                    onTap: () => controller.onCustomerTap(c),
-                                    child: Column(children: [
-                                      Row(children: [
-                                        Container(
-                                            width: 52,
-                                            height: 52,
-                                            decoration: BoxDecoration(
-                                                color: AppColor.primaryFixed,
-                                                borderRadius:
-                                                    BorderRadius.circular(14)),
-                                            child: Center(
-                                                child: Text(c['initials'],
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontSize: 16,
-                                                        color: cs.primary)))),
-                                        const SizedBox(width: 12),
-                                        Expanded(
-                                            child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                              Text(c['name'],
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontSize: 15)),
-                                              Text(c['phone'],
-                                                  style: TextStyle(
-                                                      color: cs.secondary,
-                                                      fontSize: 13)),
-                                            ])),
-                                        IconButton(
-                                            icon: Icon(Icons.more_vert_rounded,
-                                                color: cs.outline),
-                                            onPressed: () {}),
-                                      ]),
-                                      const SizedBox(height: 12),
-                                      Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-                                            Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text('LAST INVOICE',
-                                                      style: TextStyle(
-                                                          fontSize: 10,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: cs.secondary,
-                                                          letterSpacing: 0.6)),
-                                                  Text(c['lastInvoice'],
-                                                      style: const TextStyle(
-                                                          fontSize: 13)),
-                                                  const SizedBox(height: 6),
-                                                  Container(
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 10,
-                                                          vertical: 4),
-                                                      decoration: BoxDecoration(
-                                                          color: _statusBg(
-                                                              c['status'],
-                                                              c['hasOverdue']),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      99)),
-                                                      child: Text(c['status'],
-                                                          style: TextStyle(
-                                                              fontSize: 10,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              color: _statusFg(
-                                                                  c['status'],
-                                                                  c['hasOverdue'],
-                                                                  cs)))),
-                                                ]),
-                                            Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.end,
-                                                children: [
-                                                  Text('DUE AMOUNT',
-                                                      style: TextStyle(
-                                                          fontSize: 10,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: cs.secondary,
-                                                          letterSpacing: 0.6)),
-                                                  Text(c['due'],
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          color: c['due'] ==
-                                                                  r'$0.00'
-                                                              ? cs.onSurface
-                                                              : cs.error)),
-                                                ]),
-                                          ]),
-                                    ])),
-                              ))
-                          .toList())),
-                  // Add new placeholder
-                  GestureDetector(
-                    onTap: controller.onAddCustomer,
-                    child: Container(
-                      height: 120,
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: cs.outlineVariant.withOpacity(0.5),
-                              width: 2),
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 44,
-                            height: 44,
-                            decoration: BoxDecoration(
-                                color: cs.surfaceContainer,
-                                shape: BoxShape.circle),
-                            child: Icon(
-                              Icons.add_rounded,
-                              color: cs.outline,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Add New Customer',
-                            style: TextStyle(
-                              color: cs.outline,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
+
+                    const SizedBox(height: 80),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CustomerCard extends StatelessWidget {
+  final CustomerEntity customer;
+  final AppColorBase colors;
+  final VoidCallback onTap;
+
+  const _CustomerCard({
+    required this.customer,
+    required this.colors,
+    required this.onTap,
+  });
+
+  String get _initials {
+    final parts = customer.name.trim().split(' ');
+    if (parts.length >= 2) {
+      return '${parts[0][0]}${parts[1][0]}'.toUpperCase();
+    }
+    return customer.name.isNotEmpty
+        ? customer.name[0].toUpperCase()
+        : '?';
+  }
+
+  bool get _hasOverdue => customer.totalDue > 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppCard(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Row(children: [
+            Container(
+              width: 52,
+              height: 52,
+              decoration: AppDecorations.avatarDecoration(
+                  color: colors.chipBlueBg),
+              child: Center(
+                child: Text(
+                  _initials,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                    color: colors.primary,
+                  ),
+                ),
+              ),
+            ),
+            Gaps.h12,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    customer.name,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
+                      color: colors.textPrimary,
                     ),
                   ),
-                  const SizedBox(height: 80),
+                  Text(
+                    customer.phone,
+                    style: TextStyle(
+                      color: colors.textSecondary,
+                      fontSize: 13,
+                    ),
+                  ),
                 ],
               ),
             ),
+            Icon(Icons.more_vert_rounded, color: colors.outline),
+          ]),
+          Gaps.v12,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'ADDRESS',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
+                      color: colors.textSecondary,
+                      letterSpacing: 0.6,
+                    ),
+                  ),
+                  Text(
+                    customer.address.isNotEmpty
+                        ? customer.address
+                        : 'N/A',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: colors.textSecondary,
+                    ),
+                  ),
+                  Gaps.v6,
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 4),
+                    decoration: AppDecorations.chipDecoration(
+                      bg: _hasOverdue
+                          ? colors.chipRedBg
+                          : colors.chipGreenBg,
+                    ),
+                    child: Text(
+                      _hasOverdue ? 'Has Overdue' : 'Cleared',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                        color: _hasOverdue
+                            ? colors.chipRedFg
+                            : colors.chipGreenFg,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    'DUE AMOUNT',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
+                      color: colors.textSecondary,
+                      letterSpacing: 0.6,
+                    ),
+                  ),
+                  Text(
+                    _hasOverdue
+                        ? '\$${customer.totalDue.toStringAsFixed(2)}'
+                        : '\$0.00',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: _hasOverdue
+                          ? colors.error
+                          : colors.textPrimary,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ],
       ),
     );
   }
+}
 
-  Color _statusBg(String s, bool overdue) {
-    if (overdue) return AppColor.errorContainer.withOpacity(0.2);
-    if (s.contains('VIP')) return AppColor.successBg;
-    if (s.contains('Active')) return AppColor.successBg;
-    return AppColor.surfaceContainerHigh;
-  }
+class _EmptyState extends StatelessWidget {
+  final IconData icon;
+  final String message;
+  final AppColorBase colors;
 
-  Color _statusFg(String s, bool overdue, ColorScheme cs) {
-    if (overdue) return cs.error;
-    if (s.contains('VIP') || s.contains('Active')) return AppColor.successText;
-    return cs.onSurfaceVariant;
+  const _EmptyState({
+    required this.icon,
+    required this.message,
+    required this.colors,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: AppPadding.v32,
+        child: Column(
+          children: [
+            Icon(icon, size: 48, color: colors.outline),
+            Gaps.v12,
+            Text(
+              message,
+              style: TextStyle(color: colors.textSecondary),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

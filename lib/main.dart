@@ -14,21 +14,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'GetX App',
+      title: 'InvoiceFlow',
       debugShowCheckedModeBanner: false,
 
-      // ─── Theme ──────────────────────────────────────────────
+      // ── Theme ─────────────────────────────────────────────
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
       themeMode: ThemeMode.system,
 
-      // ─── Routes ─────────────────────────────────────────────
+      // ── Routes ────────────────────────────────────────────
       initialRoute: AppPages.initial,
       getPages: AppPages.routes,
-
-      // ─── Locale (optional) ──────────────────────────────────
-      // locale: const Locale('en', 'US'),
-      // fallbackLocale: const Locale('en', 'US'),
     );
   }
 }

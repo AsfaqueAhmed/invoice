@@ -1,47 +1,61 @@
-import 'package:flutter_getx_app/app/routes/app_pages.dart';
 import 'package:get/get.dart';
+import '../../../../routes/app_pages.dart';
 
 class DuePaymentController extends GetxController {
-  final RxString selectedFilter = 'Today'.obs;
-  final filters = ['Today', 'Overdue', 'High Due', 'Recent'];
-  final totalDue = r'$24,590.00';
+  final RxString selectedFilter = 'All'.obs;
+  final filters = ['All', 'Overdue', 'Pending', 'Today'];
+
   final payments = <Map<String, dynamic>>[
     {
-      'name': 'Evergreen Media Group',
-      'status': 'overdue',
-      'badge': 'Overdue by 3 days',
-      'amount': r'$4,250.00',
-      'isOverdue': true
+      'name': 'Acme Corp Ltd.',
+      'amount': r'$3,200.00',
+      'badge': '14 days overdue',
+      'isOverdue': true,
     },
     {
-      'name': 'Design Theory Lab',
-      'status': 'due',
+      'name': 'Sarah Jenkins',
+      'amount': r'$890.00',
+      'badge': 'Due today',
+      'isOverdue': false,
+    },
+    {
+      'name': 'Global Tech Inc.',
+      'amount': r'$1,450.00',
+      'badge': '3 days overdue',
+      'isOverdue': true,
+    },
+    {
+      'name': 'Bright Solutions',
+      'amount': r'$560.00',
       'badge': 'Due in 2 days',
-      'amount': r'$1,890.00',
-      'isOverdue': false
-    },
-    {
-      'name': 'Soma Marketings',
-      'status': 'due',
-      'badge': 'Due in 5 days',
-      'amount': r'$12,450.00',
-      'isOverdue': false
-    },
-    {
-      'name': 'Lighthouse Devs',
-      'status': 'overdue',
-      'badge': 'Overdue by 12 days',
-      'amount': r'$6,000.00',
-      'isOverdue': true
+      'isOverdue': false,
     },
   ].obs;
+
+  String get totalDue {
+    final total = payments.fold<double>(
+      0,
+      (s, p) {
+        final raw =
+            (p['amount'] as String).replaceAll(RegExp(r'[^\d.]'), '');
+        return s + (double.tryParse(raw) ?? 0);
+      },
+    );
+    return '\$${total.toStringAsFixed(2)}';
+  }
 
   void onFilter(String f) => selectedFilter(f);
 
   void onCollect(Map<String, dynamic> p) =>
-      Get.toNamed(Routes.ADD_PAYMENT, arguments: p);
+      Get.toNamed(Routes.ADD_PAYMENT);
 
   void onCall(Map<String, dynamic> p) {}
 
-  void onRemind(Map<String, dynamic> p) {}
+  void onRemind(Map<String, dynamic> p) {
+    Get.snackbar(
+      'Reminder Sent',
+      'Payment reminder sent to ${p['name']}',
+      snackPosition: SnackPosition.BOTTOM,
+    );
+  }
 }

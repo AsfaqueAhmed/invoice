@@ -5,8 +5,11 @@ class Gaps {
   Gaps._();
 
   // Vertical Gaps
+  static const Widget v2 = SizedBox(height: 2);
   static const Widget v4 = SizedBox(height: 4);
+  static const Widget v6 = SizedBox(height: 6);
   static const Widget v8 = SizedBox(height: 8);
+  static const Widget v10 = SizedBox(height: 10);
   static const Widget v12 = SizedBox(height: 12);
   static const Widget v16 = SizedBox(height: 16);
   static const Widget v20 = SizedBox(height: 20);
@@ -17,8 +20,11 @@ class Gaps {
   static const Widget v64 = SizedBox(height: 64);
 
   // Horizontal Gaps
+  static const Widget h2 = SizedBox(width: 2);
   static const Widget h4 = SizedBox(width: 4);
+  static const Widget h6 = SizedBox(width: 6);
   static const Widget h8 = SizedBox(width: 8);
+  static const Widget h10 = SizedBox(width: 10);
   static const Widget h12 = SizedBox(width: 12);
   static const Widget h16 = SizedBox(width: 16);
   static const Widget h20 = SizedBox(width: 20);

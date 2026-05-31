@@ -1,72 +1,108 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_getx_app/app/routes/app_pages.dart';
 import 'package:get/get.dart';
+
+import '../../../../core/database/database_service.dart';
+import '../../../../data/datasources/local/invoice_local_datasource.dart';
+import '../../../../data/datasources/local/customer_local_datasource.dart';
+import '../../../../data/entities/invoice_entity.dart';
+import '../../../../data/entities/customer_entity.dart';
+import '../../../../routes/app_pages.dart';
 
 class InvoiceListController extends GetxController {
   final searchController = TextEditingController();
-  final RxString selectedFilter = 'All'.obs;
   final RxString searchQuery = ''.obs;
-  final filters = ['All', 'Paid', 'Partial', 'Due', 'Overdue'];
-  final totalReceivable = r'$42,850.00';
-  final collectedMTD = r'$12,400.00';
-  final allInvoices = <Map<String, dynamic>>[
-    {
-      'number': '1023',
-      'client': 'Alex Thompson',
-      'date': '24 Oct 2023',
-      'amount': r'$1,250.00',
-      'status': 'paid',
-      'tag': 'Product Design'
-    },
-    {
-      'number': '1022',
-      'client': 'Global Tech Corp',
-      'date': '22 Oct 2023',
-      'amount': r'$5,400.00',
-      'status': 'partial',
-      'tag': 'Cloud Migration'
-    },
-    {
-      'number': '1021',
-      'client': 'Sarah Jenkins',
-      'date': '18 Oct 2023',
-      'amount': r'$850.00',
-      'status': 'due',
-      'tag': 'Branding Suite'
-    },
-    {
-      'number': '1019',
-      'client': 'Marcus Webb',
-      'date': '05 Oct 2023',
-      'amount': r'$2,100.00',
-      'status': 'overdue',
-      'tag': 'Marketing Strategy'
-    },
-  ].obs;
+  final RxString selectedFilter = 'All'.obs;
+  final RxBool isLoading = true.obs;
+
+  final filters = ['All', 'Paid', 'Pending', 'Overdue', 'Partial'];
+
+  final RxList<Map<String, dynamic>> _allInvoices =
+      <Map<String, dynamic>>[].obs;
+
+  late final InvoiceLocalDatasource _invoiceDs;
+  late final CustomerLocalDatasource _customerDs;
+
+  String get totalReceivable {
+    final total = _allInvoices.fold<double>(
+        0, (s, i) => s + (i['due'] as double));
+    return _fmt(total);
+  }
+
+  String get collectedMTD {
+    final total = _allInvoices.fold<double>(
+        0, (s, i) => s + (i['paid'] as double));
+    return _fmt(total);
+  }
 
   List<Map<String, dynamic>> get filtered {
-    var list = allInvoices.where((i) {
-      final q = searchQuery.value.toLowerCase();
-      return q.isEmpty ||
-          (i['client'] as String).toLowerCase().contains(q) ||
-          (i['number'] as String).contains(q);
-    }).toList();
-    if (selectedFilter.value != 'All') {
+    var list = _allInvoices.toList();
+    final f = selectedFilter.value.toLowerCase();
+    if (f != 'all') {
+      list = list.where((i) => i['status'] == f).toList();
+    }
+    final q = searchQuery.value.toLowerCase().trim();
+    if (q.isNotEmpty) {
       list = list
-          .where((i) => i['status'] == selectedFilter.value.toLowerCase())
+          .where((i) =>
+              (i['number'] as String).toLowerCase().contains(q) ||
+              (i['client'] as String).toLowerCase().contains(q))
           .toList();
     }
     return list;
   }
 
-  void onSearch(String v) => searchQuery(v);
+  @override
+  void onInit() {
+    super.onInit();
+    final db = DatabaseService();
+    _invoiceDs = InvoiceLocalDatasource(db);
+    _customerDs = CustomerLocalDatasource(db);
+    _loadData();
+  }
 
+  Future<void> _loadData() async {
+    isLoading(true);
+    try {
+      final invoices = await _invoiceDs.getAll();
+      final customers = await _customerDs.getAll();
+      final customerMap = {for (final c in customers) c.id: c};
+
+      _allInvoices.value = invoices.map((inv) {
+        final customer = customerMap[inv.customerId];
+        return {
+          'number': inv.invoiceNo,
+          'client': customer?.name ?? 'Unknown',
+          'amount': _fmt(inv.total),
+          'date': inv.invoiceNo, // placeholder if no date field
+          'status': inv.status,
+          'tag': inv.due > 0 ? 'Due: ${_fmt(inv.due)}' : 'Cleared',
+          'due': inv.due,
+          'paid': inv.paid,
+          'id': inv.id,
+        };
+      }).toList();
+    } catch (_) {
+      _allInvoices.value = [];
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  Future<void> refresh() => _loadData();
+
+  void onSearch(String v) => searchQuery(v);
   void onFilter(String f) => selectedFilter(f);
 
   void onCreateInvoice() => Get.toNamed(Routes.createInvoice);
-
   void onInvoiceTap(Map<String, dynamic> inv) =>
       Get.toNamed(Routes.invoiceDetails, arguments: inv);
+
+  String _fmt(double val) {
+    if (val >= 1000) {
+      return '\$${val.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]},')}';
+    }
+    return '\$${val.toStringAsFixed(2)}';
+  }
 
   @override
   void onClose() {

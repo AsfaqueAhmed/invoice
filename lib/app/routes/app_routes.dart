@@ -12,10 +12,6 @@ abstract class Routes {
   static const createInvoice = _Paths.createInvoice;
   static const invoiceDetails = _Paths.invoiceDetails;
   static const ONBOARDING = _Paths.ONBOARDING;
-
-  // static const CUSTOMER_LIST = _Paths.CUSTOMER_LIST;
-  // static const CUSTOMER_ADD = _Paths.CUSTOMER_ADD;
-  // static const CUSTOMER_DETAILS = _Paths.CUSTOMER_DETAILS;
   static const CUSTOMER_LIST = _Paths.CUSTOMER_LIST;
   static const CUSTOMER_DETAILS = _Paths.CUSTOMER_DETAILS;
   static const ADD_CUSTOMER = _Paths.ADD_CUSTOMER;

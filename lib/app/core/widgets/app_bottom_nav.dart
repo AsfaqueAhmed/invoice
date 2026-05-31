@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_getx_app/app/core/configs/theme/app_color.dart';
-import 'package:flutter_getx_app/app/routes/app_pages.dart';
 import 'package:get/get.dart';
+
+import '../configs/theme/app_colors.dart';
+import '../constants/app_decorations.dart';
+import '../../routes/app_pages.dart';
 
 class AppBottomNav extends StatelessWidget {
   final int currentIndex;
@@ -38,69 +40,61 @@ class AppBottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bg = isDark
-        ? AppColor.darkSurfaceContainer
-        : AppColor.surfaceContainerLowest;
-    final activeColor = isDark ? AppColor.primaryFixedDim : AppColor.primary;
-    final inactiveColor =
-        isDark ? AppColor.secondaryFixedDim : AppColor.secondary;
+    final colors = context.appColors;
 
     return Container(
       height: 72,
       decoration: BoxDecoration(
-        color: bg,
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withOpacity(0.06),
-              blurRadius: 12,
-              offset: const Offset(0, -4))
-        ],
+        color: colors.cardBg,
+        boxShadow: AppDecorations.navShadow,
       ),
       child: Row(
         children: List.generate(_items.length, (i) {
           final item = _items[i];
           final isActive = i == currentIndex;
+
           return Expanded(
             child: GestureDetector(
               onTap: () {
                 if (!isActive) Get.offAllNamed(item.route);
               },
               behavior: HitTestBehavior.opaque,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 4),
-                      decoration: isActive
-                          ? BoxDecoration(
-                              color: activeColor.withOpacity(0.12),
-                              borderRadius: BorderRadius.circular(20),
-                            )
-                          : null,
-                      child: Icon(
-                        isActive ? item.activeIcon : item.icon,
-                        color: isActive ? activeColor : inactiveColor,
-                        size: 24,
-                      ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 4),
+                    decoration: isActive
+                        ? BoxDecoration(
+                            color: colors.primary.withOpacity(0.12),
+                            borderRadius: AppDecorations.borderRadiusFull,
+                          )
+                        : null,
+                    child: Icon(
+                      isActive ? item.activeIcon : item.icon,
+                      color: isActive
+                          ? colors.primary
+                          : colors.onSurfaceVariant,
+                      size: 24,
                     ),
-                    const SizedBox(height: 2),
-                    Text(
-                      item.label,
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight:
-                            isActive ? FontWeight.w600 : FontWeight.w500,
-                        color: isActive ? activeColor : inactiveColor,
-                        letterSpacing: 0.4,
-                      ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    item.label,
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: isActive
+                          ? FontWeight.w600
+                          : FontWeight.w500,
+                      color: isActive
+                          ? colors.primary
+                          : colors.onSurfaceVariant,
+                      letterSpacing: 0.4,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           );
@@ -116,9 +110,10 @@ class _NavItem {
   final String label;
   final String route;
 
-  const _NavItem(
-      {required this.icon,
-      required this.activeIcon,
-      required this.label,
-      required this.route});
+  const _NavItem({
+    required this.icon,
+    required this.activeIcon,
+    required this.label,
+    required this.route,
+  });
 }

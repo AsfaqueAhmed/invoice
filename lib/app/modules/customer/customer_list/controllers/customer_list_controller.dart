@@ -1,77 +1,75 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_getx_app/app/routes/app_pages.dart';
 import 'package:get/get.dart';
+
+import '../../../../core/database/database_service.dart';
+import '../../../../data/datasources/local/customer_local_datasource.dart';
+import '../../../../data/entities/customer_entity.dart';
+import '../../../../routes/app_pages.dart';
 
 class CustomerListController extends GetxController {
   final searchController = TextEditingController();
   final RxString searchQuery = ''.obs;
-  final totalCustomers = 128;
-  final totalOverdue = r'$14,240';
-  final allCustomers = <Map<String, dynamic>>[
-    {
-      'initials': 'JD',
-      'name': 'Jane Doe',
-      'phone': '+1 (555) 012-3456',
-      'lastInvoice': 'Oct 24, 2023',
-      'status': 'Active Account',
-      'due': r'$1,250.00',
-      'hasOverdue': true
-    },
-    {
-      'initials': 'MS',
-      'name': 'Marcus Smith',
-      'phone': '+1 (555) 987-6543',
-      'lastInvoice': 'Nov 02, 2023',
-      'status': 'New Contract',
-      'due': r'$0.00',
-      'hasOverdue': false
-    },
-    {
-      'initials': 'AL',
-      'name': 'Aria Lopez',
-      'phone': '+1 (555) 246-8101',
-      'lastInvoice': 'Oct 15, 2023',
-      'status': 'Overdue 14 Days',
-      'due': r'$3,420.50',
-      'hasOverdue': true
-    },
-    {
-      'initials': 'DC',
-      'name': 'David Chen',
-      'phone': '+1 (555) 777-8888',
-      'lastInvoice': 'Oct 30, 2023',
-      'status': 'VIP Customer',
-      'due': r'$0.00',
-      'hasOverdue': false
-    },
-    {
-      'initials': 'SK',
-      'name': 'Sarah K.',
-      'phone': '+1 (555) 121-2121',
-      'lastInvoice': 'Sep 12, 2023',
-      'status': 'Inactive (30d+)',
-      'due': r'$450.00',
-      'hasOverdue': true
-    },
-  ].obs;
+  final RxBool isLoading = true.obs;
 
-  List<Map<String, dynamic>> get filtered {
-    final q = searchQuery.value.toLowerCase();
-    if (q.isEmpty) return allCustomers;
-    return allCustomers
+  final RxList<CustomerEntity> _allCustomers =
+      <CustomerEntity>[].obs;
+
+  late final CustomerLocalDatasource _datasource;
+
+  // Computed stats
+  int get totalCustomers => _allCustomers.length;
+
+  String get totalOverdue {
+    final total = _allCustomers.fold<double>(
+      0,
+      (sum, c) => sum + c.totalDue,
+    );
+    return _fmt(total);
+  }
+
+  List<CustomerEntity> get filtered {
+    final q = searchQuery.value.toLowerCase().trim();
+    if (q.isEmpty) return _allCustomers;
+    return _allCustomers
         .where((c) =>
-            (c['name'] as String).toLowerCase().contains(q) ||
-            (c['phone'] as String).contains(q))
+            c.name.toLowerCase().contains(q) ||
+            c.phone.contains(q))
         .toList();
   }
 
+  @override
+  void onInit() {
+    super.onInit();
+    _datasource = CustomerLocalDatasource(DatabaseService());
+    _loadCustomers();
+  }
+
+  Future<void> _loadCustomers() async {
+    isLoading(true);
+    try {
+      final list = await _datasource.getAll();
+      _allCustomers.value = list;
+    } catch (_) {
+      _allCustomers.value = [];
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  Future<void> refresh() => _loadCustomers();
+
   void onSearch(String v) => searchQuery(v);
 
-  void onCustomerTap(Map<String, dynamic> c) =>
+  void onCustomerTap(CustomerEntity c) =>
       Get.toNamed(Routes.CUSTOMER_DETAILS, arguments: c);
 
-  void onAddCustomer() {
-    Get.toNamed(Routes.ADD_CUSTOMER);
+  void onAddCustomer() => Get.toNamed(Routes.ADD_CUSTOMER);
+
+  String _fmt(double val) {
+    if (val >= 1000) {
+      return '\$${val.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]},')}';
+    }
+    return '\$${val.toStringAsFixed(2)}';
   }
 
   @override

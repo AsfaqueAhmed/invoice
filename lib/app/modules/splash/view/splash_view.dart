@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_getx_app/app/core/configs/text_style/app_text_styles.dart';
-import 'package:flutter_getx_app/app/core/configs/theme/app_colors.dart';
-import 'package:flutter_getx_app/app/core/constants/gaps.dart';
 import 'package:get/get.dart';
 
+import '../../../core/configs/text_style/app_text_styles.dart';
+import '../../../core/configs/theme/app_colors.dart';
+import '../../../core/constants/gaps.dart';
 import '../controller/splash_controller.dart';
 
 class SplashView extends GetView<SplashController> {
@@ -11,14 +11,16 @@ class SplashView extends GetView<SplashController> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Scaffold(
-      backgroundColor: AppColors.scaffoldLight,
+      backgroundColor: colors.scaffold,
       body: Stack(
         children: [
-          // ── Ambient Background Blobs ───────────────────────────
-          _AmbientBackground(),
+          // Ambient blobs
+          _AmbientBackground(colors: colors),
 
-          // ── Central Content ───────────────────────────────────
+          // Central content
           Center(
             child: AnimatedBuilder(
               animation: controller.animationController,
@@ -26,40 +28,33 @@ class SplashView extends GetView<SplashController> {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // ── Logo ──────────────────────────────────────
                     Opacity(
                       opacity: controller.logoOpacity.value,
                       child: Transform.scale(
                         scale: controller.logoScale.value,
-                        child: const _LogoContainer(),
+                        child: _LogoContainer(colors: colors),
                       ),
                     ),
-
                     Gaps.v24,
-
-                    // ── Brand Name ───────────────────────────────
                     Opacity(
                       opacity: controller.textOpacity.value,
                       child: Text(
                         'InvoiceFlow',
                         style: AppTextStyles.headlineLarge.copyWith(
-                          color: AppColors.primary,
+                          color: colors.primary,
                           fontWeight: FontWeight.w700,
                           letterSpacing: -0.5,
                           fontSize: 32,
                         ),
                       ),
                     ),
-
                     Gaps.v8,
-
-                    // ── Tagline ───────────────────────────────────
                     Opacity(
                       opacity: controller.subtitleOpacity.value,
                       child: Text(
                         'FINANCIAL MASTERY SIMPLIFIED',
                         style: AppTextStyles.labelSmall.copyWith(
-                          color: AppColors.grey500,
+                          color: colors.textTertiary,
                           letterSpacing: 2.0,
                           fontSize: 10,
                         ),
@@ -71,7 +66,7 @@ class SplashView extends GetView<SplashController> {
             ),
           ),
 
-          // ── Bottom Progress Indicator ──────────────────────────
+          // Bottom progress
           Positioned(
             bottom: 96,
             left: 0,
@@ -80,10 +75,10 @@ class SplashView extends GetView<SplashController> {
               animation: controller.animationController,
               builder: (context, _) {
                 return Opacity(
-                  opacity: (controller.progressValue.value * 2).clamp(0.0, 1.0),
+                  opacity:
+                      (controller.progressValue.value * 2).clamp(0.0, 1.0),
                   child: Column(
                     children: [
-                      // Progress bar
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 180),
                         child: ClipRRect(
@@ -91,21 +86,18 @@ class SplashView extends GetView<SplashController> {
                           child: LinearProgressIndicator(
                             value: controller.progressValue.value,
                             minHeight: 2,
-                            backgroundColor: AppColors.grey200,
-                            valueColor: const AlwaysStoppedAnimation<Color>(
-                              AppColors.primary,
-                            ),
+                            backgroundColor:
+                                colors.outlineVariant.withOpacity(0.3),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                colors.primary),
                           ),
                         ),
                       ),
-
                       Gaps.v12,
-
-                      // Status text
                       Text(
                         'Initializing secure session...',
                         style: AppTextStyles.labelSmall.copyWith(
-                          color: AppColors.grey400,
+                          color: colors.textTertiary,
                           letterSpacing: 0.5,
                         ),
                       ),
@@ -116,53 +108,49 @@ class SplashView extends GetView<SplashController> {
             ),
           ),
 
-          // ── Decorative Floating Dots ───────────────────────────
-          const _FloatingDots(),
+          // Floating dots
+          _FloatingDots(colors: colors),
         ],
       ),
     );
   }
 }
 
-// ─── Logo Container Widget ───────────────────────────────────────
-
 class _LogoContainer extends StatelessWidget {
-  const _LogoContainer();
+  final AppColorBase colors;
+  const _LogoContainer({required this.colors});
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
       children: [
-        // Glow effect
         Container(
           width: 140,
           height: 140,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: AppColors.primary.withOpacity(0.12),
+            color: colors.primary.withOpacity(0.12),
           ),
         ),
-
-        // Main icon box
         Container(
           width: 96,
           height: 96,
           decoration: BoxDecoration(
-            color: AppColors.primary,
+            color: colors.primary,
             borderRadius: BorderRadius.circular(28),
             boxShadow: [
               BoxShadow(
-                color: AppColors.primary.withOpacity(0.35),
+                color: colors.primary.withOpacity(0.35),
                 blurRadius: 32,
                 offset: const Offset(0, 12),
                 spreadRadius: -4,
               ),
             ],
           ),
-          child: const Icon(
+          child: Icon(
             Icons.account_balance_wallet_rounded,
-            color: Colors.white,
+            color: colors.onPrimary,
             size: 52,
           ),
         ),
@@ -171,14 +159,14 @@ class _LogoContainer extends StatelessWidget {
   }
 }
 
-// ─── Ambient Background ──────────────────────────────────────────
-
 class _AmbientBackground extends StatelessWidget {
+  final AppColorBase colors;
+  const _AmbientBackground({required this.colors});
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // Top-left blob
         Positioned(
           top: -60,
           left: -60,
@@ -187,11 +175,10 @@ class _AmbientBackground extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.4,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.primary.withOpacity(0.05),
+              color: colors.primary.withOpacity(0.05),
             ),
           ),
         ),
-        // Bottom-right blob
         Positioned(
           bottom: -40,
           right: -40,
@@ -200,7 +187,7 @@ class _AmbientBackground extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.3,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.secondary.withOpacity(0.07),
+              color: colors.secondary.withOpacity(0.07),
             ),
           ),
         ),
@@ -209,10 +196,9 @@ class _AmbientBackground extends StatelessWidget {
   }
 }
 
-// ─── Floating Dot Decorations ────────────────────────────────────
-
 class _FloatingDots extends StatelessWidget {
-  const _FloatingDots();
+  final AppColorBase colors;
+  const _FloatingDots({required this.colors});
 
   @override
   Widget build(BuildContext context) {
@@ -221,17 +207,20 @@ class _FloatingDots extends StatelessWidget {
         Positioned(
           top: MediaQuery.of(context).size.height * 0.25,
           left: 40,
-          child: _Dot(size: 8, color: AppColors.primary.withOpacity(0.2)),
+          child: _Dot(
+              size: 8, color: colors.primary.withOpacity(0.2)),
         ),
         Positioned(
           bottom: MediaQuery.of(context).size.height * 0.33,
           right: 48,
-          child: _Dot(size: 12, color: AppColors.secondary.withOpacity(0.15)),
+          child: _Dot(
+              size: 12, color: colors.secondary.withOpacity(0.15)),
         ),
         Positioned(
           top: MediaQuery.of(context).size.height * 0.15,
           right: 80,
-          child: _Dot(size: 6, color: AppColors.primary.withOpacity(0.1)),
+          child: _Dot(
+              size: 6, color: colors.primary.withOpacity(0.1)),
         ),
       ],
     );
@@ -241,7 +230,6 @@ class _FloatingDots extends StatelessWidget {
 class _Dot extends StatelessWidget {
   final double size;
   final Color color;
-
   const _Dot({required this.size, required this.color});
 
   @override

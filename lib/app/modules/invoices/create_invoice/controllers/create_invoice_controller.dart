@@ -1,32 +1,72 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:uuid/uuid.dart';
 
-import '../models/create_invoice_item.dart';
+import '../../../../core/database/database_service.dart';
+import '../../../../data/datasources/local/customer_local_datasource.dart';
+import '../../../../data/datasources/local/invoice_local_datasource.dart';
+import '../../../../data/datasources/local/invoice_item_local_datasource.dart';
+import '../../../../data/entities/invoice_entity.dart';
+import '../../../../data/entities/invoice_item_entity.dart';
+import '../../../../data/entities/customer_entity.dart';
 
 class CreateInvoiceController extends GetxController {
   final searchController = TextEditingController();
   final RxString selectedCustomer = ''.obs;
+  final RxString selectedCustomerId = ''.obs;
   final RxString searchQuery = ''.obs;
   final RxDouble discount = 10.0.obs;
-  final RxDouble amountPaid = 500.0.obs;
+  final RxDouble amountPaid = 0.0.obs;
   final RxBool isSaving = false.obs;
+
+  final RxList<CustomerEntity> customers = <CustomerEntity>[].obs;
+  String get invoiceNo =>
+      'INV-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}';
 
   final items = <Map<String, dynamic>>[
     {'name': 'Consulting Services', 'sku': 'CS-001', 'qty': 2, 'rate': 150.0},
-    {
-      'name': 'Premium Support Package',
-      'sku': 'PSP-24',
-      'qty': 1,
-      'rate': 1200.0
-    },
+    {'name': 'Premium Support Package', 'sku': 'PSP-24', 'qty': 1, 'rate': 1200.0},
   ].obs;
+
+  late final CustomerLocalDatasource _customerDs;
+  late final InvoiceLocalDatasource _invoiceDs;
+  late final InvoiceItemLocalDatasource _itemDs;
 
   double get subtotal =>
       items.fold(0.0, (s, i) => s + (i['qty'] as int) * (i['rate'] as double));
-
   double get grandTotal => subtotal * (1 - discount.value / 100);
+  double get dueAmount => (grandTotal - amountPaid.value).clamp(0, double.infinity);
 
-  double get dueAmount => grandTotal - amountPaid.value;
+  @override
+  void onInit() {
+    super.onInit();
+    final db = DatabaseService();
+    _customerDs = CustomerLocalDatasource(db);
+    _invoiceDs = InvoiceLocalDatasource(db);
+    _itemDs = InvoiceItemLocalDatasource(db);
+    _loadCustomers();
+  }
+
+  Future<void> _loadCustomers() async {
+    try {
+      customers.value = await _customerDs.getAll();
+    } catch (_) {}
+  }
+
+  void onSelectCustomer() {
+    if (customers.isEmpty) return;
+    Get.bottomSheet(
+      _CustomerPicker(
+        customers: customers,
+        onSelect: (c) {
+          selectedCustomer(c.name);
+          selectedCustomerId(c.id);
+          Get.back();
+        },
+      ),
+      isScrollControlled: true,
+    );
+  }
 
   void incrementQty(int idx) {
     final item = Map<String, dynamic>.from(items[idx]);
@@ -47,19 +87,121 @@ class CreateInvoiceController extends GetxController {
   void removeItem(int idx) => items.removeAt(idx);
 
   Future<void> onSave() async {
+    if (selectedCustomerId.value.isEmpty) {
+      Get.snackbar('Missing', 'Please select a customer.',
+          snackPosition: SnackPosition.BOTTOM);
+      return;
+    }
+    if (items.isEmpty) {
+      Get.snackbar('Missing', 'Please add at least one item.',
+          snackPosition: SnackPosition.BOTTOM);
+      return;
+    }
     isSaving(true);
-    await Future.delayed(const Duration(milliseconds: 1500));
-    isSaving(false);
-    Get.back();
+    try {
+      final id = const Uuid().v4();
+      final invoice = InvoiceEntity(
+        id: id,
+        customerId: selectedCustomerId.value,
+        invoiceNo: invoiceNo,
+        subtotal: subtotal,
+        discount: discount.value,
+        tax: 0,
+        total: grandTotal,
+        paid: amountPaid.value,
+        due: dueAmount,
+        status: dueAmount <= 0 ? 'paid' : amountPaid.value > 0 ? 'partial' : 'pending',
+      );
+      await _invoiceDs.create(invoice);
+      for (final item in items) {
+        await _itemDs.create(InvoiceItemEntity(
+          id: const Uuid().v4(),
+          invoiceId: id,
+          productId: '',
+          name: item['name'],
+          qty: item['qty'],
+          price: item['rate'],
+          total: item['qty'] * item['rate'],
+        ));
+      }
+      Get.back(result: true);
+      Get.snackbar('Success', 'Invoice saved!',
+          snackPosition: SnackPosition.BOTTOM);
+    } catch (e) {
+      Get.snackbar('Error', 'Could not save invoice.',
+          snackPosition: SnackPosition.BOTTOM);
+    } finally {
+      isSaving(false);
+    }
   }
+
+  void onSearch(String value) => searchQuery(value);
 
   @override
   void onClose() {
     searchController.dispose();
     super.onClose();
   }
+}
 
-  void onSearch(String value) {
-    searchQuery.value = value;
+class _CustomerPicker extends StatelessWidget {
+  final List<CustomerEntity> customers;
+  final void Function(CustomerEntity) onSelect;
+
+  const _CustomerPicker({required this.customers, required this.onSelect});
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.6,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: cs.surface,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      child: Column(children: [
+        Container(
+          width: 40,
+          height: 4,
+          decoration: BoxDecoration(
+            color: cs.outlineVariant,
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+        const SizedBox(height: 16),
+        Text('Select Customer',
+            style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w700,
+                color: cs.onSurface)),
+        const SizedBox(height: 12),
+        Expanded(
+          child: ListView.separated(
+            itemCount: customers.length,
+            separatorBuilder: (_, __) =>
+                Divider(height: 1, color: cs.outlineVariant.withOpacity(0.4)),
+            itemBuilder: (ctx, i) {
+              final c = customers[i];
+              return ListTile(
+                onTap: () => onSelect(c),
+                leading: CircleAvatar(
+                  backgroundColor: cs.primaryContainer,
+                  child: Text(
+                    c.name.isNotEmpty ? c.name[0].toUpperCase() : '?',
+                    style: TextStyle(
+                        color: cs.onPrimaryContainer,
+                        fontWeight: FontWeight.w700),
+                  ),
+                ),
+                title: Text(c.name),
+                subtitle: Text(c.phone,
+                    style: TextStyle(color: cs.onSurfaceVariant)),
+              );
+            },
+          ),
+        ),
+      ]),
+    );
   }
 }

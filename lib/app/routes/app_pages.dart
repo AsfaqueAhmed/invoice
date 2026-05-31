@@ -42,7 +42,7 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const initial = Routes.dashboard;
+  static const initial = Routes.splash;
 
   static final routes = [
     GetPage(
@@ -94,74 +94,64 @@ class AppPages {
       transition: Transition.rightToLeft,
     ),
     GetPage(
-      name: _Paths.ONBOARDING,
-      page: () => const OnboardingView(),
-      binding: OnboardingBinding(),
-    ),
-    /* GetPage(
       name: _Paths.CUSTOMER_LIST,
       page: () => const CustomerListView(),
       binding: CustomerListBinding(),
-    ),
-    GetPage(
-      name: _Paths.CUSTOMER_ADD,
-      page: () => const CustomerAddView(),
-      binding: CustomerAddBinding(),
+      transition: Transition.fadeIn,
     ),
     GetPage(
       name: _Paths.CUSTOMER_DETAILS,
       page: () => const CustomerDetailsView(),
       binding: CustomerDetailsBinding(),
-    ),*/
-    GetPage(
-      name: _Paths.CUSTOMER_LIST,
-      page: () => const CustomerListView(),
-      binding: CustomerListBinding(),
-    ),
-    GetPage(
-      name: _Paths.CUSTOMER_DETAILS,
-      page: () => const CustomerDetailsView(),
-      binding: CustomerDetailsBinding(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: _Paths.ADD_CUSTOMER,
       page: () => const AddCustomerView(),
       binding: AddCustomerBinding(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: _Paths.ADD_PRODUCT,
       page: () => const AddProductView(),
       binding: AddProductBinding(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: _Paths.PRODUCT_LIST,
       page: () => const ProductListView(),
       binding: ProductListBinding(),
+      transition: Transition.fadeIn,
     ),
     GetPage(
       name: _Paths.PRODUCT_DETAILS,
       page: () => const ProductDetailsView(),
       binding: ProductDetailsBinding(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: _Paths.SETTINGS,
       page: () => const SettingsView(),
       binding: SettingsBinding(),
+      transition: Transition.fadeIn,
     ),
     GetPage(
       name: _Paths.BACKUP_RESTORE,
       page: () => const BackupRestoreView(),
       binding: BackupRestoreBinding(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: _Paths.ADD_PAYMENT,
       page: () => const AddPaymentView(),
       binding: AddPaymentBinding(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: _Paths.DUE_PAYMENT,
       page: () => const DuePaymentView(),
       binding: DuePaymentBinding(),
+      transition: Transition.rightToLeft,
     ),
   ];
 }
