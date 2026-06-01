@@ -111,17 +111,19 @@ class CreateInvoiceView extends GetView<CreateInvoiceController> {
                 child: Row(children: [
                   Icon(Icons.person_add_outlined, color: colors.primary),
                   Gaps.h8,
-                  Obx(() => Text(
-                        controller.selectedCustomer.value.isEmpty
-                            ? 'Select Customer'
-                            : controller.selectedCustomer.value,
-                        style: TextStyle(
-                          color: controller.selectedCustomer.value.isEmpty
-                              ? colors.textTertiary
-                              : colors.textPrimary,
-                          fontSize: 15,
-                        ),
-                      )),
+                  Obx(
+                    () => Text(
+                      controller.selectedCustomer.value == null
+                          ? 'Select Customer'
+                          : controller.selectedCustomer.value!.name,
+                      style: TextStyle(
+                        color: controller.selectedCustomer.value == null
+                            ? colors.textTertiary
+                            : colors.textPrimary,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
                   const Spacer(),
                   Icon(Icons.expand_more_rounded, color: colors.outline),
                 ]),
