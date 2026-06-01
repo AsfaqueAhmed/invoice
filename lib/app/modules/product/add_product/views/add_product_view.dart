@@ -88,7 +88,7 @@ class AddProductView extends GetView<AddProductController> {
       body: Form(
         key: controller.formKey,
         child: SingleChildScrollView(
-          padding: AppPadding.all20,
+          padding: AppPadding.all16,
           child: Column(
             children: [
               // Image upload placeholder
@@ -317,20 +317,6 @@ class AddProductView extends GetView<AddProductController> {
                             ),
                           );
                         }),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: colors.surfaceContainerLow,
-                              shape: BoxShape.circle,
-                              border: Border.all(color: colors.outlineVariant),
-                            ),
-                            child: Icon(Icons.add_rounded,
-                                color: colors.primary, size: 20),
-                          ),
-                        ),
                       ],
                     )),
               ),

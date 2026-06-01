@@ -32,7 +32,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
           onPressed: Get.back,
         ),
         title: Text(
-          'InvoiceFlow',
+          'Product Details',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w700,
@@ -61,7 +61,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
               icon: const Icon(Icons.share_outlined, size: 18),
               label: const Text('Share'),
               style: OutlinedButton.styleFrom(
-                minimumSize: const Size(0, 52),
+                minimumSize: const Size(0, 48),
                 shape: RoundedRectangleBorder(
                   borderRadius: AppDecorations.borderRadiusSM,
                 ),
@@ -77,7 +77,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: colors.primary,
                   foregroundColor: colors.onPrimary,
-                  minimumSize: const Size(0, 52),
+                  minimumSize: const Size(0, 48),
                   shape: RoundedRectangleBorder(
                     borderRadius: AppDecorations.borderRadiusSM,
                   ),

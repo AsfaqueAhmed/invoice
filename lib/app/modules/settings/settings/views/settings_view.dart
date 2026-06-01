@@ -127,11 +127,13 @@ class SettingsView extends GetView<SettingsController> {
                           ),
                         ),
                       ]),
-                      Obx(() => Switch.adaptive(
-                            value: controller.isDarkMode.value,
-                            onChanged: (_) => controller.toggleTheme(),
-                            activeTrackColor: colors.primary,
-                          )),
+                      Obx(
+                        () => Switch.adaptive(
+                          value: controller.isDarkMode.value,
+                          onChanged: (_) => controller.toggleTheme(),
+                          activeTrackColor: colors.primary,
+                        ),
+                      ),
                     ],
                   ),
                 ),

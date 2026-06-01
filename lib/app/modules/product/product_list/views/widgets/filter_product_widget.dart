@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_getx_app/app/core/configs/theme/app_colors.dart';
 import 'package:flutter_getx_app/app/core/constants/app_decorations.dart';
 import 'package:flutter_getx_app/app/core/constants/gaps.dart';
-import 'package:flutter_getx_app/app/core/constants/padding.dart';
 import 'package:flutter_getx_app/app/modules/product/product_list/controllers/product_list_controller.dart';
 import 'package:get/get.dart';
 
@@ -14,7 +13,6 @@ class FilterProductWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    final cs = Theme.of(context).colorScheme;
 
     return Container(
       width: double.infinity,
@@ -123,6 +121,17 @@ class FilterProductWidget extends StatelessWidget {
                 ),
               );
             }),
+            /*Obx(() {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(controller.selectedStockRange.value.start
+                      .toStringAsFixed(0)),
+                  Text(controller.selectedStockRange.value.end
+                      .toStringAsFixed(0))
+                ],
+              );
+            }),*/
             Gaps.v16,
             Align(
               alignment: Alignment.centerLeft,
@@ -172,20 +181,6 @@ class FilterProductWidget extends StatelessWidget {
                           ),
                         );
                       }),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: colors.surfaceContainerLow,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: colors.outlineVariant),
-                          ),
-                          child: Icon(Icons.add_rounded,
-                              color: colors.primary, size: 20),
-                        ),
-                      ),
                     ],
                   )),
             ),
@@ -203,7 +198,7 @@ class FilterProductWidget extends StatelessWidget {
                   ),
                 ),
                 Obx(() => Switch.adaptive(
-                      value: controller.isActive.value,
+                      value: controller.activeFilter.value ?? false,
                       onChanged: (_) => controller.toggleProduct(),
                       activeTrackColor: colors.primary,
                     )),
@@ -211,7 +206,9 @@ class FilterProductWidget extends StatelessWidget {
             ),
             Gaps.v32,
             ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                Get.back();
+              },
               icon: const Icon(Icons.filter_list_rounded, size: 20),
               label: Text(
                 'Apply Filter',
