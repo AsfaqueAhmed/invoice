@@ -26,7 +26,9 @@ const tCustomer = '''
         id TEXT PRIMARY KEY,
         name TEXT,
         phone TEXT,
+        email TEXT,
         address TEXT,
+        avatar TEXT,
         totalDue REAL
       )
     ''';

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_getx_app/app/core/utils/image_utils.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
@@ -20,16 +23,22 @@ class AddCustomerController extends GetxController {
   final stateCtrl = TextEditingController();
   final postalCtrl = TextEditingController();
 
-  late final CustomerLocalDatasource _datasource;
+  final Rx<File?> customerAvatar = Rx<File?>(null);
+
+  final CustomerLocalDatasource _datasource = CustomerLocalDatasource();
 
   @override
-  void onInit() {
-    super.onInit();
-    _datasource = CustomerLocalDatasource(DatabaseService());
+  void onClose() {
+    fullNameCtrl.dispose();
+    businessNameCtrl.dispose();
+    emailCtrl.dispose();
+    phoneCtrl.dispose();
+    addressCtrl.dispose();
+    cityCtrl.dispose();
+    stateCtrl.dispose();
+    postalCtrl.dispose();
+    super.onClose();
   }
-
-  String? validateRequired(String? v) =>
-      (v == null || v.trim().isEmpty) ? 'This field is required' : null;
 
   Future<void> onSave() async {
     if (!formKey.currentState!.validate()) return;
@@ -46,6 +55,7 @@ class AddCustomerController extends GetxController {
         id: const Uuid().v4(),
         name: fullNameCtrl.text.trim(),
         phone: phoneCtrl.text.trim(),
+        email: emailCtrl.text.trim(),
         address: address,
         totalDue: 0,
       );
@@ -68,16 +78,8 @@ class AddCustomerController extends GetxController {
     }
   }
 
-  @override
-  void onClose() {
-    fullNameCtrl.dispose();
-    businessNameCtrl.dispose();
-    emailCtrl.dispose();
-    phoneCtrl.dispose();
-    addressCtrl.dispose();
-    cityCtrl.dispose();
-    stateCtrl.dispose();
-    postalCtrl.dispose();
-    super.onClose();
+  Future<void> onCustomerAvatarTap() async {
+    final picked = await ImageUtils.pickImageFromGallery();
+    if (picked != null) customerAvatar(File(picked.path));
   }
 }

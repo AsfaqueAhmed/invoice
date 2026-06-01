@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_getx_app/app/core/utils/app_validators.dart';
 import 'package:get/get.dart';
 
 import '../../../core/configs/text_style/app_text_styles.dart';
@@ -46,8 +47,8 @@ class BusinessSetupView extends GetView<BusinessSetupController> {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.notifications_outlined,
-                color: colors.textSecondary),
+            icon:
+                Icon(Icons.notifications_outlined, color: colors.textSecondary),
             onPressed: () {},
           ),
         ],
@@ -85,7 +86,7 @@ class BusinessSetupView extends GetView<BusinessSetupController> {
                 hintText: 'e.g. Acme Studio',
                 isRequired: true,
                 controller: controller.businessNameController,
-                validator: controller.validateBusinessName,
+                validator: AppValidators.validateName,
                 autoValidateMode: AutovalidateMode.onUserInteraction,
                 variant: AppTextFieldVariant.filled,
               ),
@@ -97,11 +98,11 @@ class BusinessSetupView extends GetView<BusinessSetupController> {
                 hintText: '01XXXXXXXXX',
                 isRequired: true,
                 controller: controller.phoneController,
-                validator: controller.validatePhone,
+                validator: AppValidators.validatePhone,
                 autoValidateMode: AutovalidateMode.onUserInteraction,
                 keyboardType: TextInputType.phone,
-                prefixIcon: Icon(Icons.call_outlined,
-                    color: colors.outline, size: 20),
+                prefixIcon:
+                    Icon(Icons.call_outlined, color: colors.outline, size: 20),
                 variant: AppTextFieldVariant.filled,
               ),
               Gaps.v16,
@@ -112,7 +113,7 @@ class BusinessSetupView extends GetView<BusinessSetupController> {
                 hintText: '123 Creative Way\nSan Francisco, CA 94103',
                 isRequired: true,
                 controller: controller.addressController,
-                validator: controller.validateAddress,
+                validator: AppValidators.validateAddress,
                 autoValidateMode: AutovalidateMode.onUserInteraction,
                 maxLines: 3,
                 minLines: 3,
@@ -135,8 +136,8 @@ class BusinessSetupView extends GetView<BusinessSetupController> {
                       prefixIcon: Icon(Icons.payments_outlined,
                           color: colors.outline, size: 20),
                     ),
-                    icon: Icon(Icons.expand_more_rounded,
-                        color: colors.outline),
+                    icon:
+                        Icon(Icons.expand_more_rounded, color: colors.outline),
                     dropdownColor: colors.cardBg,
                     items: controller.currencies
                         .map(
@@ -144,8 +145,8 @@ class BusinessSetupView extends GetView<BusinessSetupController> {
                             value: c['value'],
                             child: Text(
                               c['label']!,
-                              style: AppTextStyles.bodyLarge.copyWith(
-                                  color: colors.textPrimary),
+                              style: AppTextStyles.bodyLarge
+                                  .copyWith(color: colors.textPrimary),
                             ),
                           ),
                         )
@@ -181,8 +182,8 @@ class BusinessSetupView extends GetView<BusinessSetupController> {
 class _LogoUpload extends StatelessWidget {
   final BusinessSetupController controller;
   final AppColorBase colors;
-  const _LogoUpload(
-      {required this.controller, required this.colors});
+
+  const _LogoUpload({required this.controller, required this.colors});
 
   @override
   Widget build(BuildContext context) {
@@ -195,9 +196,7 @@ class _LogoUpload extends StatelessWidget {
           width: double.infinity,
           height: 160,
           decoration: BoxDecoration(
-            color: file != null
-                ? Colors.transparent
-                : colors.cardBg,
+            color: file != null ? Colors.transparent : colors.cardBg,
             borderRadius: AppDecorations.borderRadiusXL,
             border: Border.all(
               color: colors.outlineVariant,
@@ -253,6 +252,7 @@ class _LogoUpload extends StatelessWidget {
 
 class _SecurityBadge extends StatelessWidget {
   final AppColorBase colors;
+
   const _SecurityBadge({required this.colors});
 
   @override
@@ -312,6 +312,7 @@ class _SubmitButton extends StatelessWidget {
   final bool isSuccess;
   final AppColorBase colors;
   final VoidCallback onTap;
+
   const _SubmitButton({
     required this.isLoading,
     required this.isSuccess,
@@ -327,11 +328,9 @@ class _SubmitButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: (isLoading || isSuccess) ? null : onTap,
         style: ElevatedButton.styleFrom(
-          backgroundColor:
-              isSuccess ? colors.success : colors.primary,
-          disabledBackgroundColor: isSuccess
-              ? colors.success
-              : colors.primary.withOpacity(0.7),
+          backgroundColor: isSuccess ? colors.success : colors.primary,
+          disabledBackgroundColor:
+              isSuccess ? colors.success : colors.primary.withOpacity(0.7),
           foregroundColor: colors.onPrimary,
           shape: RoundedRectangleBorder(
             borderRadius: AppDecorations.borderRadiusFull,
@@ -349,9 +348,7 @@ class _SubmitButton extends StatelessWidget {
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(
-                          Icons.check_circle_outline_rounded,
-                          size: 20),
+                      const Icon(Icons.check_circle_outline_rounded, size: 20),
                       Gaps.h8,
                       Text('Setup Complete!',
                           style: AppTextStyles.titleMedium
@@ -365,8 +362,7 @@ class _SubmitButton extends StatelessWidget {
                           style: AppTextStyles.titleMedium
                               .copyWith(color: Colors.white)),
                       Gaps.h8,
-                      const Icon(Icons.arrow_forward_rounded,
-                          size: 20),
+                      const Icon(Icons.arrow_forward_rounded, size: 20),
                     ],
                   ),
       ),

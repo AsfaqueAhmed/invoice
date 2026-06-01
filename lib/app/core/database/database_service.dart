@@ -29,9 +29,31 @@ class DatabaseService {
 
     return await openDatabase(
       path,
-      version: 2,
+      version: 5,
       onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
     );
+  }
+
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion <= 4) {
+      final columns = await db.rawQuery("PRAGMA table_info(customers)");
+
+      final hasEmail = columns.any((col) => col['name'] == 'email');
+
+      if (!hasEmail) {
+        await db.execute('ALTER TABLE customers ADD COLUMN email TEXT');
+      }
+    }
+    if (oldVersion <= 5) {
+      final columns = await db.rawQuery("PRAGMA table_info(customers)");
+
+      final hasAvatar = columns.any((col) => col['name'] == 'avatar');
+
+      if (!hasAvatar) {
+        await db.execute('ALTER TABLE customers ADD COLUMN avatar TEXT');
+      }
+    }
   }
 
   Future<void> _onCreate(

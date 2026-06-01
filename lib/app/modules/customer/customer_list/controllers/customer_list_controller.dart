@@ -40,7 +40,7 @@ class CustomerListController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _datasource = CustomerLocalDatasource(DatabaseService());
+    _datasource = CustomerLocalDatasource();
     _loadCustomers();
   }
 

@@ -51,7 +51,7 @@ class CreateInvoiceController extends GetxController {
   void onInit() {
     super.onInit();
     final db = DatabaseService();
-    _customerDs = CustomerLocalDatasource(db);
+    _customerDs = CustomerLocalDatasource();
     _invoiceDs = InvoiceLocalDatasource(db);
     _itemDs = InvoiceItemLocalDatasource(db);
     _loadCustomers();
