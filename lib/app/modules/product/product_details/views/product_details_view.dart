@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -40,7 +42,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
         actions: [
           IconButton(
             icon: Icon(Icons.edit_outlined, color: colors.textSecondary),
-            onPressed: () {},
+            onPressed: () {
+              controller.onEdit();
+            },
           ),
         ],
       ),
@@ -89,26 +93,43 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // ── Hero image ──────────────────────────────────
-            Stack(children: [
-              Container(
-                width: double.infinity,
-                height: 220,
-                decoration: BoxDecoration(
-                  color: colors.surfaceContainerLowest,
-                  borderRadius: AppDecorations.borderRadiusXL,
-                  boxShadow: AppDecorations.cardShadow(
-                    Theme.of(context).brightness == Brightness.dark,
+            Stack(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 220,
+                  decoration: BoxDecoration(
+                    color: colors.surfaceContainerLowest,
+                    borderRadius: AppDecorations.borderRadiusXL,
+                    boxShadow: AppDecorations.cardShadow(
+                      Theme.of(context).brightness == Brightness.dark,
+                    ),
                   ),
+                  child: product.image.isNotEmpty
+                      ? ClipRRect(
+                          borderRadius: AppDecorations.borderRadiusXL,
+                          child: Image.file(
+                            File(product.image),
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) {
+                              return Icon(
+                                Icons.inventory_2_rounded,
+                                color: colors.outlineVariant,
+                                size: 80,
+                              );
+                            },
+                          ),
+                        )
+                      : Icon(Icons.inventory_2_rounded,
+                          size: 80, color: colors.outlineVariant),
                 ),
-                child: Icon(Icons.inventory_2_rounded,
-                    size: 80, color: colors.outlineVariant),
-              ),
-              Positioned(
-                top: 12,
-                right: 12,
-                child: _StatusBadge(status: _status, colors: colors),
-              ),
-            ]),
+                Positioned(
+                  top: 12,
+                  right: 12,
+                  child: _StatusBadge(status: _status, colors: colors),
+                ),
+              ],
+            ),
 
             Gaps.v16,
 
@@ -269,7 +290,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                   ),
                   Gaps.v8,
                   Text(
-                    product.description ?? 'No description provided.',
+                    product.description.isNotEmpty
+                        ? product.description
+                        : 'No description provided.',
                     style: TextStyle(
                       fontSize: 14,
                       color: colors.textSecondary,

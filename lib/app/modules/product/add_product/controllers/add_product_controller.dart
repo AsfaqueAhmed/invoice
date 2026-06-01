@@ -1,4 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_getx_app/app/core/utils/image_utils.dart';
+import 'package:flutter_getx_app/app/modules/product/product_list/controllers/product_list_controller.dart';
+import 'package:flutter_getx_app/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
@@ -9,7 +14,9 @@ import '../../../../data/entities/product_entity.dart';
 class AddProductController extends GetxController {
   final formKey = GlobalKey<FormState>();
   final RxBool isSaving = false.obs;
+  final RxBool isActive = true.obs;
   final RxString selectedCategory = ''.obs;
+  late final ProductEntity? product;
 
   final nameController = TextEditingController();
   final skuController = TextEditingController();
@@ -21,12 +28,28 @@ class AddProductController extends GetxController {
   final categories = ['General', 'Food', 'Electronics', 'Clothing', 'Services'];
 
   late final ProductLocalDatasource _datasource;
+  final Rx<File?> productImage = Rx<File?>(null);
 
   @override
   void onInit() {
     super.onInit();
     _datasource = ProductLocalDatasource(DatabaseService());
     selectedCategory.value = categories.first;
+    product = Get.arguments as ProductEntity?;
+    if (product != null) {
+      nameController.text = product!.name;
+      skuController.text = product!.sku;
+      priceController.text = product!.sellingPrice.toString();
+      stockController.text = product!.stock.toString();
+      descController.text = product!.description;
+      purchasePriceController.text = product!.purchasePrice.toString();
+      productImage.value =
+          product!.image.isNotEmpty ? File(product!.image) : null;
+      selectedCategory.value = categories.firstWhere(
+        (cat) => cat == product!.category,
+      );
+      isActive.value = product?.isProductActive ?? false;
+    }
   }
 
   void onCategorySelect(String cat) => selectedCategory(cat);
@@ -38,6 +61,12 @@ class AddProductController extends GetxController {
     if (!formKey.currentState!.validate()) return;
     isSaving(true);
     try {
+      String? savedImageDirectory;
+      if (productImage.value != null) {
+        savedImageDirectory = await ImageUtils.saveProductImage(
+          productImage.value!,
+        );
+      }
       final entity = ProductEntity(
         id: const Uuid().v4(),
         name: nameController.text.trim(),
@@ -49,8 +78,10 @@ class AddProductController extends GetxController {
         sellingPrice: double.tryParse(priceController.text) ?? 0,
         stock: int.tryParse(stockController.text) ?? 0,
         description: descController.text.trim().isEmpty
-            ? null
+            ? ''
             : descController.text.trim(),
+        image: savedImageDirectory ?? '',
+        isProductActive: isActive.value,
       );
       await _datasource.create(entity);
       Get.back(result: true);
@@ -71,6 +102,54 @@ class AddProductController extends GetxController {
     }
   }
 
+  Future<void> onUpdate() async {
+    if (!formKey.currentState!.validate()) return;
+    isSaving(true);
+    try {
+      String? savedImageDirectory;
+      if (productImage.value != null) {
+        savedImageDirectory = await ImageUtils.saveProductImage(
+          productImage.value!,
+        );
+      }
+      final entity = ProductEntity(
+        id: product!.id,
+        name: nameController.text.trim(),
+        sku: skuController.text.trim().isEmpty
+            ? 'SKU-${DateTime.now().millisecondsSinceEpoch}'
+            : skuController.text.trim(),
+        category: selectedCategory.value,
+        purchasePrice: double.tryParse(purchasePriceController.text) ?? 0,
+        sellingPrice: double.tryParse(priceController.text) ?? 0,
+        stock: int.tryParse(stockController.text) ?? 0,
+        description: descController.text.trim().isEmpty
+            ? ''
+            : descController.text.trim(),
+        image: savedImageDirectory ?? '',
+        isProductActive: isActive.value,
+      );
+      await _datasource.update(entity);
+      // Get.back(result: true);
+
+      Get.until((route) => route.settings.name == Routes.PRODUCT_LIST);
+      Get.find<ProductListController>().refresh();
+      Get.snackbar(
+        'Success',
+        'Product Updated!',
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 2),
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Could not update product.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isSaving(false);
+    }
+  }
+
   @override
   void onClose() {
     nameController.dispose();
@@ -79,6 +158,17 @@ class AddProductController extends GetxController {
     stockController.dispose();
     descController.dispose();
     purchasePriceController.dispose();
+    productImage.close();
+    selectedCategory.close();
     super.onClose();
+  }
+
+  void onAddImage() async {
+    final picked = await ImageUtils.pickImageFromGallery();
+    if (picked != null) productImage(File(picked.path));
+  }
+
+  void toggleProduct() {
+    isActive.value = !isActive.value;
   }
 }

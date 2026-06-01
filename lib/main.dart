@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       initialRoute: AppPages.initial,
       getPages: AppPages.routes,
       builder: (_, child) {
-        return SafeArea(child: child!);
+        return SafeArea(top: false,child: child!);
       },
     );
   }

@@ -54,6 +54,11 @@ class DatabaseService {
         await db.execute('ALTER TABLE customers ADD COLUMN avatar TEXT');
       }
     }
+    if (oldVersion <= 3) {
+      await db.execute(
+        'ALTER TABLE products ADD COLUMN image TEXT',
+      );
+    }
   }
 
   Future<void> _onCreate(

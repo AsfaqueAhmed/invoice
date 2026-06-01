@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_getx_app/app/modules/product/product_list/views/widgets/filter_product_widget.dart';
 import 'package:get/get.dart';
 
 import '../../../../core/database/database_service.dart';
@@ -13,6 +14,15 @@ class ProductListController extends GetxController {
   final RxList<ProductEntity> _allProducts = <ProductEntity>[].obs;
 
   late final ProductLocalDatasource _datasource;
+  final RxBool isActive = true.obs;
+  final categories = ['General', 'Food', 'Electronics', 'Clothing', 'Services'];
+  final RxString selectedCategory = ''.obs;
+  final Rx<RangeValues> priceRange = const RangeValues(0, 100000).obs;
+  final Rx<RangeValues> stockRange = const RangeValues(0, 5000).obs;
+  final RxDouble maxPrice = 0.0.obs;
+  final RxInt maxStock = 0.obs;
+  final Rx<RangeValues> selectedPriceRange = const RangeValues(0, 0).obs;
+  final Rx<RangeValues> selectedStockRange = const RangeValues(0, 0).obs;
 
   // Computed
   String get totalValue {
@@ -41,6 +51,7 @@ class ProductListController extends GetxController {
   void onInit() {
     super.onInit();
     _datasource = ProductLocalDatasource(DatabaseService());
+    selectedCategory.value = categories.first;
     _loadProducts();
   }
 
@@ -48,12 +59,43 @@ class ProductListController extends GetxController {
     isLoading(true);
     try {
       _allProducts.value = await _datasource.getAll();
+      if (_allProducts.isNotEmpty) {
+        final highestPrice = _allProducts
+            .map((e) => e.sellingPrice)
+            .reduce((a, b) => a > b ? a : b);
+
+        final highestStock =
+            _allProducts.map((e) => e.stock).reduce((a, b) => a > b ? a : b);
+
+        maxPrice.value = highestPrice;
+
+        selectedPriceRange.value = RangeValues(
+          0,
+          highestPrice,
+        );
+        priceRange.value = RangeValues(
+          0,
+          highestPrice.toDouble(),
+        );
+
+        maxStock.value = highestStock;
+        selectedStockRange.value = RangeValues(
+          0,
+          highestStock.toDouble(),
+        );
+        stockRange.value = RangeValues(
+          0,
+          highestStock.toDouble(),
+        );
+      }
     } catch (_) {
       _allProducts.value = [];
     } finally {
       isLoading(false);
     }
   }
+
+  void onCategorySelect(String cat) => selectedCategory(cat);
 
   Future<void> refresh() => _loadProducts();
 
@@ -78,9 +120,47 @@ class ProductListController extends GetxController {
     return '\$${val.toStringAsFixed(2)}';
   }
 
+  double get maxHeight {
+    final context = Get.context!;
+    return MediaQuery.of(context).size.height -
+        kToolbarHeight -
+        MediaQuery.of(context).padding.top;
+  }
+
   @override
   void onClose() {
     searchController.dispose();
     super.onClose();
+  }
+
+  void _showBottomSheet(Widget child) {
+    showModalBottomSheet(
+      context: Get.context!,
+      isScrollControlled: true,
+      useSafeArea: true,
+      constraints: BoxConstraints(maxHeight: maxHeight),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (_) => child,
+    );
+  }
+
+  void onFilterClick() {
+    _showBottomSheet(FilterProductWidget(
+      controller: this,
+    ));
+  }
+
+  void toggleProduct() {
+    isActive.value = !isActive.value;
+  }
+
+  void updatePriceRange(RangeValues values) {
+    selectedPriceRange.value = values;
+  }
+
+  void updateStockRange(RangeValues values) {
+    selectedStockRange.value = values;
   }
 }

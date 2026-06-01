@@ -27,7 +27,7 @@ class AddProductView extends GetView<AddProductController> {
           onPressed: Get.back,
         ),
         title: Text(
-          'Add Product',
+          controller.product == null ? 'Add Product' : 'Update Product',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w700,
@@ -55,7 +55,11 @@ class AddProductView extends GetView<AddProductController> {
             boxShadow: AppDecorations.bottomSheetShadow,
           ),
           child: Obx(() => ElevatedButton.icon(
-                onPressed: controller.isSaving.value ? null : controller.onSave,
+                onPressed: controller.isSaving.value
+                    ? null
+                    : controller.product == null
+                        ? controller.onSave
+                        : controller.onUpdate,
                 icon: controller.isSaving.value
                     ? SizedBox(
                         width: 18,
@@ -64,12 +68,16 @@ class AddProductView extends GetView<AddProductController> {
                             strokeWidth: 2, color: colors.onPrimary))
                     : const Icon(Icons.save_rounded, size: 20),
                 label: Text(
-                  controller.isSaving.value ? 'Saving...' : 'Save Product',
+                  controller.isSaving.value
+                      ? 'Saving...'
+                      : controller.product != null
+                          ? 'Update Product'
+                          : 'Save Product',
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: colors.primary,
                   foregroundColor: colors.onPrimary,
-                  minimumSize: const Size(double.infinity, 56),
+                  minimumSize: const Size(double.infinity, 48),
                   shape: RoundedRectangleBorder(
                     borderRadius: AppDecorations.borderRadiusMD,
                   ),
@@ -85,34 +93,43 @@ class AddProductView extends GetView<AddProductController> {
             children: [
               // Image upload placeholder
               GestureDetector(
-                child: Container(
-                  width: 120,
-                  height: 120,
-                  decoration: BoxDecoration(
-                    color: colors.surfaceContainerLow,
-                    border: Border.all(
-                        color: colors.outlineVariant,
-                        width: 2,
-                        style: BorderStyle.solid),
-                    borderRadius: AppDecorations.borderRadiusXL,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.add_a_photo_outlined,
-                          color: colors.outline, size: 32),
-                      Gaps.v6,
-                      Text(
-                        'Add Image',
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: colors.onSurfaceVariant,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                onTap: controller.onAddImage,
+                child: Obx(() {
+                  final file = controller.productImage.value;
+                  return Container(
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      color: colors.surfaceContainerLow,
+                      border: Border.all(
+                          color: colors.outlineVariant,
+                          width: 2,
+                          style: BorderStyle.solid),
+                      borderRadius: AppDecorations.borderRadiusXL,
+                    ),
+                    child: file != null
+                        ? ClipRRect(
+                            borderRadius: AppDecorations.borderRadiusXL,
+                            child: Image.file(file, fit: BoxFit.cover),
+                          )
+                        : Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.add_a_photo_outlined,
+                                  color: colors.outline, size: 32),
+                              Gaps.v6,
+                              Text(
+                                'Add Image',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: colors.onSurfaceVariant,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                  );
+                }),
               ),
 
               Gaps.v24,
@@ -129,7 +146,27 @@ class AddProductView extends GetView<AddProductController> {
                 ),
               ),
 
-              Gaps.v16,
+              Gaps.v12,
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'Active Product',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        color: colors.textPrimary,
+                      ),
+                    ),
+                  ),
+                  Obx(() => Switch.adaptive(
+                        value: controller.isActive.value,
+                        onChanged: (_) => controller.toggleProduct(),
+                        activeTrackColor: colors.primary,
+                      )),
+                ],
+              ),
+              Gaps.v12,
 
               // SKU + Barcode
               Row(
@@ -143,7 +180,7 @@ class AddProductView extends GetView<AddProductController> {
                       ),
                     ),
                   ),
-                  Gaps.h12,
+                  /*Gaps.h12,
                   Expanded(
                     child: AppFieldLabel(
                       label: 'Barcode',
@@ -164,7 +201,7 @@ class AddProductView extends GetView<AddProductController> {
                         ),
                       ),
                     ),
-                  ),
+                  ),*/
                 ],
               ),
 
@@ -347,20 +384,26 @@ class AddProductView extends GetView<AddProductController> {
                       ],
                     ),
                   ),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    decoration:
-                        AppDecorations.chipDecoration(bg: colors.chipGreenBg),
-                    child: Text(
-                      'Active',
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        color: colors.chipGreenFg,
+                  Obx(() {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      decoration: AppDecorations.chipDecoration(
+                          bg: controller.isActive.value
+                              ? colors.chipGreenBg
+                              : colors.chipRedBg),
+                      child: Text(
+                        controller.isActive.value ? 'Active' : 'Inactive',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          color: controller.isActive.value
+                              ? colors.chipGreenFg
+                              : colors.chipRedFg,
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  }),
                 ]),
               ),
 
