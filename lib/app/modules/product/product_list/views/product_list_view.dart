@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -45,12 +47,6 @@ class ProductListView extends GetView<ProductListController> {
                   color: colors.primary,
                 ),
               ),
-              actions: [
-                IconButton(
-                  icon: Icon(Icons.add_rounded, color: colors.onSurfaceVariant),
-                  onPressed: controller.onAddProduct,
-                ),
-              ],
             ),
             SliverToBoxAdapter(
               child: Padding(
@@ -69,15 +65,18 @@ class ProductListView extends GetView<ProductListController> {
                         ),
                       ),
                       Gaps.h10,
-                      Container(
-                        width: 52,
-                        height: 52,
-                        decoration: AppDecorations.iconContainer(
-                          color: colors.surfaceContainer,
-                          size: 14,
+                      GestureDetector(
+                        onTap: controller.onFilterClick,
+                        child: Container(
+                          width: 52,
+                          height: 52,
+                          decoration: AppDecorations.iconContainer(
+                            color: colors.surfaceContainer,
+                            size: 14,
+                          ),
+                          child: Icon(Icons.filter_list_rounded,
+                              color: colors.primary),
                         ),
-                        child: Icon(Icons.filter_list_rounded,
-                            color: colors.primary),
                       ),
                     ]),
 
@@ -244,7 +243,7 @@ class _ProductCard extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                         fontSize: 15,
                         color: _status == 'outofstock'
-                            ? colors.textPrimary.withOpacity(0.5)
+                            ? colors.textPrimary.withValues(alpha: 0.5)
                             : colors.textPrimary,
                       ),
                     ),
@@ -257,9 +256,10 @@ class _ProductCard extends StatelessWidget {
             _StockBadge(status: _status, colors: colors),
           ]),
           Gaps.v12,
-          Row(children: [
-            Expanded(
-              child: Column(
+          Row(
+            children: [
+              Expanded(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -290,36 +290,59 @@ class _ProductCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ]),
-            ),
-            Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-              Text(
-                'Unit Price',
-                style: TextStyle(fontSize: 11, color: colors.textSecondary),
-              ),
-              Text(
-                '\$${product.sellingPrice.toStringAsFixed(2)}',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: colors.primary,
+                  ],
                 ),
               ),
-            ]),
-            Gaps.h12,
-            Container(
-              width: 72,
-              height: 72,
-              decoration: BoxDecoration(
-                color: colors.surfaceContainerLow,
-                borderRadius: AppDecorations.borderRadiusMD,
-                border:
-                    Border.all(color: colors.outlineVariant.withOpacity(0.3)),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    'Unit Price',
+                    style: TextStyle(fontSize: 11, color: colors.textSecondary),
+                  ),
+                  Text(
+                    '\$${product.sellingPrice.toStringAsFixed(2)}',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: colors.primary,
+                    ),
+                  ),
+                ],
               ),
-              child: Icon(Icons.inventory_2_rounded,
-                  color: colors.outlineVariant, size: 28),
-            ),
-          ]),
+              Gaps.h12,
+              Container(
+                width: 72,
+                height: 72,
+                decoration: BoxDecoration(
+                  color: colors.surfaceContainerLow,
+                  borderRadius: AppDecorations.borderRadiusMD,
+                  border: Border.all(
+                      color: colors.outlineVariant.withValues(alpha: 0.3)),
+                ),
+                child: product.image.isNotEmpty
+                    ? ClipRRect(
+                        borderRadius: AppDecorations.borderRadiusMD,
+                        child: Image.file(
+                          File(product.image),
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) {
+                            return Icon(
+                              Icons.inventory_2_rounded,
+                              color: colors.outlineVariant,
+                              size: 28,
+                            );
+                          },
+                        ),
+                      )
+                    : Icon(
+                        Icons.inventory_2_rounded,
+                        color: colors.outlineVariant,
+                        size: 28,
+                      ),
+              ),
+            ],
+          ),
         ],
       ),
     );

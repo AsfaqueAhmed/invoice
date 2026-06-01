@@ -6,7 +6,9 @@ class ProductEntity {
   final double purchasePrice;
   final double sellingPrice;
   final int stock;
-  final String? description;
+  final String description;
+  final String image;
+  final bool isProductActive;
 
   ProductEntity({
     required this.id,
@@ -16,7 +18,9 @@ class ProductEntity {
     required this.purchasePrice,
     required this.sellingPrice,
     required this.stock,
-    this.description,
+    required this.description,
+    required this.image,
+    required this.isProductActive,
   });
 
   Map<String, dynamic> toJson() {
@@ -29,6 +33,8 @@ class ProductEntity {
       'sellingPrice': sellingPrice,
       'stock': stock,
       'description': description,
+      'image': image,
+      'isProductActive': isProductActive ? 1 : 0,
     };
   }
 
@@ -44,6 +50,8 @@ class ProductEntity {
       sellingPrice: map['sellingPrice'],
       stock: map['stock'],
       description: map['description'],
+      image: map['image'],
+      isProductActive: map['isProductActive'] == 1,
     );
   }
 }

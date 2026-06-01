@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -25,12 +26,13 @@ class DatabaseService {
   Future<Database> _initDatabase() async {
     final dbPath = await getDatabasesPath();
 
-    final path = join(dbPath, 'invoice_app.db');
+    final path = join(dbPath, 'invoice_app_v4.db');
 
     return await openDatabase(
       path,
-      version: 2,
+      version: 4,
       onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
     );
   }
 
@@ -53,5 +55,18 @@ class DatabaseService {
     await db.execute(tPayment);
 
     await db.execute(tExpense);
+  }
+
+  Future<void> _onUpgrade(
+    Database db,
+    int oldVersion,
+    int newVersion,
+  ) async {
+    debugPrint('onUpgrade called: $oldVersion -> $newVersion');
+    if (oldVersion < 3) {
+      await db.execute(
+        'ALTER TABLE products ADD COLUMN image TEXT',
+      );
+    }
   }
 }

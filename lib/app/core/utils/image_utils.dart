@@ -39,4 +39,30 @@ class ImageUtils {
       return null;
     }
   }
+
+  static Future<String?> saveProductImage(File imageFile) async {
+    try {
+      final appDir = await getApplicationDocumentsDirectory();
+
+      final productImgDir = Directory(
+        '${appDir.path}/product_image',
+      );
+
+      if (!await productImgDir.exists()) {
+        await productImgDir.create(recursive: true);
+      }
+
+      final extension = path.extension(imageFile.path);
+
+      final fileName = '${DateTime.now().millisecondsSinceEpoch}$extension';
+
+      final savedFile = await imageFile.copy(
+        '${productImgDir.path}/$fileName',
+      );
+
+      return savedFile.path;
+    } catch (e) {
+      return null;
+    }
+  }
 }

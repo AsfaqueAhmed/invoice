@@ -40,7 +40,9 @@ const tProduct = '''
         purchasePrice REAL,
         sellingPrice REAL,
         stock INTEGER,
-        description TEXT
+        description TEXT,
+        image TEXT,
+        isProductActive INTEGER NOT NULL DEFAULT 1
       )
     ''';
 
