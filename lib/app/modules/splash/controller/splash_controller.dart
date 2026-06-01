@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_getx_app/app/core/services/local_storage_service.dart';
 import 'package:get/get.dart';
 
 import '../../../routes/app_pages.dart';
@@ -85,9 +86,11 @@ class SplashController extends GetxController
     // Simulate async initialization (auth check, config load, etc.)
     await _initialize();
 
-    // Navigate to onboarding (or home if already onboarded)
-    // TODO: check onboarding completion flag from storage
-    Get.offAllNamed(Routes.onboarding);
+    if (LocalStorageService.hasCreatedFirstBusiness) {
+      Get.offAllNamed(Routes.dashboard);
+    } else {
+      Get.offAllNamed(Routes.onboarding);
+    }
   }
 
   Future<void> _initialize() async {

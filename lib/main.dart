@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_getx_app/app/core/services/local_storage_service.dart';
 import 'package:get/get.dart';
 import 'app/core/configs/theme/app_theme.dart';
 import 'app/routes/app_pages.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await LocalStorageService.init();
   runApp(const MyApp());
 }
 

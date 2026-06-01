@@ -1,6 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_getx_app/app/core/services/local_storage_service.dart';
+import 'package:flutter_getx_app/app/core/utils/image_utils.dart';
+import 'package:flutter_getx_app/app/data/datasources/local/business_local_datasource.dart';
+import 'package:flutter_getx_app/app/data/entities/business_entity.dart';
 import 'package:get/get.dart';
+import 'package:uuid/uuid.dart';
 import '../../../routes/app_pages.dart';
 
 class BusinessSetupController extends GetxController {
@@ -16,7 +21,7 @@ class BusinessSetupController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxBool isSuccess = false.obs;
   final Rx<File?> logoFile = Rx<File?>(null);
-  final RxString selectedCurrency = 'USD'.obs;
+  final RxString selectedCurrency = 'BDT'.obs;
 
   // ─── Currency Options ─────────────────────────────────────────
   final List<Map<String, String>> currencies = const [
@@ -28,6 +33,8 @@ class BusinessSetupController extends GetxController {
     {'value': 'BDT', 'label': 'BDT - Bangladeshi Taka'},
   ];
 
+  final _repository = BusinessLocalDatasource();
+
   // ─── Actions ──────────────────────────────────────────────────
 
   void onCurrencyChanged(String? value) {
@@ -35,10 +42,8 @@ class BusinessSetupController extends GetxController {
   }
 
   Future<void> pickLogo() async {
-    // TODO: Use image_picker package
-    // final picker = ImagePicker();
-    // final picked = await picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
-    // if (picked != null) logoFile(File(picked.path));
+    final picked = await ImageUtils.pickImageFromGallery();
+    if (picked != null) logoFile(File(picked.path));
   }
 
   Future<void> onSubmit() async {
@@ -47,21 +52,30 @@ class BusinessSetupController extends GetxController {
     isLoading(true);
 
     try {
-      // TODO: Save business profile to local storage or API
-      // final data = BusinessSetupModel(
-      //   name: businessNameController.text.trim(),
-      //   phone: phoneController.text.trim(),
-      //   address: addressController.text.trim(),
-      //   currency: selectedCurrency.value,
-      //   logoPath: logoFile.value?.path,
-      // );
-      // await _repository.saveBusinessProfile(data);
+      String? savedImageDirectory;
+      if (logoFile.value != null) {
+        savedImageDirectory = await ImageUtils.saveBusinessImage(
+          logoFile.value!,
+        );
+      }
+
+      final data = BusinessEntity(
+        id: const Uuid().v4(),
+        name: businessNameController.text.trim(),
+        phone: phoneController.text.trim(),
+        address: addressController.text.trim(),
+        currency: selectedCurrency.value,
+        logo: savedImageDirectory ?? '',
+      );
+      await _repository.create(data);
 
       await Future.delayed(const Duration(milliseconds: 1500));
 
       isSuccess(true);
 
       await Future.delayed(const Duration(milliseconds: 600));
+
+      await LocalStorageService.setOnCreatedFirstBusiness();
 
       Get.offAllNamed(Routes.dashboard);
     } catch (e) {
@@ -95,9 +109,9 @@ class BusinessSetupController extends GetxController {
     if (value == null || value.trim().isEmpty) {
       return 'Phone number is required';
     }
-    final cleaned = value.replaceAll(RegExp(r'[\s\-\(\)\+]'), '');
-    if (cleaned.length < 7) {
-      return 'Enter a valid phone number';
+    final phone = value.trim();
+    if (!RegExp(r'^01\d{9}$').hasMatch(phone)) {
+      return 'Enter a valid 11-digit phone number';
     }
     return null;
   }
