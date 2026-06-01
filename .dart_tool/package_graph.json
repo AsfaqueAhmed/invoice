@@ -330,7 +330,7 @@
     },
     {
       "name": "sqflite",
-      "version": "2.4.2+1",
+      "version": "2.4.2",
       "dependencies": [
         "flutter",
         "path",
@@ -391,7 +391,7 @@
     },
     {
       "name": "sqflite_common",
-      "version": "2.5.8",
+      "version": "2.5.6",
       "dependencies": [
         "meta",
         "path",
@@ -422,7 +422,7 @@
     },
     {
       "name": "sqflite_android",
-      "version": "2.4.2+3",
+      "version": "2.4.2+2",
       "dependencies": [
         "flutter",
         "path",
@@ -462,11 +462,9 @@
     },
     {
       "name": "path_provider_foundation",
-      "version": "2.6.0",
+      "version": "2.5.1",
       "dependencies": [
-        "ffi",
         "flutter",
-        "objective_c",
         "path_provider_platform_interface"
       ]
     },
@@ -482,7 +480,7 @@
     },
     {
       "name": "synchronized",
-      "version": "3.4.0+1",
+      "version": "3.4.0",
       "dependencies": []
     },
     {
@@ -511,19 +509,6 @@
       ]
     },
     {
-      "name": "objective_c",
-      "version": "9.4.1",
-      "dependencies": [
-        "code_assets",
-        "collection",
-        "ffi",
-        "hooks",
-        "logging",
-        "meta",
-        "pub_semver"
-      ]
-    },
-    {
       "name": "jni_flutter",
       "version": "1.0.1",
       "dependencies": [
@@ -545,39 +530,6 @@
       ]
     },
     {
-      "name": "pub_semver",
-      "version": "2.2.0",
-      "dependencies": [
-        "collection"
-      ]
-    },
-    {
-      "name": "logging",
-      "version": "1.3.0",
-      "dependencies": []
-    },
-    {
-      "name": "hooks",
-      "version": "2.0.0",
-      "dependencies": [
-        "collection",
-        "crypto",
-        "logging",
-        "meta",
-        "pub_semver",
-        "record_use",
-        "yaml"
-      ]
-    },
-    {
-      "name": "code_assets",
-      "version": "1.1.0",
-      "dependencies": [
-        "collection",
-        "hooks"
-      ]
-    },
-    {
       "name": "package_config",
       "version": "2.2.0",
       "dependencies": [
@@ -588,24 +540,6 @@
       "name": "args",
       "version": "2.7.0",
       "dependencies": []
-    },
-    {
-      "name": "yaml",
-      "version": "3.1.3",
-      "dependencies": [
-        "collection",
-        "source_span",
-        "string_scanner"
-      ]
-    },
-    {
-      "name": "record_use",
-      "version": "0.6.0",
-      "dependencies": [
-        "collection",
-        "meta",
-        "pub_semver"
-      ]
     }
   ],
   "configVersion": 1
