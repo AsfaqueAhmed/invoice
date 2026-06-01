@@ -62,10 +62,10 @@ class AddProductController extends GetxController {
       skuController.text = product!.sku;
       priceController.text = product!.sellingPrice.toString();
       stockController.text = product!.stock.toString();
-      descController.text = product!.description;
+      descController.text = product?.description ?? '';
       purchasePriceController.text = product!.purchasePrice.toString();
       productImage.value =
-          product!.image.isNotEmpty ? File(product!.image) : null;
+          (product?.image?.isNotEmpty ?? false) ? File(product?.image??'') : null;
       selectedCategory.value = categories.firstWhere(
         (cat) => cat == product!.category,
       );

@@ -105,19 +105,22 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       Theme.of(context).brightness == Brightness.dark,
                     ),
                   ),
-                  child: product.image.isNotEmpty
+                  child: (product.image?.isNotEmpty??false)
                       ? ClipRRect(
                           borderRadius: AppDecorations.borderRadiusXL,
-                          child: Image.file(
-                            File(product.image),
-                            fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) {
-                              return Icon(
-                                Icons.inventory_2_rounded,
-                                color: colors.outlineVariant,
-                                size: 80,
-                              );
-                            },
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Image.file(
+                              File(product.image??""),
+                              fit: BoxFit.fitWidth,
+                              errorBuilder: (_, __, ___) {
+                                return Icon(
+                                  Icons.inventory_2_rounded,
+                                  color: colors.outlineVariant,
+                                  size: 80,
+                                );
+                              },
+                            ),
                           ),
                         )
                       : Icon(Icons.inventory_2_rounded,
@@ -290,8 +293,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                   ),
                   Gaps.v8,
                   Text(
-                    product.description.isNotEmpty
-                        ? product.description
+                    (product.description?.isNotEmpty??false)
+                        ? product.description??''
                         : 'No description provided.',
                     style: TextStyle(
                       fontSize: 14,

@@ -320,11 +320,11 @@ class _ProductCard extends StatelessWidget {
                   border: Border.all(
                       color: colors.outlineVariant.withValues(alpha: 0.3)),
                 ),
-                child: product.image.isNotEmpty
+                child: (product.image?.isNotEmpty ?? false)
                     ? ClipRRect(
                         borderRadius: AppDecorations.borderRadiusMD,
                         child: Image.file(
-                          File(product.image),
+                          File(product.image?? ""),
                           fit: BoxFit.cover,
                           errorBuilder: (_, __, ___) {
                             return Icon(

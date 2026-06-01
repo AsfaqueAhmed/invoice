@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../../core/database/database_service.dart';
@@ -14,6 +15,7 @@ class ProductLocalDatasource {
     final Database db = await databaseService.database;
 
     final result = await db.query('products');
+    debugPrint('result: $result');
 
     return result.map((e) => ProductEntity.fromJson(e)).toList();
   }

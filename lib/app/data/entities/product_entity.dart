@@ -6,8 +6,8 @@ class ProductEntity {
   final double purchasePrice;
   final double sellingPrice;
   final int stock;
-  final String description;
-  final String image;
+  final String? description;
+  final String? image;
   final bool isProductActive;
 
   ProductEntity({
@@ -18,8 +18,8 @@ class ProductEntity {
     required this.purchasePrice,
     required this.sellingPrice,
     required this.stock,
-    required this.description,
-    required this.image,
+    this.description,
+    this.image,
     required this.isProductActive,
   });
 
@@ -49,8 +49,8 @@ class ProductEntity {
       purchasePrice: map['purchasePrice'],
       sellingPrice: map['sellingPrice'],
       stock: map['stock'],
-      description: map['description'],
-      image: map['image'],
+      description: map['description']??'',
+      image: map['image']??'',
       isProductActive: map['isProductActive'] == 1,
     );
   }
