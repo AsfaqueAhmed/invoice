@@ -138,246 +138,246 @@ class CreateInvoiceView extends GetView<CreateInvoiceController> {
           Gaps.v10,
 
           // ── Items list ─────────────────────────────────────
-          Obx(() => Column(
-                children: List.generate(controller.items.length, (i) {
-                  final item = controller.items[i];
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: AppCard(
-                      color: colors.surfaceContainerLowest,
-                      child: Column(children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  item['name'],
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 15,
-                                    color: colors.textPrimary,
-                                  ),
-                                ),
-                                Text(
-                                  'SKU: ${item['sku']}',
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    color: colors.textSecondary,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.delete_outline_rounded,
-                                  color: colors.error),
-                              onPressed: () => controller.removeItem(i),
-                            ),
-                          ],
-                        ),
-                        Gaps.v12,
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            // Qty stepper
-                            Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                color: colors.surfaceContainerLow,
-                                borderRadius: AppDecorations.borderRadiusFull,
-                                border: Border.all(
-                                    color:
-                                        colors.outlineVariant.withOpacity(0.5)),
-                              ),
-                              child: Row(children: [
-                                GestureDetector(
-                                  onTap: () => controller.decrementQty(i),
-                                  child: Container(
-                                    width: 36,
-                                    height: 36,
-                                    decoration: BoxDecoration(
-                                      color: colors.cardBg,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Icon(Icons.remove_rounded,
-                                        color: colors.primary, size: 18),
-                                  ),
-                                ),
-                                Obx(() => SizedBox(
-                                      width: 40,
-                                      child: Text(
-                                        '${controller.items[i]['qty']}',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 16,
-                                          color: colors.textPrimary,
-                                        ),
-                                      ),
-                                    )),
-                                GestureDetector(
-                                  onTap: () => controller.incrementQty(i),
-                                  child: Container(
-                                    width: 36,
-                                    height: 36,
-                                    decoration: BoxDecoration(
-                                      color: colors.cardBg,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Icon(Icons.add_rounded,
-                                        color: colors.primary, size: 18),
-                                  ),
-                                ),
-                              ]),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  '\$${item['rate'].toStringAsFixed(2)} / unit',
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    color: colors.textSecondary,
-                                  ),
-                                ),
-                                Obx(() => Text(
-                                      '\$${(controller.items[i]['qty'] * item['rate']).toStringAsFixed(2)}',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w700,
-                                        color: colors.primary,
-                                      ),
-                                    )),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ]),
-                    ),
-                  );
-                }),
-              )),
+          // Obx(() => Column(
+          //       children: List.generate(controller.items.length, (i) {
+          //         final item = controller.items[i];
+          //         return Padding(
+          //           padding: const EdgeInsets.only(bottom: 12),
+          //           child: AppCard(
+          //             color: colors.surfaceContainerLowest,
+          //             child: Column(children: [
+          //               Row(
+          //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //                 children: [
+          //                   Column(
+          //                     crossAxisAlignment: CrossAxisAlignment.start,
+          //                     children: [
+          //                       Text(
+          //                         item['name'],
+          //                         style: TextStyle(
+          //                           fontWeight: FontWeight.w600,
+          //                           fontSize: 15,
+          //                           color: colors.textPrimary,
+          //                         ),
+          //                       ),
+          //                       Text(
+          //                         'SKU: ${item['sku']}',
+          //                         style: TextStyle(
+          //                           fontSize: 11,
+          //                           color: colors.textSecondary,
+          //                         ),
+          //                       ),
+          //                     ],
+          //                   ),
+          //                   IconButton(
+          //                     icon: Icon(Icons.delete_outline_rounded,
+          //                         color: colors.error),
+          //                     onPressed: () => controller.removeItem(i),
+          //                   ),
+          //                 ],
+          //               ),
+          //               Gaps.v12,
+          //               Row(
+          //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //                 children: [
+          //                   // Qty stepper
+          //                   Container(
+          //                     padding: const EdgeInsets.all(4),
+          //                     decoration: BoxDecoration(
+          //                       color: colors.surfaceContainerLow,
+          //                       borderRadius: AppDecorations.borderRadiusFull,
+          //                       border: Border.all(
+          //                           color:
+          //                               colors.outlineVariant.withOpacity(0.5)),
+          //                     ),
+          //                     child: Row(children: [
+          //                       GestureDetector(
+          //                         onTap: () => controller.decrementQty(i),
+          //                         child: Container(
+          //                           width: 36,
+          //                           height: 36,
+          //                           decoration: BoxDecoration(
+          //                             color: colors.cardBg,
+          //                             shape: BoxShape.circle,
+          //                           ),
+          //                           child: Icon(Icons.remove_rounded,
+          //                               color: colors.primary, size: 18),
+          //                         ),
+          //                       ),
+          //                       Obx(() => SizedBox(
+          //                             width: 40,
+          //                             child: Text(
+          //                               '${controller.items[i]['qty']}',
+          //                               textAlign: TextAlign.center,
+          //                               style: TextStyle(
+          //                                 fontWeight: FontWeight.w700,
+          //                                 fontSize: 16,
+          //                                 color: colors.textPrimary,
+          //                               ),
+          //                             ),
+          //                           )),
+          //                       GestureDetector(
+          //                         onTap: () => controller.incrementQty(i),
+          //                         child: Container(
+          //                           width: 36,
+          //                           height: 36,
+          //                           decoration: BoxDecoration(
+          //                             color: colors.cardBg,
+          //                             shape: BoxShape.circle,
+          //                           ),
+          //                           child: Icon(Icons.add_rounded,
+          //                               color: colors.primary, size: 18),
+          //                         ),
+          //                       ),
+          //                     ]),
+          //                   ),
+          //                   Column(
+          //                     crossAxisAlignment: CrossAxisAlignment.end,
+          //                     children: [
+          //                       Text(
+          //                         '\$${item['rate'].toStringAsFixed(2)} / unit',
+          //                         style: TextStyle(
+          //                           fontSize: 11,
+          //                           color: colors.textSecondary,
+          //                         ),
+          //                       ),
+          //                       Obx(() => Text(
+          //                             '\$${(controller.items[i]['qty'] * item['rate']).toStringAsFixed(2)}',
+          //                             style: TextStyle(
+          //                               fontSize: 18,
+          //                               fontWeight: FontWeight.w700,
+          //                               color: colors.primary,
+          //                             ),
+          //                           )),
+          //                     ],
+          //                   ),
+          //                 ],
+          //               ),
+          //             ]),
+          //           ),
+          //         );
+          //       }),
+          //     )),
 
           // ── Summary ────────────────────────────────────────
-          AppCard(
-            child: Column(children: [
-              _SummaryRow(
-                label: 'Subtotal',
-                colors: colors,
-                value: Obx(() => Text(
-                      '\$${controller.subtotal.toStringAsFixed(2)}',
-                      style: TextStyle(fontSize: 14, color: colors.textPrimary),
-                    )),
-              ),
-              Gaps.v8,
-              _SummaryRow(
-                label: 'Discount (%)',
-                colors: colors,
-                value: SizedBox(
-                  width: 70,
-                  child: TextFormField(
-                    initialValue: controller.discount.value.toString(),
-                    keyboardType: TextInputType.number,
-                    textAlign: TextAlign.right,
-                    onChanged: (v) =>
-                        controller.discount(double.tryParse(v) ?? 0),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: colors.surfaceContainerLow,
-                      border: OutlineInputBorder(
-                        borderRadius: AppDecorations.borderRadiusXS,
-                        borderSide: BorderSide.none,
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 8),
-                    ),
-                  ),
-                ),
-              ),
-              Gaps.v8,
-              _SummaryRow(
-                label: 'Amount Paid',
-                colors: colors,
-                value: SizedBox(
-                  width: 110,
-                  child: TextFormField(
-                    initialValue: controller.amountPaid.value.toString(),
-                    keyboardType: TextInputType.number,
-                    textAlign: TextAlign.right,
-                    onChanged: (v) =>
-                        controller.amountPaid(double.tryParse(v) ?? 0),
-                    decoration: InputDecoration(
-                      prefixText: '\$',
-                      filled: true,
-                      fillColor: colors.surfaceContainerLow,
-                      border: OutlineInputBorder(
-                        borderRadius: AppDecorations.borderRadiusXS,
-                        borderSide: BorderSide.none,
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 8),
-                    ),
-                  ),
-                ),
-              ),
-              Divider(
-                  height: 20, color: colors.outlineVariant.withOpacity(0.5)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Grand Total',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: colors.textPrimary,
-                    ),
-                  ),
-                  Obx(() => Text(
-                        '\$${controller.grandTotal.toStringAsFixed(2)}',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w700,
-                          color: colors.primary,
-                          letterSpacing: -0.5,
-                        ),
-                      )),
-                ],
-              ),
-              Gaps.v8,
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  color: colors.errorContainer.withOpacity(0.2),
-                  borderRadius: AppDecorations.borderRadiusSM,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'DUE AMOUNT',
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        color: colors.error,
-                        letterSpacing: 0.8,
-                      ),
-                    ),
-                    Obx(() => Text(
-                          '\$${controller.dueAmount.toStringAsFixed(2)}',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: colors.error,
-                          ),
-                        )),
-                  ],
-                ),
-              ),
-            ]),
-          ),
+          // AppCard(
+            // child: Column(children: [
+            //   _SummaryRow(
+            //     label: 'Subtotal',
+            //     colors: colors,
+            //     value: Obx(() => Text(
+            //           '\$${controller.subtotal.toStringAsFixed(2)}',
+            //           style: TextStyle(fontSize: 14, color: colors.textPrimary),
+            //         )),
+            //   ),
+            //   Gaps.v8,
+            //   _SummaryRow(
+            //     label: 'Discount (%)',
+            //     colors: colors,
+            //     value: SizedBox(
+            //       width: 70,
+            //       child: TextFormField(
+            //         initialValue: controller.discount.value.toString(),
+            //         keyboardType: TextInputType.number,
+            //         textAlign: TextAlign.right,
+            //         onChanged: (v) =>
+            //             controller.discount(double.tryParse(v) ?? 0),
+            //         decoration: InputDecoration(
+            //           filled: true,
+            //           fillColor: colors.surfaceContainerLow,
+            //           border: OutlineInputBorder(
+            //             borderRadius: AppDecorations.borderRadiusXS,
+            //             borderSide: BorderSide.none,
+            //           ),
+            //           contentPadding: const EdgeInsets.symmetric(
+            //               horizontal: 8, vertical: 8),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            //   Gaps.v8,
+            //   _SummaryRow(
+            //     label: 'Amount Paid',
+            //     colors: colors,
+            //     value: SizedBox(
+            //       width: 110,
+            //       child: TextFormField(
+            //         initialValue: controller.amountPaid.value.toString(),
+            //         keyboardType: TextInputType.number,
+            //         textAlign: TextAlign.right,
+            //         onChanged: (v) =>
+            //             controller.amountPaid(double.tryParse(v) ?? 0),
+            //         decoration: InputDecoration(
+            //           prefixText: '\$',
+            //           filled: true,
+            //           fillColor: colors.surfaceContainerLow,
+            //           border: OutlineInputBorder(
+            //             borderRadius: AppDecorations.borderRadiusXS,
+            //             borderSide: BorderSide.none,
+            //           ),
+            //           contentPadding: const EdgeInsets.symmetric(
+            //               horizontal: 8, vertical: 8),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            //   Divider(
+            //       height: 20, color: colors.outlineVariant.withOpacity(0.5)),
+            //   Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       Text(
+            //         'Grand Total',
+            //         style: TextStyle(
+            //           fontSize: 16,
+            //           fontWeight: FontWeight.w700,
+            //           color: colors.textPrimary,
+            //         ),
+            //       ),
+            //       Obx(() => Text(
+            //             '\$${controller.grandTotal.toStringAsFixed(2)}',
+            //             style: TextStyle(
+            //               fontSize: 24,
+            //               fontWeight: FontWeight.w700,
+            //               color: colors.primary,
+            //               letterSpacing: -0.5,
+            //             ),
+            //           )),
+            //     ],
+            //   ),
+            //   Gaps.v8,
+            //   Container(
+            //     padding:
+            //         const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            //     decoration: BoxDecoration(
+            //       color: colors.errorContainer.withOpacity(0.2),
+            //       borderRadius: AppDecorations.borderRadiusSM,
+            //     ),
+            //     child: Row(
+            //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //       children: [
+            //         Text(
+            //           'DUE AMOUNT',
+            //           style: TextStyle(
+            //             fontSize: 11,
+            //             fontWeight: FontWeight.w700,
+            //             color: colors.error,
+            //             letterSpacing: 0.8,
+            //           ),
+            //         ),
+            //         Obx(() => Text(
+            //               '\$${controller.dueAmount.toStringAsFixed(2)}',
+            //               style: TextStyle(
+            //                 fontSize: 16,
+            //                 fontWeight: FontWeight.w700,
+            //                 color: colors.error,
+            //               ),
+            //             )),
+            //       ],
+            //     ),
+            //   ),
+            // ]),
+          // ),
           Gaps.v16,
         ]),
       ),

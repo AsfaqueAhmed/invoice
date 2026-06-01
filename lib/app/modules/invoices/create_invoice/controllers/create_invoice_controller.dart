@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_getx_app/app/data/entities/product_entity.dart';
 import 'package:flutter_getx_app/app/modules/invoices/create_invoice/views/widgets/select_customer_bottom_sheet.dart';
 import 'package:flutter_getx_app/app/routes/app_pages.dart';
 import 'package:get/get.dart';
@@ -29,27 +30,19 @@ class CreateInvoiceController extends GetxController {
   String get invoiceNo =>
       'INV-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}';
 
-  final items = <Map<String, dynamic>>[
-    {'name': 'Consulting Services', 'sku': 'CS-001', 'qty': 2, 'rate': 150.0},
-    {
-      'name': 'Premium Support Package',
-      'sku': 'PSP-24',
-      'qty': 1,
-      'rate': 1200.0
-    },
-  ].obs;
-
   late final CustomerLocalDatasource _customerDs;
   late final InvoiceLocalDatasource _invoiceDs;
   late final InvoiceItemLocalDatasource _itemDs;
 
-  double get subtotal =>
-      items.fold(0.0, (s, i) => s + (i['qty'] as int) * (i['rate'] as double));
+  // double get subtotal =>
+  //     items.fold(0.0, (s, i) => s + (i['qty'] as int) * (i['rate'] as double));
 
-  double get grandTotal => subtotal * (1 - discount.value / 100);
+  // double get grandTotal => subtotal * (1 - discount.value / 100);
 
-  double get dueAmount =>
-      (grandTotal - amountPaid.value).clamp(0, double.infinity);
+  // double get dueAmount =>
+  //     (grandTotal - amountPaid.value).clamp(0, double.infinity);
+
+  RxList<ProductEntity> items = <ProductEntity>[].obs;
 
   @override
   void onInit() {
@@ -98,21 +91,21 @@ class CreateInvoiceController extends GetxController {
     );
   }
 
-  void incrementQty(int idx) {
-    final item = Map<String, dynamic>.from(items[idx]);
-    item['qty'] = (item['qty'] as int) + 1;
-    items[idx] = item;
-    items.refresh();
-  }
-
-  void decrementQty(int idx) {
-    final item = Map<String, dynamic>.from(items[idx]);
-    if ((item['qty'] as int) > 1) {
-      item['qty'] = (item['qty'] as int) - 1;
-      items[idx] = item;
-      items.refresh();
-    }
-  }
+  // void incrementQty(int idx) {
+  //   final item = Map<String, dynamic>.from(items[idx]);
+  //   item['qty'] = (item['qty'] as int) + 1;
+  //   items[idx] = item;
+  //   items.refresh();
+  // }
+  //
+  // void decrementQty(int idx) {
+  //   final item = Map<String, dynamic>.from(items[idx]);
+  //   if ((item['qty'] as int) > 1) {
+  //     item['qty'] = (item['qty'] as int) - 1;
+  //     items[idx] = item;
+  //     items.refresh();
+  //   }
+  // }
 
   void removeItem(int idx) => items.removeAt(idx);
 
@@ -130,33 +123,33 @@ class CreateInvoiceController extends GetxController {
     isSaving(true);
     try {
       final id = const Uuid().v4();
-      final invoice = InvoiceEntity(
-        id: id,
-        customerId: selectedCustomer.value!.id,
-        invoiceNo: invoiceNo,
-        subtotal: subtotal,
-        discount: discount.value,
-        tax: 0,
-        total: grandTotal,
-        paid: amountPaid.value,
-        due: dueAmount,
-        status: dueAmount <= 0
-            ? 'paid'
-            : amountPaid.value > 0
-                ? 'partial'
-                : 'pending',
-      );
-      await _invoiceDs.create(invoice);
+      // final invoice = InvoiceEntity(
+      //   id: id,
+      //   customerId: selectedCustomer.value!.id,
+      //   invoiceNo: invoiceNo,
+      //   subtotal: subtotal,
+      //   discount: discount.value,
+      //   tax: 0,
+      //   total: grandTotal,
+      //   paid: amountPaid.value,
+      //   due: dueAmount,
+      //   status: dueAmount <= 0
+      //       ? 'paid'
+      //       : amountPaid.value > 0
+      //           ? 'partial'
+      //           : 'pending',
+      // );
+      // await _invoiceDs.create(invoice);
       for (final item in items) {
-        await _itemDs.create(InvoiceItemEntity(
-          id: const Uuid().v4(),
-          invoiceId: id,
-          productId: '',
-          name: item['name'],
-          qty: item['qty'],
-          price: item['rate'],
-          total: item['qty'] * item['rate'],
-        ));
+        // await _itemDs.create(InvoiceItemEntity(
+        //   id: const Uuid().v4(),
+        //   invoiceId: id,
+        //   productId: '',
+        //   name: item['name'],
+        //   qty: item['qty'],
+        //   price: item['rate'],
+        //   total: item['qty'] * item['rate'],
+        // ));
       }
       Get.back(result: true);
       Get.snackbar('Success', 'Invoice saved!',
