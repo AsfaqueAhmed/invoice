@@ -39,7 +39,8 @@ const tProduct = '''
         category TEXT,
         purchasePrice REAL,
         sellingPrice REAL,
-        stock INTEGER
+        stock INTEGER,
+        description TEXT
       )
     ''';
 

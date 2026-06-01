@@ -18,9 +18,7 @@ class AddProductController extends GetxController {
   final descController = TextEditingController();
   final purchasePriceController = TextEditingController();
 
-  final categories = [
-    'General', 'Food', 'Electronics', 'Clothing', 'Services'
-  ];
+  final categories = ['General', 'Food', 'Electronics', 'Clothing', 'Services'];
 
   late final ProductLocalDatasource _datasource;
 
@@ -47,11 +45,12 @@ class AddProductController extends GetxController {
             ? 'SKU-${DateTime.now().millisecondsSinceEpoch}'
             : skuController.text.trim(),
         category: selectedCategory.value,
-        purchasePrice:
-            double.tryParse(purchasePriceController.text) ?? 0,
-        sellingPrice:
-            double.tryParse(priceController.text) ?? 0,
+        purchasePrice: double.tryParse(purchasePriceController.text) ?? 0,
+        sellingPrice: double.tryParse(priceController.text) ?? 0,
         stock: int.tryParse(stockController.text) ?? 0,
+        description: descController.text.trim().isEmpty
+            ? null
+            : descController.text.trim(),
       );
       await _datasource.create(entity);
       Get.back(result: true);

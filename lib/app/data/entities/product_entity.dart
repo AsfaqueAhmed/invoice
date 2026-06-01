@@ -6,6 +6,7 @@ class ProductEntity {
   final double purchasePrice;
   final double sellingPrice;
   final int stock;
+  final String? description;
 
   ProductEntity({
     required this.id,
@@ -15,6 +16,7 @@ class ProductEntity {
     required this.purchasePrice,
     required this.sellingPrice,
     required this.stock,
+    this.description,
   });
 
   Map<String, dynamic> toJson() {
@@ -25,7 +27,8 @@ class ProductEntity {
       'category': category,
       'purchasePrice': purchasePrice,
       'sellingPrice': sellingPrice,
-      'stock': stock
+      'stock': stock,
+      'description': description,
     };
   }
 
@@ -33,12 +36,14 @@ class ProductEntity {
     Map<String, dynamic> map,
   ) {
     return ProductEntity(
-        id: map['id'],
-        name: map['name'],
-        sku: map['sku'],
-        category: map['category'],
-        purchasePrice: map['purchasePrice'],
-        sellingPrice: map['sellingPrice'],
-        stock: map['stock']);
+      id: map['id'],
+      name: map['name'],
+      sku: map['sku'],
+      category: map['category'],
+      purchasePrice: map['purchasePrice'],
+      sellingPrice: map['sellingPrice'],
+      stock: map['stock'],
+      description: map['description'],
+    );
   }
 }

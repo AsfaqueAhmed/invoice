@@ -33,7 +33,7 @@ class CustomerListView extends GetView<CustomerListController> {
         child: CustomScrollView(
           slivers: [
             SliverAppBar(
-              floating: true,
+              floating: true,pinned: true,
               snap: true,
               backgroundColor: colors.surface,
               elevation: 0,
@@ -210,44 +210,7 @@ class CustomerListView extends GetView<CustomerListController> {
                             .toList(),
                       );
                     }),
-
-                    // ── Add new button ─────────────────────────
-                    GestureDetector(
-                      onTap: controller.onAddCustomer,
-                      child: Container(
-                        height: 120,
-                        decoration: AppDecorations
-                            .addButtonDecoration(context: context),
-                        child: Column(
-                          mainAxisAlignment:
-                              MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 44,
-                              height: 44,
-                              decoration: BoxDecoration(
-                                color: colors.surfaceContainer,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                Icons.add_rounded,
-                                color: colors.outline,
-                              ),
-                            ),
-                            Gaps.v8,
-                            Text(
-                              'Add New Customer',
-                              style: TextStyle(
-                                color: colors.outline,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 80),
+                    const SizedBox(height: 40),
                   ],
                 ),
               ),
