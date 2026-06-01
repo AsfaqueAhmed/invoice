@@ -50,7 +50,7 @@ class ProductListView extends GetView<ProductListController> {
             ),
             SliverToBoxAdapter(
               child: Padding(
-                padding: AppPadding.all20,
+                padding: AppPadding.all16,
                 child: Column(
                   children: [
                     // ── Search + Filter ──────────────────────

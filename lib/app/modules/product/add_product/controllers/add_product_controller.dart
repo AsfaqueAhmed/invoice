@@ -25,7 +25,28 @@ class AddProductController extends GetxController {
   final descController = TextEditingController();
   final purchasePriceController = TextEditingController();
 
-  final categories = ['General', 'Food', 'Electronics', 'Clothing', 'Services'];
+  final categories = [
+    'General',
+    'Food',
+    'Beverages',
+    'Electronics',
+    'Computer & IT',
+    'Mobile & Accessories',
+    'Clothing',
+    'Footwear',
+    'Beauty & Personal Care',
+    'Health & Medicine',
+    'Home & Kitchen',
+    'Furniture',
+    'Books & Stationery',
+    'Sports & Fitness',
+    'Toys & Games',
+    'Automotive',
+    'Hardware & Tools',
+    'Pet Supplies',
+    'Services',
+    'Other',
+  ];
 
   late final ProductLocalDatasource _datasource;
   final Rx<File?> productImage = Rx<File?>(null);

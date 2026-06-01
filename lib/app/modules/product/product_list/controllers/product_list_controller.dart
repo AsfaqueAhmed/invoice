@@ -14,8 +14,30 @@ class ProductListController extends GetxController {
   final RxList<ProductEntity> _allProducts = <ProductEntity>[].obs;
 
   late final ProductLocalDatasource _datasource;
-  final RxBool isActive = true.obs;
-  final categories = ['General', 'Food', 'Electronics', 'Clothing', 'Services'];
+  final RxnBool activeFilter = RxnBool();
+  final categories = [
+    'All',
+    'General',
+    'Food',
+    'Beverages',
+    'Electronics',
+    'Computer & IT',
+    'Mobile & Accessories',
+    'Clothing',
+    'Footwear',
+    'Beauty & Personal Care',
+    'Health & Medicine',
+    'Home & Kitchen',
+    'Furniture',
+    'Books & Stationery',
+    'Sports & Fitness',
+    'Toys & Games',
+    'Automotive',
+    'Hardware & Tools',
+    'Pet Supplies',
+    'Services',
+    'Other',
+  ];
   final RxString selectedCategory = ''.obs;
   final Rx<RangeValues> priceRange = const RangeValues(0, 100000).obs;
   final Rx<RangeValues> stockRange = const RangeValues(0, 5000).obs;
@@ -38,13 +60,31 @@ class ProductListController extends GetxController {
 
   List<ProductEntity> get filtered {
     final q = searchQuery.value.toLowerCase().trim();
-    if (q.isEmpty) return _allProducts;
-    return _allProducts
-        .where((p) =>
-            p.name.toLowerCase().contains(q) ||
-            p.sku.toLowerCase().contains(q) ||
-            p.category.toLowerCase().contains(q))
-        .toList();
+    return _allProducts.where((p) {
+      final matchesSearch = q.isEmpty ||
+          p.name.toLowerCase().contains(q) ||
+          p.sku.toLowerCase().contains(q) ||
+          p.category.toLowerCase().contains(q);
+
+      final matchesCategory = selectedCategory.value.isEmpty ||
+          selectedCategory.value == 'All' ||
+          p.category == selectedCategory.value;
+
+      final matchesActive =
+          activeFilter.value == null || p.isProductActive == activeFilter.value;
+
+      // Price
+      final matchesPrice = p.sellingPrice >= selectedPriceRange.value.start &&
+          p.sellingPrice <= selectedPriceRange.value.end;
+      final matchesStock = p.stock >= selectedStockRange.value.start &&
+          p.stock <= selectedStockRange.value.end;
+
+      return matchesSearch &&
+          matchesCategory &&
+          matchesActive &&
+          matchesPrice &&
+          matchesStock;
+    }).toList();
   }
 
   @override
@@ -153,7 +193,7 @@ class ProductListController extends GetxController {
   }
 
   void toggleProduct() {
-    isActive.value = !isActive.value;
+    activeFilter.value = !(activeFilter.value ?? false);
   }
 
   void updatePriceRange(RangeValues values) {
