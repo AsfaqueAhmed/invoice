@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_getx_app/app/modules/invoices/create_invoice/views/widgets/select_customer_bottom_sheet.dart';
+import 'package:flutter_getx_app/app/routes/app_pages.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../core/database/database_service.dart';
@@ -60,29 +64,36 @@ class CreateInvoiceController extends GetxController {
   Future<void> _loadCustomers() async {
     try {
       customers.value = await _customerDs.getAll();
+      log('customers length => ${customers.length}');
     } catch (_) {}
   }
 
   void onSelectCustomer() {
     if (customers.isEmpty) return;
     Get.bottomSheet(
-      AppSelectBottomSheet<CustomerEntity>(
-        title: "Select Customer",
-        items: customers,
-        selectedItem: selectedCustomer.value,
-        onSelect: (c) {
-          selectedCustomer.value = c;
-          Get.back();
-        },
-        addTitle: "Add New Customer",
-        addSubtitle: "Create a profile for a new client",
-        onAddTap: () {},
-        titleBuilder: (c) => c.name,
-        subtitleBuilder: (c) => c.phone,
-        avatarBuilder: (c) => c.name.isNotEmpty
-            ? c.name.trim().split(' ').map((e) => e[0]).take(2).join()
-            : 'U',
-      ),
+      Obx(() {
+        return AppSelectBottomSheet<CustomerEntity>(
+          title: "Select Customer",
+          items: customers.value,
+          selectedItem: selectedCustomer.value,
+          onSelect: (c) {
+            selectedCustomer.value = c;
+            Get.back();
+          },
+          addTitle: "Add New Customer",
+          addSubtitle: "Create a profile for a new client",
+          onAddTap: () async {
+            log('on add tap');
+            await Get.toNamed(Routes.ADD_CUSTOMER);
+            await _loadCustomers();
+          },
+          titleBuilder: (c) => c.name,
+          subtitleBuilder: (c) => c.phone,
+          avatarBuilder: (c) => c.name.isNotEmpty
+              ? c.name.trim().split(' ').map((e) => e[0]).take(2).join()
+              : 'U',
+        );
+      }),
       isScrollControlled: true,
     );
   }

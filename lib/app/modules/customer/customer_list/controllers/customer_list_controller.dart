@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,8 +13,7 @@ class CustomerListController extends GetxController {
   final RxString searchQuery = ''.obs;
   final RxBool isLoading = true.obs;
 
-  final RxList<CustomerEntity> _allCustomers =
-      <CustomerEntity>[].obs;
+  final RxList<CustomerEntity> _allCustomers = <CustomerEntity>[].obs;
 
   late final CustomerLocalDatasource _datasource;
 
@@ -31,9 +32,7 @@ class CustomerListController extends GetxController {
     final q = searchQuery.value.toLowerCase().trim();
     if (q.isEmpty) return _allCustomers;
     return _allCustomers
-        .where((c) =>
-            c.name.toLowerCase().contains(q) ||
-            c.phone.contains(q))
+        .where((c) => c.name.toLowerCase().contains(q) || c.phone.contains(q))
         .toList();
   }
 
@@ -63,7 +62,10 @@ class CustomerListController extends GetxController {
   void onCustomerTap(CustomerEntity c) =>
       Get.toNamed(Routes.CUSTOMER_DETAILS, arguments: c);
 
-  void onAddCustomer() => Get.toNamed(Routes.ADD_CUSTOMER);
+  Future<void> onAddCustomer() async {
+    await Get.toNamed(Routes.ADD_CUSTOMER);
+    await _loadCustomers();
+  }
 
   String _fmt(double val) {
     if (val >= 1000) {

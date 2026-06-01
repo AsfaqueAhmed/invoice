@@ -57,6 +57,7 @@ class AppSelectBottomSheet<T> extends StatelessWidget {
               const SizedBox(height: 8),
               Expanded(
                 child: ListView.builder(
+                  padding: const EdgeInsets.only(bottom: 24),
                   controller: scrollController,
                   itemCount: items.length,
                   itemBuilder: (context, index) {
