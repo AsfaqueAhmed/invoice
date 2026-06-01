@@ -2,52 +2,155 @@ import 'package:flutter/material.dart';
 import 'package:flutter_getx_app/app/data/entities/customer_entity.dart';
 import 'package:get/get.dart';
 
-class SelectCustomerBottomSheet extends StatelessWidget {
-  final List<CustomerEntity> customers;
-  final CustomerEntity? selectedCustomer;
-  final void Function(CustomerEntity) onSelect;
+class AppSelectBottomSheet<T> extends StatelessWidget {
+  final String title;
 
-  const SelectCustomerBottomSheet({
+  final List<T> items;
+  final T? selectedItem;
+
+  final String Function(T item) titleBuilder;
+  final String Function(T item)? subtitleBuilder;
+  final String Function(T item)? avatarBuilder;
+
+  final VoidCallback onAddTap;
+  final String addTitle;
+  final String addSubtitle;
+
+  final void Function(T item) onSelect;
+
+  const AppSelectBottomSheet({
     super.key,
-    required this.customers,
-    required this.selectedCustomer,
+    required this.title,
+    required this.items,
+    required this.selectedItem,
+    required this.titleBuilder,
     required this.onSelect,
+    required this.onAddTap,
+    required this.addTitle,
+    required this.addSubtitle,
+    this.subtitleBuilder,
+    this.avatarBuilder,
   });
 
   @override
   Widget build(BuildContext context) {
-    return AppBottomSheet(
-      title: "Select Customer",
-      onClose: Get.back,
-      child: Column(
-        children: [
-          AppSearchField(
-            hintText: "Search by name or phone...",
-            onChanged: (value) {},
-          ),
-          AppActionCard(
-            icon: Icons.person_add,
-            title: "Add New Customer",
-            subtitle: "Create a profile for a new client",
-            onTap: () {},
-          ),
-          const SizedBox(height: 4),
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.only(bottom: 24),
-              itemCount: customers.length,
-              itemBuilder: (context, index) {
-                final c = customers[index];
+    return DraggableScrollableSheet(
+      initialChildSize: 0.7,
+      minChildSize: 0.7,
+      maxChildSize: 1,
+      builder: (context, scrollController) {
+        return AppBottomSheet(
+          title: title,
+          onClose: Get.back,
+          child: Column(
+            children: [
+              AppSearchField(
+                hintText: "Search...",
+                onChanged: (_) {},
+              ),
+              AppActionCard(
+                icon: Icons.add,
+                title: addTitle,
+                subtitle: addSubtitle,
+                onTap: onAddTap,
+              ),
+              const SizedBox(height: 8),
+              Expanded(
+                child: ListView.builder(
+                  controller: scrollController,
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    final item = items[index];
+                    final selected = item == selectedItem;
 
-                return CustomerTile(
-                  customer: c,
-                  selected: c.id == selectedCustomer?.id,
-                  onTap: () => onSelect(c),
-                );
-              },
+                    return _GenericTile<T>(
+                      item: item,
+                      selected: selected,
+                      title: titleBuilder(item),
+                      subtitle: subtitleBuilder?.call(item),
+                      avatar: avatarBuilder?.call(item),
+                      onTap: () => onSelect(item),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _GenericTile<T> extends StatelessWidget {
+  final T item;
+  final bool selected;
+
+  final String title;
+  final String? subtitle;
+  final String? avatar;
+
+  final VoidCallback onTap;
+
+  const _GenericTile({
+    required this.item,
+    required this.selected,
+    required this.title,
+    required this.subtitle,
+    required this.avatar,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: selected
+                ? theme.colorScheme.primaryContainer
+                : theme.colorScheme.surface,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: selected
+                  ? theme.colorScheme.primary
+                  : theme.colorScheme.outlineVariant,
             ),
           ),
-        ],
+          child: Row(
+            children: [
+              if (avatar != null) _Avatar(avatar: avatar!),
+              if (avatar != null) const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title, style: theme.textTheme.titleMedium),
+                    if (subtitle != null) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        subtitle!,
+                        style: theme.textTheme.bodySmall,
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              if (selected)
+                Icon(
+                  Icons.check_circle,
+                  color: theme.colorScheme.primary,
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -112,74 +215,6 @@ class AppBottomSheet extends StatelessWidget {
 
           Expanded(child: child),
         ],
-      ),
-    );
-  }
-}
-
-class CustomerTile extends StatelessWidget {
-  final CustomerEntity customer;
-  final bool selected;
-  final VoidCallback onTap;
-
-  const CustomerTile({
-    super.key,
-    required this.customer,
-    required this.selected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: selected
-                ? theme.colorScheme.primaryContainer
-                : theme.colorScheme.surface,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: selected
-                  ? theme.colorScheme.primary
-                  : theme.colorScheme.outlineVariant,
-            ),
-          ),
-          child: Row(
-            children: [
-              _Avatar(customer: customer),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      customer.name,
-                      style: theme.textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      customer.phone,
-                      style: theme.textTheme.bodySmall,
-                    ),
-                  ],
-                ),
-              ),
-              if (selected)
-                Icon(
-                  Icons.check_circle,
-                  color: theme.colorScheme.primary,
-                ),
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -299,17 +334,13 @@ class AppSearchField extends StatelessWidget {
 }
 
 class _Avatar extends StatelessWidget {
-  final CustomerEntity customer;
+  final String avatar;
 
-  const _Avatar({required this.customer});
+  const _Avatar({required this.avatar});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
-    final initials = customer.name.isNotEmpty
-        ? customer.name.trim().split(' ').map((e) => e[0]).take(2).join()
-        : 'U';
 
     return Container(
       width: 44,
@@ -320,7 +351,7 @@ class _Avatar extends StatelessWidget {
         shape: BoxShape.circle,
       ),
       child: Text(
-        initials.toUpperCase(),
+        avatar.toUpperCase(),
         style: theme.textTheme.labelLarge,
       ),
     );

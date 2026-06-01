@@ -66,13 +66,22 @@ class CreateInvoiceController extends GetxController {
   void onSelectCustomer() {
     if (customers.isEmpty) return;
     Get.bottomSheet(
-      SelectCustomerBottomSheet(
-        customers: customers,
+      AppSelectBottomSheet<CustomerEntity>(
+        title: "Select Customer",
+        items: customers,
+        selectedItem: selectedCustomer.value,
         onSelect: (c) {
           selectedCustomer.value = c;
           Get.back();
         },
-        selectedCustomer: selectedCustomer.value,
+        addTitle: "Add New Customer",
+        addSubtitle: "Create a profile for a new client",
+        onAddTap: () {},
+        titleBuilder: (c) => c.name,
+        subtitleBuilder: (c) => c.phone,
+        avatarBuilder: (c) => c.name.isNotEmpty
+            ? c.name.trim().split(' ').map((e) => e[0]).take(2).join()
+            : 'U',
       ),
       isScrollControlled: true,
     );
