@@ -103,7 +103,7 @@
         <entry key="flutter">
           <value>
             <list>
-              <option value="/opt/homebrew/share/flutter/packages/flutter/lib" />
+              <option value="$USER_HOME$/development/flutter_linux_3.35.5-stable.tar(1)/flutter/packages/flutter/lib" />
             </list>
           </value>
         </entry>
@@ -124,7 +124,7 @@
         <entry key="flutter_test">
           <value>
             <list>
-              <option value="/opt/homebrew/share/flutter/packages/flutter_test/lib" />
+              <option value="$USER_HOME$/development/flutter_linux_3.35.5-stable.tar(1)/flutter/packages/flutter_test/lib" />
             </list>
           </value>
         </entry>
@@ -313,7 +313,7 @@
         <entry key="sky_engine">
           <value>
             <list>
-              <option value="/opt/homebrew/share/flutter/bin/cache/pkg/sky_engine/lib" />
+              <option value="$USER_HOME$/development/flutter_linux_3.35.5-stable.tar(1)/flutter/bin/cache/pkg/sky_engine/lib" />
             </list>
           </value>
         </entry>
@@ -506,9 +506,9 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/vm_service-15.2.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/web-1.1.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/xdg_directories-1.1.0/lib" />
-      <root url="file:///opt/homebrew/share/flutter/bin/cache/pkg/sky_engine/lib" />
-      <root url="file:///opt/homebrew/share/flutter/packages/flutter/lib" />
-      <root url="file:///opt/homebrew/share/flutter/packages/flutter_test/lib" />
+      <root url="file://$USER_HOME$/development/flutter_linux_3.35.5-stable.tar(1)/flutter/bin/cache/pkg/sky_engine/lib" />
+      <root url="file://$USER_HOME$/development/flutter_linux_3.35.5-stable.tar(1)/flutter/packages/flutter/lib" />
+      <root url="file://$USER_HOME$/development/flutter_linux_3.35.5-stable.tar(1)/flutter/packages/flutter_test/lib" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

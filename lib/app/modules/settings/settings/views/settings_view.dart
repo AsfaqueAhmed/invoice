@@ -25,6 +25,7 @@ class SettingsView extends GetView<SettingsController> {
         SliverAppBar(
           floating: true,
           snap: true,
+          pinned: true,
           backgroundColor: colors.surface,
           elevation: 0,
           title: Text(

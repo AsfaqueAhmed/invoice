@@ -36,6 +36,7 @@ class DashboardView extends GetView<DashboardController> {
               floating: true,
               snap: true,
               backgroundColor: colors.surface,
+              pinned: true,
               elevation: 0,
               title: Row(children: [
                 Container(
@@ -151,6 +152,7 @@ class DashboardView extends GetView<DashboardController> {
                         crossAxisSpacing: 12,
                         mainAxisSpacing: 12,
                         childAspectRatio: 1.5,
+                        padding: EdgeInsets.zero,
                         children: [
                           _QuickAction(
                             icon: Icons.add_circle_outline_rounded,
@@ -184,7 +186,7 @@ class DashboardView extends GetView<DashboardController> {
                       ),
                     ),
 
-                    Gaps.v24,
+                    Gaps.v20,
 
                     // ── Recent Invoices ───────────────────────
                     Padding(

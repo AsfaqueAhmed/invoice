@@ -47,33 +47,35 @@ class AddProductView extends GetView<AddProductController> {
           ),
         ],
       ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-        decoration: BoxDecoration(
-          color: colors.cardBg,
-          boxShadow: AppDecorations.bottomSheetShadow,
-        ),
-        child: Obx(() => ElevatedButton.icon(
-              onPressed: controller.isSaving.value ? null : controller.onSave,
-              icon: controller.isSaving.value
-                  ? SizedBox(
-                      width: 18,
-                      height: 18,
-                      child: CircularProgressIndicator(
-                          strokeWidth: 2, color: colors.onPrimary))
-                  : const Icon(Icons.save_rounded, size: 20),
-              label: Text(
-                controller.isSaving.value ? 'Saving...' : 'Save Product',
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: colors.primary,
-                foregroundColor: colors.onPrimary,
-                minimumSize: const Size(double.infinity, 56),
-                shape: RoundedRectangleBorder(
-                  borderRadius: AppDecorations.borderRadiusMD,
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+          decoration: BoxDecoration(
+            color: colors.cardBg,
+            boxShadow: AppDecorations.bottomSheetShadow,
+          ),
+          child: Obx(() => ElevatedButton.icon(
+                onPressed: controller.isSaving.value ? null : controller.onSave,
+                icon: controller.isSaving.value
+                    ? SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(
+                            strokeWidth: 2, color: colors.onPrimary))
+                    : const Icon(Icons.save_rounded, size: 20),
+                label: Text(
+                  controller.isSaving.value ? 'Saving...' : 'Save Product',
                 ),
-              ),
-            )),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: colors.primary,
+                  foregroundColor: colors.onPrimary,
+                  minimumSize: const Size(double.infinity, 56),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: AppDecorations.borderRadiusMD,
+                  ),
+                ),
+              )),
+        ),
       ),
       body: Form(
         key: controller.formKey,
@@ -130,79 +132,84 @@ class AddProductView extends GetView<AddProductController> {
               Gaps.v16,
 
               // SKU + Barcode
-              Row(children: [
-                Expanded(
-                  child: AppFieldLabel(
-                    label: 'SKU',
-                    child: AppTextField(
-                      hintText: 'CF-1002',
-                      controller: controller.skuController,
+              Row(
+                children: [
+                  Expanded(
+                    child: AppFieldLabel(
+                      label: 'SKU',
+                      child: AppTextField(
+                        hintText: 'CF-1002',
+                        controller: controller.skuController,
+                      ),
                     ),
                   ),
-                ),
-                Gaps.h12,
-                Expanded(
-                  child: AppFieldLabel(
-                    label: 'Barcode',
-                    child: OutlinedButton.icon(
-                      onPressed: () {},
-                      icon: Icon(Icons.barcode_reader,
-                          color: colors.primary, size: 18),
-                      label: Text(
-                        'Scan',
-                        style: TextStyle(color: colors.primary),
-                      ),
-                      style: OutlinedButton.styleFrom(
-                        minimumSize: const Size(double.infinity, 56),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: AppDecorations.borderRadiusSM,
+                  Gaps.h12,
+                  Expanded(
+                    child: AppFieldLabel(
+                      label: 'Barcode',
+                      child: OutlinedButton.icon(
+                        onPressed: () {},
+                        icon: Icon(Icons.barcode_reader,
+                            color: colors.primary, size: 18),
+                        label: Text(
+                          'Scan',
+                          style: TextStyle(color: colors.primary),
                         ),
-                        side: BorderSide(color: colors.outlineVariant),
+                        style: OutlinedButton.styleFrom(
+                          minimumSize: const Size(double.infinity, 56),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: AppDecorations.borderRadiusSM,
+                          ),
+                          side: BorderSide(color: colors.outlineVariant),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ]),
+                ],
+              ),
 
               Gaps.v16,
 
               // Purchase Price + Selling Price
-              Row(children: [
-                Expanded(
-                  child: AppFieldLabel(
-                    label: 'Purchase Price (\$)',
-                    child: AppTextField(
-                      hintText: '0.00',
-                      controller: controller.purchasePriceController,
-                      keyboardType:
-                          const TextInputType.numberWithOptions(decimal: true),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp(r'[\d.]')),
-                      ],
-                      prefixIcon: Icon(Icons.shopping_cart_outlined,
-                          color: colors.outline, size: 20),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: AppFieldLabel(
+                      label: 'Purchase Price (\$)',
+                      child: AppTextField(
+                        hintText: '0.00',
+                        controller: controller.purchasePriceController,
+                        keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(r'[\d.]')),
+                        ],
+                        prefixIcon: Icon(Icons.shopping_cart_outlined,
+                            color: colors.outline, size: 20),
+                      ),
                     ),
                   ),
-                ),
-                Gaps.h12,
-                Expanded(
-                  child: AppFieldLabel(
-                    label: 'Selling Price (\$)',
-                    child: AppTextField(
-                      hintText: '0.00',
-                      controller: controller.priceController,
-                      validator: controller.validateRequired,
-                      keyboardType:
-                          const TextInputType.numberWithOptions(decimal: true),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp(r'[\d.]')),
-                      ],
-                      prefixIcon: Icon(Icons.payments_outlined,
-                          color: colors.outline, size: 20),
+                  Gaps.h12,
+                  Expanded(
+                    child: AppFieldLabel(
+                      label: 'Selling Price (\$)',
+                      child: AppTextField(
+                        hintText: '0.00',
+                        controller: controller.priceController,
+                        validator: controller.validateRequired,
+                        keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(r'[\d.]')),
+                        ],
+                        prefixIcon: Icon(Icons.payments_outlined,
+                            color: colors.outline, size: 20),
+                      ),
                     ),
                   ),
-                ),
-              ]),
+                ],
+              ),
 
               Gaps.v16,
 
@@ -258,6 +265,7 @@ class AddProductView extends GetView<AddProductController> {
                                       ? colors.primaryContainer
                                       : colors.surfaceContainerHigh,
                                 ),
+                                alignment: Alignment.center,
                                 child: Text(
                                   cat,
                                   style: TextStyle(
@@ -356,7 +364,7 @@ class AddProductView extends GetView<AddProductController> {
                 ]),
               ),
 
-              const SizedBox(height: 80),
+              const SizedBox(height: 24),
             ],
           ),
         ),

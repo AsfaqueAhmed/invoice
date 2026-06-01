@@ -25,6 +25,9 @@ class MyApp extends StatelessWidget {
       // ── Routes ────────────────────────────────────────────
       initialRoute: AppPages.initial,
       getPages: AppPages.routes,
+      builder: (_, child) {
+        return SafeArea(child: child!);
+      },
     );
   }
 }

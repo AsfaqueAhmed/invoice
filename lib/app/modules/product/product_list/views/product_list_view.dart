@@ -33,6 +33,7 @@ class ProductListView extends GetView<ProductListController> {
           slivers: [
             SliverAppBar(
               floating: true,
+              pinned: true,
               snap: true,
               backgroundColor: colors.surface,
               elevation: 0,

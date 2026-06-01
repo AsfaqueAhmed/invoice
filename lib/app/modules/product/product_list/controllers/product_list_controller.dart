@@ -10,8 +10,7 @@ class ProductListController extends GetxController {
   final searchController = TextEditingController();
   final RxString searchQuery = ''.obs;
   final RxBool isLoading = true.obs;
-  final RxList<ProductEntity> _allProducts =
-      <ProductEntity>[].obs;
+  final RxList<ProductEntity> _allProducts = <ProductEntity>[].obs;
 
   late final ProductLocalDatasource _datasource;
 
@@ -60,10 +59,17 @@ class ProductListController extends GetxController {
 
   void onSearch(String v) => searchQuery(v);
 
-  void onProductTap(ProductEntity p) =>
-      Get.toNamed(Routes.PRODUCT_DETAILS, arguments: p);
+  void onProductTap(ProductEntity p) {
+    Get.toNamed(Routes.PRODUCT_DETAILS, arguments: p);
+  }
 
-  void onAddProduct() => Get.toNamed(Routes.ADD_PRODUCT);
+  void onAddProduct() {
+    Get.toNamed(Routes.ADD_PRODUCT)?.then((value) {
+      if (value == true) {
+        _loadProducts();
+      }
+    });
+  }
 
   String _fmt(double val) {
     if (val >= 1000) {

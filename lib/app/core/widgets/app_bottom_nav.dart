@@ -42,63 +42,65 @@ class AppBottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.appColors;
 
-    return Container(
-      height: 72,
-      decoration: BoxDecoration(
-        color: colors.cardBg,
-        boxShadow: AppDecorations.navShadow,
-      ),
-      child: Row(
-        children: List.generate(_items.length, (i) {
-          final item = _items[i];
-          final isActive = i == currentIndex;
-
-          return Expanded(
-            child: GestureDetector(
-              onTap: () {
-                if (!isActive) Get.offAllNamed(item.route);
-              },
-              behavior: HitTestBehavior.opaque,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 4),
-                    decoration: isActive
-                        ? BoxDecoration(
-                            color: colors.primary.withOpacity(0.12),
-                            borderRadius: AppDecorations.borderRadiusFull,
-                          )
-                        : null,
-                    child: Icon(
-                      isActive ? item.activeIcon : item.icon,
-                      color: isActive
-                          ? colors.primary
-                          : colors.onSurfaceVariant,
-                      size: 24,
+    return SafeArea(
+      child: Container(
+        height: 72,
+        decoration: BoxDecoration(
+          color: colors.cardBg,
+          boxShadow: AppDecorations.navShadow,
+        ),
+        child: Row(
+          children: List.generate(_items.length, (i) {
+            final item = _items[i];
+            final isActive = i == currentIndex;
+      
+            return Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  if (!isActive) Get.offAllNamed(item.route);
+                },
+                behavior: HitTestBehavior.opaque,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 4),
+                      decoration: isActive
+                          ? BoxDecoration(
+                              color: colors.primary.withOpacity(0.12),
+                              borderRadius: AppDecorations.borderRadiusFull,
+                            )
+                          : null,
+                      child: Icon(
+                        isActive ? item.activeIcon : item.icon,
+                        color: isActive
+                            ? colors.primary
+                            : colors.onSurfaceVariant,
+                        size: 24,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    item.label,
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: isActive
-                          ? FontWeight.w600
-                          : FontWeight.w500,
-                      color: isActive
-                          ? colors.primary
-                          : colors.onSurfaceVariant,
-                      letterSpacing: 0.4,
+                    const SizedBox(height: 2),
+                    Text(
+                      item.label,
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: isActive
+                            ? FontWeight.w600
+                            : FontWeight.w500,
+                        color: isActive
+                            ? colors.primary
+                            : colors.onSurfaceVariant,
+                        letterSpacing: 0.4,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          );
-        }),
+            );
+          }),
+        ),
       ),
     );
   }

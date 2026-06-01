@@ -2,19 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../core/configs/theme/app_colors.dart';
-import '../../../../core/constants/gaps.dart';
 import '../../../../core/constants/app_decorations.dart';
+import '../../../../core/constants/gaps.dart';
 import '../../../../core/widgets/app_card.dart';
-import '../../../../core/widgets/status_badge.dart';
 import '../controllers/product_details_controller.dart';
 
 class ProductDetailsView extends GetView<ProductDetailsController> {
   const ProductDetailsView({super.key});
 
+  String get _status {
+    if (controller.product.stock == 0) return 'outofstock';
+    if (controller.product.stock <= 10) return 'lowstock';
+    return 'instock';
+  }
+
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    final p = controller.product;
+    final product = controller.product;
 
     return Scaffold(
       backgroundColor: colors.scaffold,
@@ -40,14 +45,14 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
         ],
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
         decoration: BoxDecoration(
           color: colors.cardBg,
           boxShadow: AppDecorations.bottomSheetShadow,
         ),
-        child: Row(children: [
-          Expanded(
-            child: OutlinedButton.icon(
+        child: Row(
+          children: [
+            OutlinedButton.icon(
               onPressed: controller.onShare,
               icon: const Icon(Icons.share_outlined, size: 18),
               label: const Text('Share'),
@@ -58,25 +63,25 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                 ),
               ),
             ),
-          ),
-          Gaps.h12,
-          Expanded(
-            flex: 2,
-            child: ElevatedButton.icon(
-              onPressed: controller.onAddToInvoice,
-              icon: const Icon(Icons.add_circle_rounded, size: 18),
-              label: const Text('Add to Invoice'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: colors.primary,
-                foregroundColor: colors.onPrimary,
-                minimumSize: const Size(0, 52),
-                shape: RoundedRectangleBorder(
-                  borderRadius: AppDecorations.borderRadiusSM,
+            Gaps.h12,
+            Expanded(
+              // flex: 3,
+              child: ElevatedButton.icon(
+                onPressed: controller.onAddToInvoice,
+                icon: const Icon(Icons.add_circle_rounded, size: 18),
+                label: const Text('Add to Invoice'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: colors.primary,
+                  foregroundColor: colors.onPrimary,
+                  minimumSize: const Size(0, 52),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: AppDecorations.borderRadiusSM,
+                  ),
                 ),
               ),
             ),
-          ),
-        ]),
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -101,15 +106,14 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
               Positioned(
                 top: 12,
                 right: 12,
-                child: _StatusBadge(
-                    status: p['status'] ?? 'instock', colors: colors),
+                child: _StatusBadge(status: _status, colors: colors),
               ),
             ]),
 
             Gaps.v16,
 
             Text(
-              'SKU: ${p['sku']}',
+              'SKU: ${product.sku}',
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
@@ -119,7 +123,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
             ),
             Gaps.v4,
             Text(
-              p['name'],
+              product.name,
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w700,
@@ -150,7 +154,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                         textBaseline: TextBaseline.alphabetic,
                         children: [
                           Text(
-                            '${p['stock']}',
+                            '${product.stock}',
                             style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.w700,
@@ -183,7 +187,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       ),
                       Gaps.v4,
                       Text(
-                        p['price'],
+                        product.sellingPrice.toStringAsFixed(2),
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
@@ -217,14 +221,14 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                         'Total Inventory Value',
                         style: TextStyle(
                           fontSize: 11,
-                          color: colors.onPrimaryContainer
-                              .withOpacity(0.8),
+                          color:
+                              colors.onPrimaryContainer.withValues(alpha: 0.8),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       Gaps.v4,
                       Text(
-                        '\$${(p['stock'] * 89).toStringAsFixed(2)}',
+                        '\$${(product.stock * product.sellingPrice).toStringAsFixed(2)}',
                         style: TextStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.w700,
@@ -238,13 +242,11 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                     width: 48,
                     height: 48,
                     decoration: BoxDecoration(
-                      color: colors.onPrimaryContainer.withOpacity(0.15),
+                      color: colors.onPrimaryContainer.withValues(alpha: 0.15),
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(
-                        Icons.account_balance_wallet_rounded,
-                        color: colors.onPrimaryContainer,
-                        size: 26),
+                    child: Icon(Icons.account_balance_wallet_rounded,
+                        color: colors.onPrimaryContainer, size: 26),
                   ),
                 ],
               ),
@@ -267,7 +269,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                   ),
                   Gaps.v8,
                   Text(
-                    'Sleek product with premium build quality. Compatible with a wide range of use cases.',
+                    product.description ?? 'No description provided.',
                     style: TextStyle(
                       fontSize: 14,
                       color: colors.textSecondary,
@@ -275,59 +277,64 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                     ),
                   ),
                   Gaps.v12,
-                  Row(children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Category',
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: colors.textSecondary,
-                            fontWeight: FontWeight.w600,
-                          ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Category',
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: colors.textSecondary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Text(
+                              product.category,
+                              style: TextStyle(
+                                  fontSize: 13, color: colors.textPrimary),
+                            ),
+                          ],
                         ),
-                        Text(
-                          'Hardware / Accessories',
-                          style: TextStyle(
-                              fontSize: 13, color: colors.textPrimary),
+                      ),
+                      Container(
+                        width: 1,
+                        height: 36,
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        color: colors.outlineVariant.withValues(alpha: 0.5),
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Tax Rate',
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: colors.textSecondary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Text(
+                              '8.5%',
+                              style: TextStyle(
+                                  fontSize: 13, color: colors.textPrimary),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    Container(
-                      width: 1,
-                      height: 36,
-                      margin:
-                          const EdgeInsets.symmetric(horizontal: 20),
-                      color: colors.outlineVariant.withOpacity(0.5),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Tax Rate',
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: colors.textSecondary,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Text(
-                          '8.5%',
-                          style: TextStyle(
-                              fontSize: 13, color: colors.textPrimary),
-                        ),
-                      ],
-                    ),
-                  ]),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
 
-            Gaps.v20,
+            // Gaps.v20,
 
             // ── Recent invoices ──────────────────────────────
-            Row(
+            /* Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
@@ -401,7 +408,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                   ]),
                 ),
               ),
-            ),
+            ),*/
             const SizedBox(height: 80),
           ],
         ),
@@ -446,8 +453,7 @@ class _StatusBadge extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration:
-          AppDecorations.chipDecoration(bg: bg),
+      decoration: AppDecorations.chipDecoration(bg: bg),
       child: Row(children: [
         Container(
           width: 6,
