@@ -27,9 +27,11 @@ class AppCard extends StatelessWidget {
     final bg = color ?? colors.cardBg;
     final border = colors.outlineVariant.withOpacity(0.3);
 
-    return Material(
-      color: bg,
-      borderRadius: BorderRadius.circular(radius),
+    return Container(
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(radius),
+      ),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(radius),
@@ -37,7 +39,7 @@ class AppCard extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(radius),
             border: Border.all(color: border, width: 1),
-            boxShadow: AppDecorations.cardShadow(isDark),
+            // boxShadow: AppDecorations.cardShadow(isDark),
           ),
           padding: padding ?? const EdgeInsets.all(16),
           child: child,
@@ -107,8 +109,7 @@ class AppStatCard extends StatelessWidget {
               children: [
                 if (subIcon != null) ...[
                   Icon(subIcon,
-                      size: 13,
-                      color: subColor ?? cs.onSurfaceVariant),
+                      size: 13, color: subColor ?? cs.onSurfaceVariant),
                   const SizedBox(width: 4),
                 ],
                 Flexible(

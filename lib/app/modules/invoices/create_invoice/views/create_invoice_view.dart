@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_getx_app/app/core/extensions/string_extensions.dart';
+import 'package:flutter_getx_app/app/data/entities/customer_entity.dart';
 import 'package:get/get.dart';
 
 import '../../../../core/configs/theme/app_colors.dart';
@@ -103,74 +105,35 @@ class CreateInvoiceView extends GetView<CreateInvoiceController> {
       body: SingleChildScrollView(
         padding: AppPadding.all20,
         child: Column(children: [
-          // ── Customer selector ──────────────────────────────
-          Row(children: [
-            Expanded(
-              child: AppCard(
-                onTap: controller.onSelectCustomer,
-                child: Row(children: [
-                  Icon(Icons.person_add_outlined, color: colors.primary),
-                  Gaps.h8,
-                  Obx(
-                    () => Text(
-                      controller.selectedCustomer.value == null
-                          ? 'Select Customer'
-                          : controller.selectedCustomer.value!.name,
-                      style: TextStyle(
-                        color: controller.selectedCustomer.value == null
-                            ? colors.textTertiary
-                            : colors.textPrimary,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ),
-                  const Spacer(),
-                  Icon(Icons.expand_more_rounded, color: colors.outline),
-                ]),
-              ),
-            ),
-            Gaps.h12,
-            GestureDetector(
-              onTap: controller.onSelectCustomer,
-              child: Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  color: colors.primary,
-                  borderRadius: AppDecorations.borderRadiusMD,
-                  boxShadow: AppDecorations.buttonShadow(colors.primary),
-                ),
-                child: Icon(Icons.add_rounded, color: colors.onPrimary),
-              ),
-            ),
-          ]),
-
-          Gaps.v16,
-
-          // ── Product search ─────────────────────────────────
-          AppTextField(
-            hintText: 'Search product or enter SKU...',
-            controller: controller.searchController,
-            onChanged: controller.onSearch,
-            prefixIcon: Icon(Icons.search_rounded, color: colors.primary),
-            suffixIcon:
-                Icon(Icons.qr_code_scanner_rounded, color: colors.outline),
-          ),
+          Obx(() {
+            return CustomerSection(
+              customer: controller.selectedCustomer.value,
+              onCustomerSelect: controller.onSelectCustomer,
+            );
+          }),
 
           Gaps.v20,
 
           // ── Items header ───────────────────────────────────
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              'ADDED ITEMS',
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                color: colors.textSecondary,
-                letterSpacing: 1.2,
+          Row(
+            children: [
+              Expanded(
+                child: Row(
+                  children: [
+                    Text(
+                      'ADDED ITEMS: 9',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: colors.textSecondary,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+              ProductSection(onAddProduct: controller.onAddProduct),
+            ],
           ),
           Gaps.v10,
 
@@ -181,6 +144,7 @@ class CreateInvoiceView extends GetView<CreateInvoiceController> {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 12),
                     child: AppCard(
+                      color: colors.surfaceContainerLowest,
                       child: Column(children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -416,6 +380,153 @@ class CreateInvoiceView extends GetView<CreateInvoiceController> {
           ),
           Gaps.v16,
         ]),
+      ),
+    );
+  }
+}
+
+class CustomerSection extends StatelessWidget {
+  final CustomerEntity? customer;
+  final Function() onCustomerSelect;
+
+  const CustomerSection({
+    super.key,
+    this.customer,
+    required this.onCustomerSelect,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+    final bool hasCustomer = customer != null;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
+          child: Text(
+            'CUSTOMER',
+            style: textTheme.labelMedium?.copyWith(
+              color: colors.onSurfaceVariant,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 1.2,
+            ),
+          ),
+        ),
+        const SizedBox(height: 4),
+        InkWell(
+          onTap: onCustomerSelect,
+          borderRadius: BorderRadius.circular(16),
+          child: Container(
+            padding: const EdgeInsets.all(12.0),
+            decoration: BoxDecoration(
+              color: colors.surfaceContainerLowest,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: colors.outlineVariant.withOpacity(0.2),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: colors.shadow.withOpacity(0.02),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: hasCustomer
+                        ? colors.primary.withValues(alpha: 0.1)
+                        : colors.surface,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: colors.outlineVariant,
+                      style: BorderStyle.solid,
+                    ),
+                  ),
+                  alignment: Alignment.center,
+                  child: hasCustomer
+                      ? Text(
+                          customer?.name.initials ?? '',
+                          style: textTheme.titleLarge?.copyWith(
+                            color: colors.primary,
+                          ),
+                        )
+                      : Icon(
+                          Icons.person_add_alt,
+                          color: colors.secondary,
+                        ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        hasCustomer ? customer?.name ?? '' : 'Select Customer',
+                        style: textTheme.titleMedium?.copyWith(
+                          color: colors.onSurfaceVariant,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        hasCustomer
+                            ? customer?.phone ?? ''
+                            : 'Tap to choose a customer',
+                        style: textTheme.bodySmall?.copyWith(
+                          color: colors.inverseSurface,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  Icons.chevron_right,
+                  color: colors.outlineVariant,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class ProductSection extends StatelessWidget {
+  final Function() onAddProduct;
+
+  const ProductSection({super.key, required this.onAddProduct});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+    return GestureDetector(
+      onTap: onAddProduct,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.add,
+            color: colors.primary,
+          ),
+          const SizedBox(width: 12),
+          Text(
+            'Add Product',
+            style: textTheme.bodyLarge?.copyWith(
+              color: colors.primary,
+            ),
+          ),
+        ],
       ),
     );
   }

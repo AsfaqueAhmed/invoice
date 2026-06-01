@@ -176,4 +176,6 @@ class CreateInvoiceController extends GetxController {
     searchController.dispose();
     super.onClose();
   }
+
+  onAddProduct() {}
 }
