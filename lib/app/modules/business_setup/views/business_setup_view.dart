@@ -86,6 +86,7 @@ class BusinessSetupView extends GetView<BusinessSetupController> {
                 isRequired: true,
                 controller: controller.businessNameController,
                 validator: controller.validateBusinessName,
+                autoValidateMode: AutovalidateMode.onUserInteraction,
                 variant: AppTextFieldVariant.filled,
               ),
               Gaps.v16,
@@ -93,10 +94,11 @@ class BusinessSetupView extends GetView<BusinessSetupController> {
               // Phone
               AppTextField(
                 title: 'Phone Number',
-                hintText: '+1 (555) 000-0000',
+                hintText: '01XXXXXXXXX',
                 isRequired: true,
                 controller: controller.phoneController,
                 validator: controller.validatePhone,
+                autoValidateMode: AutovalidateMode.onUserInteraction,
                 keyboardType: TextInputType.phone,
                 prefixIcon: Icon(Icons.call_outlined,
                     color: colors.outline, size: 20),
@@ -111,6 +113,7 @@ class BusinessSetupView extends GetView<BusinessSetupController> {
                 isRequired: true,
                 controller: controller.addressController,
                 validator: controller.validateAddress,
+                autoValidateMode: AutovalidateMode.onUserInteraction,
                 maxLines: 3,
                 minLines: 3,
                 prefixIcon: Icon(Icons.location_on_outlined,
