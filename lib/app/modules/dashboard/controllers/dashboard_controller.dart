@@ -1,3 +1,5 @@
+import 'package:flutter_getx_app/app/data/datasources/local/business_local_datasource.dart';
+import 'package:flutter_getx_app/app/data/entities/business_entity.dart';
 import 'package:get/get.dart';
 import '../../../data/datasources/local/invoice_local_datasource.dart';
 import '../../../data/datasources/local/customer_local_datasource.dart';
@@ -25,6 +27,7 @@ class DashboardController extends GetxController {
   // ─── Cache ─────────────────────────────────────────────────────
   List<InvoiceEntity> _invoices = [];
   List<CustomerEntity> _customers = [];
+  RxList<BusinessEntity> businesses = <BusinessEntity>[].obs;
 
   @override
   void onInit() {
@@ -33,6 +36,12 @@ class DashboardController extends GetxController {
     _invoiceDs = InvoiceLocalDatasource(db);
     _customerDs = CustomerLocalDatasource(db);
     _loadData();
+  }
+
+  @override
+  onReady() async {
+    businesses.value = await BusinessLocalDatasource().getAll();
+    super.onReady();
   }
 
   Future<void> _loadData() async {
@@ -118,10 +127,15 @@ class DashboardController extends GetxController {
 
   // ─── Navigation ────────────────────────────────────────────────
   void onNewInvoice() => Get.toNamed(Routes.createInvoice);
+
   void onNewCustomer() => Get.toNamed(Routes.ADD_CUSTOMER);
+
   void onAddProduct() => Get.toNamed(Routes.ADD_PRODUCT);
+
   void onCollectPayment() => Get.toNamed(Routes.ADD_PAYMENT);
+
   void onSeeAllInvoices() => Get.toNamed(Routes.invoices);
+
   void onInvoiceTap(Map<String, String> inv) =>
       Get.toNamed(Routes.invoiceDetails, arguments: inv);
 
