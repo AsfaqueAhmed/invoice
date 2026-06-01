@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -29,13 +30,14 @@ class DatabaseService {
 
     return await openDatabase(
       path,
-      version: 5,
+      version: 7,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    debugPrint('onUpgrade: $oldVersion -> $newVersion');
     if (oldVersion <= 4) {
       final columns = await db.rawQuery("PRAGMA table_info(customers)");
 
@@ -54,10 +56,34 @@ class DatabaseService {
         await db.execute('ALTER TABLE customers ADD COLUMN avatar TEXT');
       }
     }
-    if (oldVersion <= 3) {
-      await db.execute(
-        'ALTER TABLE products ADD COLUMN image TEXT',
-      );
+    if (oldVersion <= 6) {
+      final columns = await db.rawQuery("PRAGMA table_info(products)");
+
+      final hasImage = columns.any((col) => col['name'] == 'image');
+      if (!hasImage) {
+        await db.execute(
+          'ALTER TABLE products ADD COLUMN image TEXT',
+        );
+      }
+    }
+    if (oldVersion <= 6) {
+      final columns = await db.rawQuery("PRAGMA table_info(products)");
+      final hasDescription = columns.any((col) => col['name'] == 'description');
+      if (!hasDescription) {
+        await db.execute(
+          'ALTER TABLE products ADD COLUMN description TEXT',
+        );
+      }
+    }
+    if (oldVersion <= 7) {
+      final columns = await db.rawQuery("PRAGMA table_info(products)");
+      final hasIsProductActive =
+          columns.any((col) => col['name'] == 'isProductActive');
+      if (!hasIsProductActive) {
+        await db.execute(
+          'ALTER TABLE products ADD COLUMN isProductActive INTEGER',
+        );
+      }
     }
   }
 

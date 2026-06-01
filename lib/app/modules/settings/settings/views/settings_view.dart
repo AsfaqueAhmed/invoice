@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -57,43 +59,68 @@ class SettingsView extends GetView<SettingsController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // ── Business profile card ──────────────────────
-                AppCard(
-                  child: Row(children: [
-                    Container(
-                      width: 56,
-                      height: 56,
-                      decoration: AppDecorations.avatarDecoration(
-                        color: colors.chipBlueBg,
-                        radius: 16,
-                      ),
-                      child: Icon(Icons.storefront_rounded,
-                          color: colors.primary, size: 28),
-                    ),
-                    Gaps.h12,
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Nexus Solutions Inc.',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: colors.textPrimary,
-                            ),
+                Obx(() {
+                  final businesses = controller.businesses;
+                  if (businesses.isEmpty) {
+                    return const SizedBox();
+                  }
+                  return AppCard(
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 56,
+                          height: 56,
+                          decoration: AppDecorations.avatarDecoration(
+                            color: colors.chipBlueBg,
+                            radius: 16,
                           ),
-                          Text(
-                            'Pro Plan  •  Active',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: colors.textSecondary,
-                            ),
+                          child: businesses.first.logo.isNotEmpty
+                              ? ClipRRect(
+                                  borderRadius: AppDecorations.borderRadiusMD,
+                                  child: Image.file(
+                                    File(businesses.first.logo),
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (_, __, ___) {
+                                      return Icon(
+                                        Icons.storefront_rounded,
+                                        color: colors.primary,
+                                        size: 28,
+                                      );
+                                    },
+                                  ),
+                                )
+                              : Icon(Icons.storefront_rounded,
+                                  color: colors.primary, size: 28),
+                        ),
+                        Gaps.h12,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                controller.businesses.isNotEmpty
+                                    ? controller.businesses.first.name
+                                    : '',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: colors.textPrimary,
+                                ),
+                              ),
+                              Text(
+                                'Pro Plan  •  Active',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: colors.textSecondary,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ]),
-                ),
+                  );
+                }),
 
                 Gaps.v20,
 
@@ -142,25 +169,27 @@ class SettingsView extends GetView<SettingsController> {
                 _SectionHeader('Business', colors: colors),
 
                 AppCard(
-                  child: Column(children: [
-                    _SettingsTile(
-                      icon: Icons.edit_calendar_outlined,
-                      iconBg: colors.chipBlueBg,
-                      iconColor: colors.primary,
-                      label: 'Edit Business Info',
-                      colors: colors,
-                      onTap: controller.onEditBusiness,
-                    ),
-                    _Divider(colors: colors),
-                    _SettingsTile(
-                      icon: Icons.add_photo_alternate_outlined,
-                      iconBg: colors.chipBlueBg,
-                      iconColor: colors.primary,
-                      label: 'Change Logo',
-                      colors: colors,
-                      onTap: controller.onChangeLogo,
-                    ),
-                  ]),
+                  child: Column(
+                    children: [
+                      _SettingsTile(
+                        icon: Icons.edit_calendar_outlined,
+                        iconBg: colors.chipBlueBg,
+                        iconColor: colors.primary,
+                        label: 'Edit Business Info',
+                        colors: colors,
+                        onTap: controller.onEditBusiness,
+                      ),
+                      _Divider(colors: colors),
+                      _SettingsTile(
+                        icon: Icons.add_photo_alternate_outlined,
+                        iconBg: colors.chipBlueBg,
+                        iconColor: colors.primary,
+                        label: 'Change Logo',
+                        colors: colors,
+                        onTap: controller.onChangeLogo,
+                      ),
+                    ],
+                  ),
                 ),
 
                 Gaps.v20,
@@ -312,29 +341,45 @@ class _SettingsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
+    return GestureDetector(
       onTap: onTap,
-      leading: Container(
-        width: 44,
-        height: 44,
-        decoration: AppDecorations.iconContainer(color: iconBg, size: 12),
-        child: Icon(icon, color: iconColor, size: 22),
-      ),
-      title: Text(
-        label,
-        style: TextStyle(fontSize: 15, color: colors.textPrimary),
-      ),
-      subtitle: sub != null
-          ? Text(
-              sub!,
-              style: TextStyle(
-                fontSize: 11,
-                color: subColor ?? colors.textSecondary,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: AppDecorations.iconContainer(color: iconBg, size: 12),
+              child: Icon(icon, color: iconColor, size: 22),
+            ),
+            Gaps.h12,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: TextStyle(fontSize: 15, color: colors.textPrimary),
+                  ),
+                  sub != null ? Gaps.v4 : const SizedBox.shrink(),
+                  sub != null
+                      ? Text(
+                          sub!,
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: subColor ?? colors.textSecondary,
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+                ],
               ),
-            )
-          : null,
-      trailing: Icon(Icons.chevron_right_rounded, color: colors.outline),
+            ),
+            Gaps.h8,
+            Icon(Icons.chevron_right_rounded, color: colors.outline)
+          ],
+        ),
+      ),
     );
   }
 }

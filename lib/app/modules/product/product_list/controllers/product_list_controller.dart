@@ -96,9 +96,13 @@ class ProductListController extends GetxController {
   }
 
   Future<void> _loadProducts() async {
+    debugPrint('here');
     isLoading(true);
+    debugPrint('here 2');
     try {
+      debugPrint('here 3');
       _allProducts.value = await _datasource.getAll();
+      debugPrint('Loaded ${_allProducts.length} products');
       if (_allProducts.isNotEmpty) {
         final highestPrice = _allProducts
             .map((e) => e.sellingPrice)
@@ -128,8 +132,9 @@ class ProductListController extends GetxController {
           highestStock.toDouble(),
         );
       }
-    } catch (_) {
-      _allProducts.value = [];
+    } catch (e, stack) {
+      debugPrint('Error loading products: $e');
+      debugPrintStack(stackTrace: stack);
     } finally {
       isLoading(false);
     }

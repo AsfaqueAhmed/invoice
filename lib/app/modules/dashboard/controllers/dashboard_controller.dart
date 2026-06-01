@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_getx_app/app/data/datasources/local/business_local_datasource.dart';
 import 'package:flutter_getx_app/app/data/entities/business_entity.dart';
 import 'package:get/get.dart';
@@ -41,6 +42,7 @@ class DashboardController extends GetxController {
   @override
   onReady() async {
     businesses.value = await BusinessLocalDatasource().getAll();
+    debugPrint('businesses: ${businesses.length}');
     super.onReady();
   }
 
