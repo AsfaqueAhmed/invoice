@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -46,8 +48,31 @@ class DashboardView extends GetView<DashboardController> {
                     color: cs.secondaryContainer,
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(Icons.business_rounded,
-                      color: cs.onSecondaryContainer, size: 20),
+                  child: Obx(
+                    () {
+                      if (controller.businesses.isEmpty) {
+                        return Icon(
+                          Icons.business_rounded,
+                          color: cs.onSecondaryContainer,
+                          size: 20,
+                        );
+                      }
+                      final business = controller.businesses.first;
+                      return business.logo.isNotEmpty
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(1000),
+                              child: Image.file(
+                                File(business.logo),
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : Icon(
+                              Icons.business_rounded,
+                              color: cs.onSecondaryContainer,
+                              size: 20,
+                            );
+                    },
+                  ),
                 ),
                 Gaps.h10,
                 Text(
@@ -61,8 +86,8 @@ class DashboardView extends GetView<DashboardController> {
               ]),
               actions: [
                 IconButton(
-                  icon: Icon(Icons.notifications_outlined,
-                      color: colors.primary),
+                  icon:
+                      Icon(Icons.notifications_outlined, color: colors.primary),
                   onPressed: () {},
                 ),
               ],
@@ -73,8 +98,7 @@ class DashboardView extends GetView<DashboardController> {
                   return SizedBox(
                     height: 400,
                     child: Center(
-                      child: CircularProgressIndicator(
-                          color: colors.primary),
+                      child: CircularProgressIndicator(color: colors.primary),
                     ),
                   );
                 }
@@ -192,8 +216,7 @@ class DashboardView extends GetView<DashboardController> {
                     Padding(
                       padding: AppPadding.h20,
                       child: Row(
-                        mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             'Recent Invoices',
@@ -220,28 +243,23 @@ class DashboardView extends GetView<DashboardController> {
                     Obx(() => Column(
                           children: controller.recentInvoices
                               .map((inv) => Padding(
-                                    padding: const EdgeInsets
-                                        .symmetric(
+                                    padding: const EdgeInsets.symmetric(
                                       horizontal: 20,
                                       vertical: 5,
                                     ),
                                     child: AppCard(
-                                      onTap: () =>
-                                          controller.onInvoiceTap(
-                                              inv),
+                                      onTap: () => controller.onInvoiceTap(inv),
                                       child: Row(children: [
                                         Container(
                                           width: 44,
                                           height: 44,
-                                          decoration: AppDecorations
-                                              .iconContainer(
-                                            color: colors
-                                                .surfaceContainer,
+                                          decoration:
+                                              AppDecorations.iconContainer(
+                                            color: colors.surfaceContainer,
                                             size: 12,
                                           ),
                                           child: Icon(
-                                            Icons
-                                                .description_outlined,
+                                            Icons.description_outlined,
                                             color: colors.primary,
                                           ),
                                         ),
@@ -249,24 +267,20 @@ class DashboardView extends GetView<DashboardController> {
                                         Expanded(
                                           child: Column(
                                             crossAxisAlignment:
-                                                CrossAxisAlignment
-                                                    .start,
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 inv['number']!,
                                                 style: TextStyle(
-                                                  fontWeight:
-                                                      FontWeight.w700,
+                                                  fontWeight: FontWeight.w700,
                                                   fontSize: 14,
-                                                  color: colors
-                                                      .textPrimary,
+                                                  color: colors.textPrimary,
                                                 ),
                                               ),
                                               Text(
                                                 inv['client']!,
                                                 style: TextStyle(
-                                                  color: colors
-                                                      .textSecondary,
+                                                  color: colors.textSecondary,
                                                   fontSize: 13,
                                                 ),
                                               ),
@@ -280,16 +294,14 @@ class DashboardView extends GetView<DashboardController> {
                                             Text(
                                               inv['amount']!,
                                               style: TextStyle(
-                                                fontWeight:
-                                                    FontWeight.w700,
+                                                fontWeight: FontWeight.w700,
                                                 fontSize: 14,
                                                 color: colors.primary,
                                               ),
                                             ),
                                             Gaps.v4,
                                             StatusBadge(
-                                              status:
-                                                  StatusBadge.fromString(
+                                              status: StatusBadge.fromString(
                                                 inv['status']!,
                                               ),
                                             ),
@@ -333,8 +345,7 @@ class _QuickAction extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             color: bg,
-            borderRadius:
-                AppDecorations.borderRadiusLG,
+            borderRadius: AppDecorations.borderRadiusLG,
             boxShadow: AppDecorations.buttonShadow(bg),
           ),
           child: Column(
