@@ -56,7 +56,7 @@ class InvoiceListController extends GetxController {
     super.onInit();
     final db = DatabaseService();
     _invoiceDs = InvoiceLocalDatasource(db);
-    _customerDs = CustomerLocalDatasource(db);
+    _customerDs = CustomerLocalDatasource();
     _loadData();
   }
 

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -26,14 +25,40 @@ class DatabaseService {
   Future<Database> _initDatabase() async {
     final dbPath = await getDatabasesPath();
 
-    final path = join(dbPath, 'invoice_app_v4.db');
+    final path = join(dbPath, 'invoice_app.db');
 
     return await openDatabase(
       path,
-      version: 4,
+      version: 5,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
+  }
+
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion <= 4) {
+      final columns = await db.rawQuery("PRAGMA table_info(customers)");
+
+      final hasEmail = columns.any((col) => col['name'] == 'email');
+
+      if (!hasEmail) {
+        await db.execute('ALTER TABLE customers ADD COLUMN email TEXT');
+      }
+    }
+    if (oldVersion <= 5) {
+      final columns = await db.rawQuery("PRAGMA table_info(customers)");
+
+      final hasAvatar = columns.any((col) => col['name'] == 'avatar');
+
+      if (!hasAvatar) {
+        await db.execute('ALTER TABLE customers ADD COLUMN avatar TEXT');
+      }
+    }
+    if (oldVersion <= 3) {
+      await db.execute(
+        'ALTER TABLE products ADD COLUMN image TEXT',
+      );
+    }
   }
 
   Future<void> _onCreate(
@@ -55,18 +80,5 @@ class DatabaseService {
     await db.execute(tPayment);
 
     await db.execute(tExpense);
-  }
-
-  Future<void> _onUpgrade(
-    Database db,
-    int oldVersion,
-    int newVersion,
-  ) async {
-    debugPrint('onUpgrade called: $oldVersion -> $newVersion');
-    if (oldVersion < 3) {
-      await db.execute(
-        'ALTER TABLE products ADD COLUMN image TEXT',
-      );
-    }
   }
 }

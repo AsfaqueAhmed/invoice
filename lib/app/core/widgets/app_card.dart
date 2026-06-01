@@ -68,7 +68,7 @@ class AppStatCard extends StatelessWidget {
     this.valueColor,
     this.subColor,
     this.subIcon,
-    this.width = 200,
+    this.width = 150,
     this.valueSize = 20,
     this.cardColor,
   });

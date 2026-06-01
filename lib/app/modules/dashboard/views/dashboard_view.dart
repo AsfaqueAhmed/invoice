@@ -109,10 +109,10 @@ class DashboardView extends GetView<DashboardController> {
 
                     // ── Summary cards ─────────────────────────
                     SizedBox(
-                      height: 155,
+                      height: 132,
                       child: ListView(
                         scrollDirection: Axis.horizontal,
-                        padding: AppPadding.h20,
+                        padding: AppPadding.h20 + AppPadding.v12,
                         children: [
                           AppStatCard(
                             label: 'Today Sales',
@@ -122,7 +122,6 @@ class DashboardView extends GetView<DashboardController> {
                             subColor: colors.tertiary,
                             valueColor: colors.primary,
                             valueSize: 26,
-                            width: 230,
                           ),
                           Gaps.h12,
                           AppStatCard(
@@ -130,7 +129,6 @@ class DashboardView extends GetView<DashboardController> {
                             value: controller.dueAmount.value,
                             sub: '${controller.totalInvoices.value} invoices',
                             valueColor: colors.error,
-                            width: 200,
                           ),
                           Gaps.h12,
                           AppStatCard(
@@ -138,21 +136,19 @@ class DashboardView extends GetView<DashboardController> {
                             value: controller.collected.value,
                             sub: 'All time',
                             valueColor: colors.primary,
-                            width: 200,
                           ),
                           Gaps.h12,
                           AppStatCard(
                             label: 'Total Invoices',
                             value: '${controller.totalInvoices.value}',
                             sub: 'All time',
-                            width: 200,
                           ),
                           Gaps.h20,
                         ],
                       ),
                     ),
 
-                    Gaps.v24,
+                    Gaps.v12,
 
                     // ── Quick Actions ─────────────────────────
                     Padding(
@@ -210,7 +206,7 @@ class DashboardView extends GetView<DashboardController> {
                       ),
                     ),
 
-                    Gaps.v20,
+                    Gaps.v4,
 
                     // ── Recent Invoices ───────────────────────
                     Padding(

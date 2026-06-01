@@ -93,36 +93,6 @@ class BusinessSetupController extends GetxController {
     }
   }
 
-  // ─── Validators ───────────────────────────────────────────────
-
-  String? validateBusinessName(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Business name is required';
-    }
-    if (value.trim().length < 2) {
-      return 'Business name must be at least 2 characters';
-    }
-    return null;
-  }
-
-  String? validatePhone(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Phone number is required';
-    }
-    final phone = value.trim();
-    if (!RegExp(r'^01\d{9}$').hasMatch(phone)) {
-      return 'Enter a valid 11-digit phone number';
-    }
-    return null;
-  }
-
-  String? validateAddress(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Address is required';
-    }
-    return null;
-  }
-
   @override
   void onClose() {
     businessNameController.dispose();

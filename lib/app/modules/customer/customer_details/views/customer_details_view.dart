@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_getx_app/app/core/extensions/string_extensions.dart';
 import 'package:get/get.dart';
 
 import '../../../../core/configs/theme/app_colors.dart';
@@ -25,8 +26,7 @@ class CustomerDetailsView extends GetView<CustomerDetailsController> {
           backgroundColor: colors.surface,
           elevation: 0,
           leading: IconButton(
-            icon:
-                Icon(Icons.arrow_back_rounded, color: colors.primary),
+            icon: Icon(Icons.arrow_back_rounded, color: colors.primary),
             onPressed: Get.back,
           ),
           title: Text(
@@ -39,8 +39,7 @@ class CustomerDetailsView extends GetView<CustomerDetailsController> {
           ),
           actions: [
             IconButton(
-              icon:
-                  Icon(Icons.edit_outlined, color: colors.textSecondary),
+              icon: Icon(Icons.edit_outlined, color: colors.textSecondary),
               onPressed: () {},
             ),
           ],
@@ -60,8 +59,7 @@ class CustomerDetailsView extends GetView<CustomerDetailsController> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: colors.primaryContainer,
-                        border:
-                            Border.all(color: colors.surface, width: 3),
+                        border: Border.all(color: colors.surface, width: 3),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.1),
@@ -71,12 +69,7 @@ class CustomerDetailsView extends GetView<CustomerDetailsController> {
                       ),
                       child: Center(
                         child: Text(
-                          (controller.customer['initials'] ??
-                              controller.customer['name']
-                                  ?.toString()
-                                  .substring(0, 2)
-                                  .toUpperCase() ??
-                              'CU'),
+                          controller.customer.name.initials,
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.w700,
@@ -94,8 +87,7 @@ class CustomerDetailsView extends GetView<CustomerDetailsController> {
                         decoration: BoxDecoration(
                           color: colors.primaryContainer,
                           shape: BoxShape.circle,
-                          border:
-                              Border.all(color: colors.surface, width: 2),
+                          border: Border.all(color: colors.surface, width: 2),
                         ),
                         child: Icon(Icons.verified_rounded,
                             size: 14, color: colors.primary),
@@ -108,7 +100,7 @@ class CustomerDetailsView extends GetView<CustomerDetailsController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          controller.customer['name'] ?? 'Customer',
+                          controller.customer.name,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w700,
@@ -118,27 +110,23 @@ class CustomerDetailsView extends GetView<CustomerDetailsController> {
                         Gaps.v4,
                         Row(children: [
                           Icon(Icons.phone_outlined,
-                              size: 14,
-                              color: colors.textSecondary),
+                              size: 14, color: colors.textSecondary),
                           Gaps.h4,
                           Text(
-                            controller.customer['phone'] ?? '',
+                            controller.customer.phone,
                             style: TextStyle(
-                                color: colors.textSecondary,
-                                fontSize: 13),
+                                color: colors.textSecondary, fontSize: 13),
                           ),
                         ]),
                         Gaps.v2,
                         Row(children: [
                           Icon(Icons.location_on_outlined,
-                              size: 14,
-                              color: colors.textSecondary),
+                              size: 14, color: colors.textSecondary),
                           Gaps.h4,
                           Text(
-                            'San Francisco, CA',
+                            controller.customer.address,
                             style: TextStyle(
-                                color: colors.textSecondary,
-                                fontSize: 13),
+                                color: colors.textSecondary, fontSize: 13),
                           ),
                         ]),
                       ],
@@ -194,55 +182,60 @@ class CustomerDetailsView extends GetView<CustomerDetailsController> {
                   ),
                 ),
                 Gaps.v12,
-                Row(children: [
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: controller.onCall,
-                      icon: const Icon(Icons.call_outlined, size: 18),
-                      label: const Text('Call'),
-                      style: OutlinedButton.styleFrom(
-                        minimumSize: const Size(0, 52),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: AppDecorations.borderRadiusSM,
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: controller.onCall,
+                            icon: const Icon(Icons.call_outlined, size: 18),
+                            label: const Text('Call'),
+                            style: OutlinedButton.styleFrom(
+                              minimumSize: const Size(0, 52),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: AppDecorations.borderRadiusSM,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: controller.onNewInvoice,
+                            icon: const Icon(Icons.add_rounded, size: 18),
+                            label: const Text('New Invoice'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: colors.primary,
+                              foregroundColor: colors.onPrimary,
+                              minimumSize: const Size(0, 52),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: AppDecorations.borderRadiusSM,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: controller.onCollectPayment,
+                        icon: const Icon(Icons.payments_outlined, size: 18),
+                        label: const Text('Collect'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: colors.secondaryContainer,
+                          foregroundColor: colors.onSecondaryContainer,
+                          minimumSize: const Size(0, 52),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: AppDecorations.borderRadiusSM,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Gaps.h10,
-                  Expanded(
-                    flex: 2,
-                    child: ElevatedButton.icon(
-                      onPressed: controller.onNewInvoice,
-                      icon: const Icon(Icons.add_rounded, size: 18),
-                      label: const Text('New Invoice'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: colors.primary,
-                        foregroundColor: colors.onPrimary,
-                        minimumSize: const Size(0, 52),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: AppDecorations.borderRadiusSM,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Gaps.h10,
-                  Expanded(
-                    flex: 2,
-                    child: ElevatedButton.icon(
-                      onPressed: controller.onCollectPayment,
-                      icon: const Icon(Icons.payments_outlined, size: 18),
-                      label: const Text('Collect'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: colors.secondaryContainer,
-                        foregroundColor: colors.onSecondaryContainer,
-                        minimumSize: const Size(0, 52),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: AppDecorations.borderRadiusSM,
-                        ),
-                      ),
-                    ),
-                  ),
-                ]),
+                  ],
+                ),
 
                 Gaps.v24,
 
@@ -260,8 +253,7 @@ class CustomerDetailsView extends GetView<CustomerDetailsController> {
                     ),
                     TextButton.icon(
                       onPressed: () {},
-                      icon: const Icon(Icons.arrow_forward_rounded,
-                          size: 14),
+                      icon: const Icon(Icons.arrow_forward_rounded, size: 14),
                       label: const Text('View All'),
                     ),
                   ],
@@ -299,8 +291,7 @@ class CustomerDetailsView extends GetView<CustomerDetailsController> {
                               Text(
                                 inv['date'],
                                 style: TextStyle(
-                                    color: colors.textSecondary,
-                                    fontSize: 12),
+                                    color: colors.textSecondary, fontSize: 12),
                               ),
                             ],
                           ),
@@ -318,8 +309,7 @@ class CustomerDetailsView extends GetView<CustomerDetailsController> {
                             ),
                             Gaps.v4,
                             StatusBadge(
-                              status:
-                                  StatusBadge.fromString(inv['status']),
+                              status: StatusBadge.fromString(inv['status']),
                             ),
                           ],
                         ),

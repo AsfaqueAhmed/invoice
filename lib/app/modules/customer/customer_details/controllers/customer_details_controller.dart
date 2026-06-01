@@ -1,8 +1,9 @@
+import 'package:flutter_getx_app/app/data/entities/customer_entity.dart';
 import 'package:flutter_getx_app/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 
 class CustomerDetailsController extends GetxController {
-  late final Map<String, dynamic> customer;
+  final customer = Get.arguments as CustomerEntity;
   final invoices = <Map<String, dynamic>>[
     {
       'number': 'INV-2024-081',
@@ -30,8 +31,6 @@ class CustomerDetailsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    customer = Get.arguments as Map<String, dynamic>? ??
-        {'name': 'Alexander Sterling', 'phone': '+1 (555) 234-8901'};
   }
 
   void onCall() {}
