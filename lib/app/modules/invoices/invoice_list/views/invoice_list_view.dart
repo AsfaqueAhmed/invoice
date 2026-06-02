@@ -229,23 +229,25 @@ class InvoiceListView extends GetView<InvoiceListController> {
                                             ),
                                           ),
                                           Gaps.v6,
-                                          Row(children: [
-                                            Container(
-                                              width: 8,
-                                              height: 8,
-                                              margin: const EdgeInsets.only(
-                                                  right: 6),
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: _statusColor(
-                                                    inv['status'], colors),
+                                          Row(
+                                            children: [
+                                              Container(
+                                                width: 8,
+                                                height: 8,
+                                                margin: const EdgeInsets.only(
+                                                    right: 6),
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: _statusColor(
+                                                      inv['status'], colors),
+                                                ),
                                               ),
-                                            ),
-                                            StatusBadge(
-                                              status: StatusBadge.fromString(
-                                                  inv['status']),
-                                            ),
-                                          ]),
+                                              StatusBadge(
+                                                status: StatusBadge.fromString(
+                                                    inv['status']),
+                                              ),
+                                            ],
+                                          ),
                                         ],
                                       ),
                                     ),

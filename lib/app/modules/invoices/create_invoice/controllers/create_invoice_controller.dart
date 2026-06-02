@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_getx_app/app/core/extensions/string_extensions.dart';
+import 'package:flutter_getx_app/app/core/services/local_storage_service.dart';
 import 'package:flutter_getx_app/app/data/datasources/local/product_local_datasource.dart';
 import 'package:flutter_getx_app/app/data/entities/product_entity.dart';
 import 'package:flutter_getx_app/app/modules/invoices/create_invoice/views/widgets/select_customer_bottom_sheet.dart';
@@ -31,7 +32,7 @@ class CreateInvoiceController extends GetxController {
   final RxList<CustomerEntity> customers = <CustomerEntity>[].obs;
 
   String get invoiceNo =>
-      'INV-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}';
+      '${LocalStorageService.invoicePrefix}-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}';
 
   late final CustomerLocalDatasource _customerDs;
   late final InvoiceLocalDatasource _invoiceDs;

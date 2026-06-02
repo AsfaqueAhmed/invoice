@@ -22,13 +22,18 @@ class MyApp extends StatelessWidget {
       // ── Theme ─────────────────────────────────────────────
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
-      themeMode: ThemeMode.system,
+      // themeMode: ThemeMod,
+      themeMode: switch (LocalStorageService.themeMode) {
+        'dark' => ThemeMode.dark,
+        'light' => ThemeMode.light,
+        _ => ThemeMode.system,
+      },
 
       // ── Routes ────────────────────────────────────────────
       initialRoute: AppPages.initial,
       getPages: AppPages.routes,
       builder: (_, child) {
-        return SafeArea(top: false,child: child!);
+        return SafeArea(top: false, child: child!);
       },
     );
   }

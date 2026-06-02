@@ -184,15 +184,17 @@ class SettingsView extends GetView<SettingsController> {
 
                 AppCard(
                   child: Column(children: [
-                    _SettingsTile(
-                      icon: Icons.pin_outlined,
-                      iconBg: colors.chipAmberBg,
-                      iconColor: colors.chipAmberFg,
-                      label: 'Invoice Prefix',
-                      sub: 'Current: "INV-"',
-                      colors: colors,
-                      onTap: controller.onInvoicePrefix,
-                    ),
+                    Obx(() {
+                      return _SettingsTile(
+                        icon: Icons.pin_outlined,
+                        iconBg: colors.chipAmberBg,
+                        iconColor: colors.chipAmberFg,
+                        label: 'Invoice Prefix',
+                        sub: 'Current: "${controller.invoicePrefix.value}"',
+                        colors: colors,
+                        onTap: controller.onInvoicePrefix,
+                      );
+                    }),
                     _Divider(colors: colors),
                     _SettingsTile(
                       icon: Icons.percent_rounded,
