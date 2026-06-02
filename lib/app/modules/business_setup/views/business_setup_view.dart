@@ -62,7 +62,9 @@ class BusinessSetupView extends GetView<BusinessSetupController> {
             children: [
               Gaps.v8,
               Text(
-                'Set up your business',
+                controller.business == null
+                    ? 'Set up your business'
+                    : 'Update your business',
                 style: AppTextStyles.headlineLarge.copyWith(
                   color: colors.textPrimary,
                 ),
@@ -163,12 +165,16 @@ class BusinessSetupView extends GetView<BusinessSetupController> {
               Gaps.v24,
 
               // Submit
-              Obx(() => _SubmitButton(
-                    isLoading: controller.isLoading.value,
-                    isSuccess: controller.isSuccess.value,
-                    colors: colors,
-                    onTap: controller.onSubmit,
-                  )),
+              Obx(
+                () => _SubmitButton(
+                  isLoading: controller.isLoading.value,
+                  isSuccess: controller.isSuccess.value,
+                  colors: colors,
+                  onTap: controller.business == null
+                      ? controller.onSubmit
+                      : controller.onUpdate,
+                ),
+              ),
 
               Gaps.v32,
             ],

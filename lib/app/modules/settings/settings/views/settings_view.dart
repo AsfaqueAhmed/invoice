@@ -169,26 +169,13 @@ class SettingsView extends GetView<SettingsController> {
                 _SectionHeader('Business', colors: colors),
 
                 AppCard(
-                  child: Column(
-                    children: [
-                      _SettingsTile(
-                        icon: Icons.edit_calendar_outlined,
-                        iconBg: colors.chipBlueBg,
-                        iconColor: colors.primary,
-                        label: 'Edit Business Info',
-                        colors: colors,
-                        onTap: controller.onEditBusiness,
-                      ),
-                      _Divider(colors: colors),
-                      _SettingsTile(
-                        icon: Icons.add_photo_alternate_outlined,
-                        iconBg: colors.chipBlueBg,
-                        iconColor: colors.primary,
-                        label: 'Change Logo',
-                        colors: colors,
-                        onTap: controller.onChangeLogo,
-                      ),
-                    ],
+                  child: _SettingsTile(
+                    icon: Icons.edit_calendar_outlined,
+                    iconBg: colors.chipBlueBg,
+                    iconColor: colors.primary,
+                    label: 'Edit Business Info',
+                    colors: colors,
+                    onTap: controller.onEditBusiness,
                   ),
                 ),
 
@@ -314,7 +301,7 @@ class _Divider extends StatelessWidget {
     return Divider(
       height: 1,
       indent: 72,
-      color: colors.outlineVariant.withOpacity(0.4),
+      color: colors.outlineVariant.withValues(alpha: 0.4),
     );
   }
 }
@@ -342,9 +329,11 @@ class _SettingsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
-      child: Padding(
+      child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8),
+        width: double.infinity,
         child: Row(
           children: [
             Container(

@@ -22,6 +22,7 @@ class BusinessSetupController extends GetxController {
   final RxBool isSuccess = false.obs;
   final Rx<File?> logoFile = Rx<File?>(null);
   final RxString selectedCurrency = 'BDT'.obs;
+  late final BusinessEntity? business;
 
   // ─── Currency Options ─────────────────────────────────────────
   final List<Map<String, String>> currencies = const [
@@ -34,6 +35,21 @@ class BusinessSetupController extends GetxController {
   ];
 
   final _repository = BusinessLocalDatasource();
+
+  @override
+  void onInit() {
+    business = Get.arguments as BusinessEntity?;
+    if (business != null) {
+      businessNameController.text = business!.name;
+      phoneController.text = business!.phone;
+      addressController.text = business!.address;
+      selectedCurrency.value = business!.currency;
+      if (business!.logo.isNotEmpty) {
+        logoFile(File(business!.logo));
+      }
+    }
+    super.onInit();
+  }
 
   // ─── Actions ──────────────────────────────────────────────────
 
@@ -78,6 +94,51 @@ class BusinessSetupController extends GetxController {
       await LocalStorageService.setOnCreatedFirstBusiness();
 
       Get.offAllNamed(Routes.dashboard);
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to save business profile: $e',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red.shade50,
+        colorText: Colors.red.shade800,
+        margin: const EdgeInsets.all(16),
+        borderRadius: 12,
+      );
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  Future<void> onUpdate() async {
+    if (!formKey.currentState!.validate()) return;
+
+    isLoading(true);
+
+    try {
+      String? savedImageDirectory;
+      if (logoFile.value != null) {
+        savedImageDirectory = await ImageUtils.saveBusinessImage(
+          logoFile.value!,
+        );
+      }
+
+      final data = BusinessEntity(
+        id: business?.id ?? const Uuid().v4(),
+        name: businessNameController.text.trim(),
+        phone: phoneController.text.trim(),
+        address: addressController.text.trim(),
+        currency: selectedCurrency.value,
+        logo: savedImageDirectory ?? '',
+      );
+      await _repository.update(data);
+
+      await Future.delayed(const Duration(milliseconds: 1500));
+
+      isSuccess(true);
+
+      await Future.delayed(const Duration(milliseconds: 600));
+
+      Get.back(result: true);
     } catch (e) {
       Get.snackbar(
         'Error',

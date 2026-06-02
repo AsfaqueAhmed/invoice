@@ -10,7 +10,7 @@ class AppTheme {
         useMaterial3: true,
         fontFamily: AppTextStyles.fontFamily,
         brightness: Brightness.light,
-        colorScheme: ColorScheme(
+        colorScheme: const ColorScheme(
           brightness: Brightness.light,
           primary: AppColor.primary,
           onPrimary: AppColor.onPrimary,
@@ -129,7 +129,7 @@ class AppTheme {
         useMaterial3: true,
         fontFamily: AppTextStyles.fontFamily,
         brightness: Brightness.dark,
-        colorScheme: ColorScheme(
+        colorScheme: const ColorScheme(
           brightness: Brightness.dark,
           primary: AppColor.primaryFixedDim,
           onPrimary: AppColor.onPrimaryFixed,
@@ -143,17 +143,17 @@ class AppTheme {
           onTertiary: AppColor.onTertiaryFixed,
           tertiaryContainer: AppColor.tertiaryContainer,
           onTertiaryContainer: AppColor.onTertiaryContainer,
-          error: const Color(0xFFF87171),
+          error: Color(0xFFF87171),
           onError: AppColor.onError,
-          errorContainer: const Color(0xFF7F1D1D),
-          onErrorContainer: const Color(0xFFFCA5A5),
+          errorContainer: Color(0xFF7F1D1D),
+          onErrorContainer: Color(0xFFFCA5A5),
           surface: AppColor.darkSurface,
           onSurface: AppColor.darkOnSurface,
           onSurfaceVariant: AppColor.darkOnSurfaceVariant,
-          outline: const Color(0xFF6B7280),
+          outline: Color(0xFF6B7280),
           outlineVariant: AppColor.darkOutlineVariant,
           surfaceContainerLowest: AppColor.darkSurfaceContainerLowest,
-          surfaceContainerLow: const Color(0xFF1A2233),
+          surfaceContainerLow: Color(0xFF1A2233),
           surfaceContainer: AppColor.darkSurfaceContainer,
           surfaceContainerHigh: AppColor.darkSurfaceContainerHigh,
           inverseSurface: AppColor.surface,
@@ -189,7 +189,7 @@ class AppTheme {
         outlinedButtonTheme: OutlinedButtonThemeData(
           style: OutlinedButton.styleFrom(
             foregroundColor: AppColor.primaryFixedDim,
-            side: BorderSide(color: AppColor.darkOutlineVariant),
+            side: const BorderSide(color: AppColor.darkOutlineVariant),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
@@ -204,11 +204,11 @@ class AppTheme {
               const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: AppColor.darkOutlineVariant),
+            borderSide: const BorderSide(color: AppColor.darkOutlineVariant),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: AppColor.darkOutlineVariant),
+            borderSide: const BorderSide(color: AppColor.darkOutlineVariant),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),

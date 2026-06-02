@@ -10,15 +10,30 @@ class SettingsController extends GetxController {
 
   @override
   onReady() async {
-    businesses.value = await BusinessLocalDatasource().getAll();
+    final brightness =
+        WidgetsBinding.instance.platformDispatcher.platformBrightness;
+    isDarkMode.value = brightness == Brightness.dark;
+
+    // Now take control away from system and use our own value
+    Get.changeThemeMode(isDarkMode.value ? ThemeMode.dark : ThemeMode.light);
     super.onReady();
   }
 
-  void onEditBusiness() {}
+  void onEditBusiness() {
+    Get.toNamed(Routes.businessSetup, arguments: businesses.first)
+        ?.then((value) async {
+      if (value == true) {
+        // Refresh the business list after returning from the edit screen
+        businesses.value = await BusinessLocalDatasource().getAll();
+      }
+    });
+  }
 
   void onChangeLogo() {}
 
-  void onInvoicePrefix() {}
+  void onInvoicePrefix() {
+
+  }
 
   void onTaxSettings() {}
 
