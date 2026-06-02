@@ -10,6 +10,9 @@ class ProductEntity {
   final String? image;
   final bool isProductActive;
 
+  // this
+  int? quantity;
+
   ProductEntity({
     required this.id,
     required this.name,
@@ -21,6 +24,7 @@ class ProductEntity {
     this.description,
     this.image,
     required this.isProductActive,
+    this.quantity,
   });
 
   Map<String, dynamic> toJson() {

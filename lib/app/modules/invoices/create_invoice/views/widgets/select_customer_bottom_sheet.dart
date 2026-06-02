@@ -1,5 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_getx_app/app/data/entities/customer_entity.dart';
+import 'package:flutter_getx_app/app/core/extensions/string_extensions.dart';
 import 'package:get/get.dart';
 
 class AppSelectBottomSheet<T> extends StatelessWidget {
@@ -11,6 +12,7 @@ class AppSelectBottomSheet<T> extends StatelessWidget {
   final String Function(T item) titleBuilder;
   final String Function(T item)? subtitleBuilder;
   final String Function(T item)? avatarBuilder;
+  final String Function(T item)? filePathBuilder;
 
   final VoidCallback onAddTap;
   final String addTitle;
@@ -30,6 +32,7 @@ class AppSelectBottomSheet<T> extends StatelessWidget {
     required this.addSubtitle,
     this.subtitleBuilder,
     this.avatarBuilder,
+    this.filePathBuilder,
   });
 
   @override
@@ -70,6 +73,7 @@ class AppSelectBottomSheet<T> extends StatelessWidget {
                       title: titleBuilder(item),
                       subtitle: subtitleBuilder?.call(item),
                       avatar: avatarBuilder?.call(item),
+                      filePath: filePathBuilder?.call(item),
                       onTap: () => onSelect(item),
                     );
                   },
@@ -90,6 +94,7 @@ class _GenericTile<T> extends StatelessWidget {
   final String title;
   final String? subtitle;
   final String? avatar;
+  final String? filePath;
 
   final VoidCallback onTap;
 
@@ -99,6 +104,7 @@ class _GenericTile<T> extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.avatar,
+    required this.filePath,
     required this.onTap,
   });
 
@@ -127,8 +133,13 @@ class _GenericTile<T> extends StatelessWidget {
           ),
           child: Row(
             children: [
-              if (avatar != null) _Avatar(avatar: avatar!),
-              if (avatar != null) const SizedBox(width: 12),
+              if (avatar.notNullNotEmpty || filePath.notNullNotEmpty)
+                _Avatar(
+                  avatar: avatar,
+                  filePath: filePath,
+                ),
+              if (avatar.notNullNotEmpty || filePath.notNullNotEmpty)
+                const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -335,9 +346,10 @@ class AppSearchField extends StatelessWidget {
 }
 
 class _Avatar extends StatelessWidget {
-  final String avatar;
+  final String? avatar;
+  final String? filePath;
 
-  const _Avatar({required this.avatar});
+  const _Avatar({required this.avatar, required this.filePath});
 
   @override
   Widget build(BuildContext context) {
@@ -351,10 +363,20 @@ class _Avatar extends StatelessWidget {
         color: theme.colorScheme.surfaceContainer,
         shape: BoxShape.circle,
       ),
-      child: Text(
-        avatar.toUpperCase(),
-        style: theme.textTheme.labelLarge,
-      ),
+      child: filePath.notNullNotEmpty
+          ? ClipRRect(
+              borderRadius: BorderRadius.circular(1000),
+              child: Image.file(
+                File(filePath!),
+                fit: BoxFit.cover,
+              ),
+            )
+          : avatar.notNullNotEmpty
+              ? Text(
+                  avatar!.toUpperCase(),
+                  style: theme.textTheme.labelLarge,
+                )
+              : const SizedBox(),
     );
   }
 }
