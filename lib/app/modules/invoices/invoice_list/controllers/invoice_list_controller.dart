@@ -57,10 +57,10 @@ class InvoiceListController extends GetxController {
     final db = DatabaseService();
     _invoiceDs = InvoiceLocalDatasource(db);
     _customerDs = CustomerLocalDatasource();
-    _loadData();
+    loadData();
   }
 
-  Future<void> _loadData() async {
+  Future<void> loadData() async {
     isLoading(true);
     try {
       final invoices = await _invoiceDs.getAll();
@@ -88,7 +88,7 @@ class InvoiceListController extends GetxController {
     }
   }
 
-  Future<void> refresh() => _loadData();
+  Future<void> refresh() => loadData();
 
   void onSearch(String v) => searchQuery(v);
   void onFilter(String f) => selectedFilter(f);
