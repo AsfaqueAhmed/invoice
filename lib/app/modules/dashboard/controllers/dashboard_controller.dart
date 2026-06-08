@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_getx_app/app/data/entities/business_entity.dart';
+import 'package:flutter_getx_app/features/invoices/data/repositories/invoice_repository.dart';
+import 'package:flutter_getx_app/features/invoices/domain/entities/invoice_entity.dart';
 import 'package:get/get.dart';
 import '../../../core/extensions/num_extensions.dart';
-import '../../../data/entities/invoice_entity.dart';
 import '../../../data/entities/customer_entity.dart';
 import '../../../data/repositories/business_repository.dart';
 import '../../../data/repositories/customer_repository.dart';
-import '../../../data/repositories/invoice_repository.dart';
 import '../../../routes/app_pages.dart';
 
 class DashboardController extends GetxController {

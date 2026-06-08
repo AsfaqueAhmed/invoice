@@ -10,12 +10,10 @@ import '../modules/customer/customer_list/bindings/customer_list_binding.dart';
 import '../modules/customer/customer_list/views/customer_list_view.dart';
 import '../modules/dashboard/bindings/dashboard_binding.dart';
 import '../modules/dashboard/views/dashboard_view.dart';
-import '../modules/invoices/create_invoice/bindings/create_invoice_binding.dart';
-import '../modules/invoices/create_invoice/views/create_invoice_view.dart';
-import '../modules/invoices/invoice_details/bindings/invoice_details_binding.dart';
-import '../modules/invoices/invoice_details/views/invoice_details_view.dart';
-import '../modules/invoices/invoice_list/bindings/invoice_list_binding.dart';
-import '../modules/invoices/invoice_list/views/invoice_list_view.dart';
+import 'package:flutter_getx_app/features/invoices/presentation/screens/create_invoice_screen.dart';
+import 'package:flutter_getx_app/features/invoices/presentation/screens/invoice_details_screen.dart';
+import 'package:flutter_getx_app/features/invoices/presentation/screens/invoice_list_screen.dart';
+
 import '../modules/onboarding/bindings/onboarding_binding.dart';
 import '../modules/onboarding/views/onboarding_view.dart';
 import '../modules/payment/add_payment/bindings/add_payment_binding.dart';
@@ -57,20 +55,17 @@ class AppPages {
     ),
     GetPage(
       name: Routes.invoices,
-      page: () => const InvoiceListView(),
-      binding: InvoiceListBinding(),
+      page: () => const InvoiceListScreen(),
       transition: Transition.fadeIn,
     ),
     GetPage(
       name: Routes.createInvoice,
-      page: () => const CreateInvoiceView(),
-      binding: CreateInvoiceBinding(),
+      page: () => const CreateInvoiceScreen(),
       transition: Transition.rightToLeft,
     ),
     GetPage(
       name: Routes.invoiceDetails,
-      page: () => const InvoiceDetailsView(),
-      binding: InvoiceDetailsBinding(),
+      page: () => const InvoiceDetailsScreen(),
       transition: Transition.rightToLeft,
     ),
     GetPage(

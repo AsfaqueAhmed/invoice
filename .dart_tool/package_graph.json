@@ -9,6 +9,7 @@
       "dependencies": [
         "cached_network_image",
         "flutter",
+        "flutter_riverpod",
         "get",
         "get_storage",
         "http",
@@ -132,6 +133,17 @@
         "http_parser",
         "meta",
         "web"
+      ]
+    },
+    {
+      "name": "flutter_riverpod",
+      "version": "2.6.1",
+      "dependencies": [
+        "collection",
+        "flutter",
+        "meta",
+        "riverpod",
+        "state_notifier"
       ]
     },
     {
@@ -429,6 +441,23 @@
       "dependencies": [
         "collection",
         "meta"
+      ]
+    },
+    {
+      "name": "state_notifier",
+      "version": "1.0.0",
+      "dependencies": [
+        "meta"
+      ]
+    },
+    {
+      "name": "riverpod",
+      "version": "2.6.1",
+      "dependencies": [
+        "collection",
+        "meta",
+        "stack_trace",
+        "state_notifier"
       ]
     },
     {

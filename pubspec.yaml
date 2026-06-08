@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   get: ^4.6.6
+  flutter_riverpod: ^2.6.1
   http: ^1.2.1
   intl:
   shimmer:
