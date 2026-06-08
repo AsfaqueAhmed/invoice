@@ -4,9 +4,9 @@ import '../../../core/database/database_service.dart';
 import '../../entities/business_entity.dart';
 
 class BusinessLocalDatasource {
-  final DatabaseService databaseService = DatabaseService();
+  final DatabaseService databaseService;
 
-  BusinessLocalDatasource();
+  BusinessLocalDatasource(this.databaseService);
 
   Future<List<BusinessEntity>> getAll() async {
     final Database db = await databaseService.database;

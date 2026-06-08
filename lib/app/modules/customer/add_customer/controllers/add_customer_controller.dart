@@ -5,11 +5,14 @@ import 'package:flutter_getx_app/app/core/utils/image_utils.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../../core/database/database_service.dart';
-import '../../../../data/datasources/local/customer_local_datasource.dart';
 import '../../../../data/entities/customer_entity.dart';
+import '../../../../data/repositories/customer_repository.dart';
 
 class AddCustomerController extends GetxController {
+  AddCustomerController(this._repository);
+
+  final CustomerRepository _repository;
+
   final formKey = GlobalKey<FormState>();
   final RxBool isSaving = false.obs;
 
@@ -24,8 +27,6 @@ class AddCustomerController extends GetxController {
   final postalCtrl = TextEditingController();
 
   final Rx<File?> customerAvatar = Rx<File?>(null);
-
-  final CustomerLocalDatasource _datasource = CustomerLocalDatasource();
 
   @override
   void onClose() {
@@ -59,7 +60,7 @@ class AddCustomerController extends GetxController {
         address: address,
         totalDue: 0,
       );
-      await _datasource.create(entity);
+      await _repository.create(entity);
       Get.back(result: true);
       Get.snackbar(
         'Success',

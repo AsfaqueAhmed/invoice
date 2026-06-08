@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../core/database/database_service.dart';
-import '../../../../data/datasources/local/invoice_local_datasource.dart';
-import '../../../../data/datasources/local/customer_local_datasource.dart';
-import '../../../../data/entities/invoice_entity.dart';
-import '../../../../data/entities/customer_entity.dart';
+import '../../../../core/extensions/num_extensions.dart';
+import '../../../../data/repositories/customer_repository.dart';
+import '../../../../data/repositories/invoice_repository.dart';
 import '../../../../routes/app_pages.dart';
 
 class InvoiceListController extends GetxController {
+  InvoiceListController(this._invoiceRepository, this._customerRepository);
+
+  final InvoiceRepository _invoiceRepository;
+  final CustomerRepository _customerRepository;
+
   final searchController = TextEditingController();
   final RxString searchQuery = ''.obs;
   final RxString selectedFilter = 'All'.obs;
@@ -19,19 +22,16 @@ class InvoiceListController extends GetxController {
   final RxList<Map<String, dynamic>> _allInvoices =
       <Map<String, dynamic>>[].obs;
 
-  late final InvoiceLocalDatasource _invoiceDs;
-  late final CustomerLocalDatasource _customerDs;
-
   String get totalReceivable {
     final total = _allInvoices.fold<double>(
         0, (s, i) => s + (i['due'] as double));
-    return _fmt(total);
+    return total.asCurrency;
   }
 
   String get collectedMTD {
     final total = _allInvoices.fold<double>(
         0, (s, i) => s + (i['paid'] as double));
-    return _fmt(total);
+    return total.asCurrency;
   }
 
   List<Map<String, dynamic>> get filtered {
@@ -54,17 +54,14 @@ class InvoiceListController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    final db = DatabaseService();
-    _invoiceDs = InvoiceLocalDatasource(db);
-    _customerDs = CustomerLocalDatasource();
     loadData();
   }
 
   Future<void> loadData() async {
     isLoading(true);
     try {
-      final invoices = await _invoiceDs.getAll();
-      final customers = await _customerDs.getAll();
+      final invoices = await _invoiceRepository.getAll();
+      final customers = await _customerRepository.getAll();
       final customerMap = {for (final c in customers) c.id: c};
 
       _allInvoices.value = invoices.map((inv) {
@@ -72,16 +69,17 @@ class InvoiceListController extends GetxController {
         return {
           'number': inv.invoiceNo,
           'client': customer?.name ?? 'Unknown',
-          'amount': _fmt(inv.total),
+          'amount': inv.total.asCurrency,
           'date': inv.invoiceNo, // placeholder if no date field
           'status': inv.status,
-          'tag': inv.due > 0 ? 'Due: ${_fmt(inv.due)}' : 'Cleared',
+          'tag': inv.due > 0 ? 'Due: ${inv.due.asCurrency}' : 'Cleared',
           'due': inv.due,
           'paid': inv.paid,
           'id': inv.id,
         };
       }).toList();
-    } catch (_) {
+    } catch (e, stack) {
+      debugPrint('Error loading invoices: $e\n$stack');
       _allInvoices.value = [];
     } finally {
       isLoading(false);
@@ -96,13 +94,6 @@ class InvoiceListController extends GetxController {
   void onCreateInvoice() => Get.toNamed(Routes.createInvoice);
   void onInvoiceTap(Map<String, dynamic> inv) =>
       Get.toNamed(Routes.invoiceDetails, arguments: inv);
-
-  String _fmt(double val) {
-    if (val >= 1000) {
-      return '\$${val.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]},')}';
-    }
-    return '\$${val.toStringAsFixed(2)}';
-  }
 
   @override
   void onClose() {

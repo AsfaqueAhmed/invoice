@@ -7,11 +7,14 @@ import 'package:flutter_getx_app/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../../core/database/database_service.dart';
-import '../../../../data/datasources/local/product_local_datasource.dart';
 import '../../../../data/entities/product_entity.dart';
+import '../../../../data/repositories/product_repository.dart';
 
 class AddProductController extends GetxController {
+  AddProductController(this._repository);
+
+  final ProductRepository _repository;
+
   final formKey = GlobalKey<FormState>();
   final RxBool isSaving = false.obs;
   final RxBool isActive = true.obs;
@@ -48,13 +51,11 @@ class AddProductController extends GetxController {
     'Other',
   ];
 
-  late final ProductLocalDatasource _datasource;
   final Rx<File?> productImage = Rx<File?>(null);
 
   @override
   void onInit() {
     super.onInit();
-    _datasource = ProductLocalDatasource(DatabaseService());
     selectedCategory.value = categories.first;
     product = Get.arguments as ProductEntity?;
     if (product != null) {
@@ -104,7 +105,7 @@ class AddProductController extends GetxController {
         image: savedImageDirectory ?? '',
         isProductActive: isActive.value,
       );
-      await _datasource.create(entity);
+      await _repository.create(entity);
       Get.back(result: true);
       Get.snackbar(
         'Success',
@@ -149,7 +150,7 @@ class AddProductController extends GetxController {
         image: savedImageDirectory ?? '',
         isProductActive: isActive.value,
       );
-      await _datasource.update(entity);
+      await _repository.update(entity);
       // Get.back(result: true);
 
       Get.until((route) => route.settings.name == Routes.PRODUCT_LIST);

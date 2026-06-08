@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_getx_app/app/modules/product/product_list/views/widgets/filter_product_widget.dart';
 import 'package:get/get.dart';
 
-import '../../../../core/database/database_service.dart';
-import '../../../../data/datasources/local/product_local_datasource.dart';
+import '../../../../core/extensions/num_extensions.dart';
 import '../../../../data/entities/product_entity.dart';
+import '../../../../data/repositories/product_repository.dart';
 import '../../../../routes/app_pages.dart';
 
 class ProductListController extends GetxController {
+  ProductListController(this._repository);
+
+  final ProductRepository _repository;
+
   final searchController = TextEditingController();
   final RxString searchQuery = ''.obs;
   final RxBool isLoading = true.obs;
   final RxList<ProductEntity> _allProducts = <ProductEntity>[].obs;
 
-  late final ProductLocalDatasource _datasource;
   final RxnBool activeFilter = RxnBool();
   final categories = [
     'All',
@@ -52,7 +55,7 @@ class ProductListController extends GetxController {
       0,
       (sum, p) => sum + (p.sellingPrice * p.stock),
     );
-    return _fmt(total);
+    return total.asCurrency;
   }
 
   int get lowStockCount =>
@@ -90,19 +93,14 @@ class ProductListController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _datasource = ProductLocalDatasource(DatabaseService());
     selectedCategory.value = categories.first;
     _loadProducts();
   }
 
   Future<void> _loadProducts() async {
-    debugPrint('here');
     isLoading(true);
-    debugPrint('here 2');
     try {
-      debugPrint('here 3');
-      _allProducts.value = await _datasource.getAll();
-      debugPrint('Loaded ${_allProducts.length} products');
+      _allProducts.value = await _repository.getAll();
       if (_allProducts.isNotEmpty) {
         final highestPrice = _allProducts
             .map((e) => e.sellingPrice)
@@ -156,13 +154,6 @@ class ProductListController extends GetxController {
         _loadProducts();
       }
     });
-  }
-
-  String _fmt(double val) {
-    if (val >= 1000) {
-      return '\$${val.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]},')}';
-    }
-    return '\$${val.toStringAsFixed(2)}';
   }
 
   double get maxHeight {

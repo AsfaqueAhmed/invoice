@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_getx_app/app/core/services/local_storage_service.dart';
 import 'package:get/get.dart';
+import 'app/core/bindings/initial_binding.dart';
 import 'app/core/configs/theme/app_theme.dart';
 import 'app/routes/app_pages.dart';
 
@@ -23,6 +24,9 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
       themeMode: ThemeMode.system,
+
+      // ── Dependency injection ──────────────────────────────
+      initialBinding: InitialBinding(),
 
       // ── Routes ────────────────────────────────────────────
       initialRoute: AppPages.initial,

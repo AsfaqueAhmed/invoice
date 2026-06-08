@@ -19,9 +19,10 @@ class InvoiceItemLocalDatasource {
   }
 
   Future<void> create(
-    InvoiceItemEntity item,
-  ) async {
-    final Database db = await databaseService.database;
+    InvoiceItemEntity item, {
+    DatabaseExecutor? executor,
+  }) async {
+    final DatabaseExecutor db = executor ?? await databaseService.database;
 
     await db.insert(
       'invoice_items',

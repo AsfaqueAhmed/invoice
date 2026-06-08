@@ -2,13 +2,17 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_getx_app/app/core/services/local_storage_service.dart';
 import 'package:flutter_getx_app/app/core/utils/image_utils.dart';
-import 'package:flutter_getx_app/app/data/datasources/local/business_local_datasource.dart';
 import 'package:flutter_getx_app/app/data/entities/business_entity.dart';
+import 'package:flutter_getx_app/app/data/repositories/business_repository.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 import '../../../routes/app_pages.dart';
 
 class BusinessSetupController extends GetxController {
+  BusinessSetupController(this._repository);
+
+  final BusinessRepository _repository;
+
   // ─── Form Key ─────────────────────────────────────────────────
   final formKey = GlobalKey<FormState>();
 
@@ -33,8 +37,6 @@ class BusinessSetupController extends GetxController {
     {'value': 'AUD', 'label': 'AUD - Australian Dollar'},
     {'value': 'BDT', 'label': 'BDT - Bangladeshi Taka'},
   ];
-
-  final _repository = BusinessLocalDatasource();
 
   @override
   void onInit() {
