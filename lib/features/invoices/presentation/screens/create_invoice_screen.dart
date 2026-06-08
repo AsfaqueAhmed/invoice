@@ -5,9 +5,9 @@ import 'package:flutter_getx_app/app/core/constants/gaps.dart';
 import 'package:flutter_getx_app/app/core/constants/padding.dart';
 import 'package:flutter_getx_app/app/core/extensions/string_extensions.dart';
 import 'package:flutter_getx_app/app/core/widgets/app_card.dart';
-import 'package:flutter_getx_app/app/data/entities/customer_entity.dart';
-import 'package:flutter_getx_app/app/data/entities/product_entity.dart';
 import 'package:flutter_getx_app/app/routes/app_pages.dart';
+import 'package:flutter_getx_app/features/customer/domain/entities/customer_entity.dart';
+import 'package:flutter_getx_app/features/product/domain/entities/product_entity.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 

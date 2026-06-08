@@ -3,13 +3,13 @@ import 'package:get/get.dart';
 import 'package:flutter_getx_app/features/invoices/data/datasources/invoice_item_local_datasource.dart';
 import 'package:flutter_getx_app/features/invoices/data/datasources/invoice_local_datasource.dart';
 import 'package:flutter_getx_app/features/invoices/data/repositories/invoice_repository.dart';
+import 'package:flutter_getx_app/features/customer/data/datasources/customer_local_datasource.dart';
+import 'package:flutter_getx_app/features/customer/data/repositories/customer_repository.dart';
+import 'package:flutter_getx_app/features/product/data/datasources/product_local_datasource.dart';
+import 'package:flutter_getx_app/features/product/data/repositories/product_repository.dart';
+import 'package:flutter_getx_app/features/business_setup/data/datasources/business_local_datasource.dart';
+import 'package:flutter_getx_app/features/business_setup/data/repositories/business_repository.dart';
 
-import '../../data/datasources/local/business_local_datasource.dart';
-import '../../data/datasources/local/customer_local_datasource.dart';
-import '../../data/datasources/local/product_local_datasource.dart';
-import '../../data/repositories/business_repository.dart';
-import '../../data/repositories/customer_repository.dart';
-import '../../data/repositories/product_repository.dart';
 import '../database/database_service.dart';
 
 /// Registers the data layer once at app start so every feature shares the

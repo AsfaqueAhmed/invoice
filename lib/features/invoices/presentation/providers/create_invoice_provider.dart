@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_getx_app/app/core/providers/shared_repository_providers.dart';
-import 'package:flutter_getx_app/app/data/entities/customer_entity.dart';
-import 'package:flutter_getx_app/app/data/entities/product_entity.dart';
+import 'package:flutter_getx_app/features/customer/data/providers.dart';
+import 'package:flutter_getx_app/features/customer/domain/entities/customer_entity.dart';
+import 'package:flutter_getx_app/features/product/data/providers.dart';
+import 'package:flutter_getx_app/features/product/domain/entities/product_entity.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 

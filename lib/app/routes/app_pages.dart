@@ -1,37 +1,23 @@
 import 'package:get/get.dart';
 
-import '../modules/business_setup/bindings/business_setup_binding.dart';
-import '../modules/business_setup/views/business_setup_view.dart';
-import '../modules/customer/add_customer/bindings/add_customer_binding.dart';
-import '../modules/customer/add_customer/views/add_customer_view.dart';
-import '../modules/customer/customer_details/bindings/customer_details_binding.dart';
-import '../modules/customer/customer_details/views/customer_details_view.dart';
-import '../modules/customer/customer_list/bindings/customer_list_binding.dart';
-import '../modules/customer/customer_list/views/customer_list_view.dart';
-import '../modules/dashboard/bindings/dashboard_binding.dart';
-import '../modules/dashboard/views/dashboard_view.dart';
+import 'package:flutter_getx_app/features/business_setup/presentation/screens/business_setup_screen.dart';
+import 'package:flutter_getx_app/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:flutter_getx_app/features/customer/presentation/screens/add_customer_screen.dart';
+import 'package:flutter_getx_app/features/customer/presentation/screens/customer_details_screen.dart';
+import 'package:flutter_getx_app/features/customer/presentation/screens/customer_list_screen.dart';
 import 'package:flutter_getx_app/features/invoices/presentation/screens/create_invoice_screen.dart';
 import 'package:flutter_getx_app/features/invoices/presentation/screens/invoice_details_screen.dart';
 import 'package:flutter_getx_app/features/invoices/presentation/screens/invoice_list_screen.dart';
 
-import '../modules/onboarding/bindings/onboarding_binding.dart';
-import '../modules/onboarding/views/onboarding_view.dart';
-import '../modules/payment/add_payment/bindings/add_payment_binding.dart';
-import '../modules/payment/add_payment/views/add_payment_view.dart';
-import '../modules/payment/due_payment/bindings/due_payment_binding.dart';
-import '../modules/payment/due_payment/views/due_payment_view.dart';
-import '../modules/product/add_product/bindings/add_product_binding.dart';
-import '../modules/product/add_product/views/add_product_view.dart';
-import '../modules/product/product_details/bindings/product_details_binding.dart';
-import '../modules/product/product_details/views/product_details_view.dart';
-import '../modules/product/product_list/bindings/product_list_binding.dart';
-import '../modules/product/product_list/views/product_list_view.dart';
-import '../modules/settings/backup_restore/bindings/backup_restore_binding.dart';
-import '../modules/settings/backup_restore/views/backup_restore_view.dart';
-import '../modules/settings/settings/bindings/settings_binding.dart';
-import '../modules/settings/settings/views/settings_view.dart';
-import '../modules/splash/binding/splash_binding.dart';
-import '../modules/splash/view/splash_view.dart';
+import 'package:flutter_getx_app/features/onboarding/presentation/screens/onboarding_screen.dart';
+import 'package:flutter_getx_app/features/add_payment/presentation/screens/add_payment_screen.dart';
+import 'package:flutter_getx_app/features/due_payment/presentation/screens/due_payment_screen.dart';
+import 'package:flutter_getx_app/features/product/presentation/screens/add_product_screen.dart';
+import 'package:flutter_getx_app/features/product/presentation/screens/product_details_screen.dart';
+import 'package:flutter_getx_app/features/product/presentation/screens/product_list_screen.dart';
+import 'package:flutter_getx_app/features/backup_restore/presentation/screens/backup_restore_screen.dart';
+import 'package:flutter_getx_app/features/settings/presentation/screens/settings_screen.dart';
+import 'package:flutter_getx_app/features/splash/presentation/screens/splash_screen.dart';
 
 part 'app_routes.dart';
 
@@ -43,14 +29,12 @@ class AppPages {
   static final routes = [
     GetPage(
       name: Routes.splash,
-      page: () => const SplashView(),
-      binding: SplashBinding(),
+      page: () => const SplashScreen(),
       transition: Transition.fadeIn,
     ),
     GetPage(
       name: Routes.dashboard,
-      page: () => const DashboardView(),
-      binding: DashboardBinding(),
+      page: () => const DashboardScreen(),
       transition: Transition.fadeIn,
     ),
     GetPage(
@@ -70,74 +54,62 @@ class AppPages {
     ),
     GetPage(
       name: Routes.onboarding,
-      page: () => const OnboardingView(),
-      binding: OnboardingBinding(),
+      page: () => const OnboardingScreen(),
       transition: Transition.fadeIn,
     ),
     GetPage(
       name: Routes.businessSetup,
-      page: () => const BusinessSetupView(),
-      binding: BusinessSetupBinding(),
+      page: () => const BusinessSetupScreen(),
       transition: Transition.rightToLeft,
     ),
     GetPage(
       name: _Paths.CUSTOMER_LIST,
-      page: () => const CustomerListView(),
-      binding: CustomerListBinding(),
+      page: () => const CustomerListScreen(),
       transition: Transition.fadeIn,
     ),
     GetPage(
       name: _Paths.CUSTOMER_DETAILS,
-      page: () => const CustomerDetailsView(),
-      binding: CustomerDetailsBinding(),
+      page: () => const CustomerDetailsScreen(),
       transition: Transition.rightToLeft,
     ),
     GetPage(
       name: _Paths.ADD_CUSTOMER,
-      page: () => const AddCustomerView(),
-      binding: AddCustomerBinding(),
+      page: () => const AddCustomerScreen(),
       transition: Transition.rightToLeft,
     ),
     GetPage(
       name: _Paths.ADD_PRODUCT,
-      page: () => const AddProductView(),
-      binding: AddProductBinding(),
+      page: () => const AddProductScreen(),
       transition: Transition.rightToLeft,
     ),
     GetPage(
       name: _Paths.PRODUCT_LIST,
-      page: () => const ProductListView(),
-      binding: ProductListBinding(),
+      page: () => const ProductListScreen(),
       transition: Transition.fadeIn,
     ),
     GetPage(
       name: _Paths.PRODUCT_DETAILS,
-      page: () => const ProductDetailsView(),
-      binding: ProductDetailsBinding(),
+      page: () => const ProductDetailsScreen(),
       transition: Transition.rightToLeft,
     ),
     GetPage(
       name: _Paths.SETTINGS,
-      page: () => const SettingsView(),
-      binding: SettingsBinding(),
+      page: () => const SettingsScreen(),
       transition: Transition.fadeIn,
     ),
     GetPage(
       name: _Paths.BACKUP_RESTORE,
-      page: () => const BackupRestoreView(),
-      binding: BackupRestoreBinding(),
+      page: () => const BackupRestoreScreen(),
       transition: Transition.rightToLeft,
     ),
     GetPage(
       name: _Paths.ADD_PAYMENT,
-      page: () => const AddPaymentView(),
-      binding: AddPaymentBinding(),
+      page: () => const AddPaymentScreen(),
       transition: Transition.rightToLeft,
     ),
     GetPage(
       name: _Paths.DUE_PAYMENT,
-      page: () => const DuePaymentView(),
-      binding: DuePaymentBinding(),
+      page: () => const DuePaymentScreen(),
       transition: Transition.rightToLeft,
     ),
   ];
