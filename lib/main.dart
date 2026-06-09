@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_getx_app/app/core/services/local_storage_service.dart';
+import 'package:flutter_getx_app/core/services/local_storage_service.dart';
 import 'package:get/get.dart';
-import 'app/core/configs/theme/app_theme.dart';
-import 'app/routes/app_pages.dart';
+import 'core/configs/theme/app_theme.dart';
+import 'routes/app_pages.dart';
+import 'routes/app_routes.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,10 +26,10 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.system,
 
       // ── Routes ────────────────────────────────────────────
-      initialRoute: AppPages.initial,
-      getPages: AppPages.routes,
+      initialRoute: Routes.splash,
+      getPages: AppPages.pages,
       builder: (_, child) {
-        return SafeArea(top: false,child: child!);
+        return SafeArea(top: false, child: child!);
       },
     );
   }
