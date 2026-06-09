@@ -243,8 +243,7 @@ class DashboardView extends GetView<DashboardController> {
                                       vertical: 5,
                                     ),
                                     child: AppCard(
-                                      onTap: () =>
-                                          controller.onInvoiceTap(inv),
+                                      onTap: () => controller.onInvoiceTap(inv),
                                       child: Row(children: [
                                         Container(
                                           width: 44,

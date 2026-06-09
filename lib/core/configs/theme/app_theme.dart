@@ -85,11 +85,13 @@ class AppTheme {
               const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: AppColor.outlineVariant.withOpacity(0.5)),
+            borderSide:
+                BorderSide(color: AppColor.outlineVariant.withOpacity(0.5)),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: AppColor.outlineVariant.withOpacity(0.5)),
+            borderSide:
+                BorderSide(color: AppColor.outlineVariant.withOpacity(0.5)),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
@@ -212,7 +214,8 @@ class AppTheme {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: AppColor.primaryFixedDim, width: 2),
+            borderSide:
+                const BorderSide(color: AppColor.primaryFixedDim, width: 2),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),

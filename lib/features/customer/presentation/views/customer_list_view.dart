@@ -33,7 +33,8 @@ class CustomerListView extends GetView<CustomerListController> {
         child: CustomScrollView(
           slivers: [
             SliverAppBar(
-              floating: true, pinned: true,
+              floating: true,
+              pinned: true,
               snap: true,
               backgroundColor: colors.surface,
               elevation: 0,
@@ -62,8 +63,8 @@ class CustomerListView extends GetView<CustomerListController> {
                       hintText: 'Search by name or phone...',
                       controller: controller.searchController,
                       onChanged: controller.onSearch,
-                      prefixIcon: Icon(Icons.search_rounded,
-                          color: colors.outline),
+                      prefixIcon:
+                          Icon(Icons.search_rounded, color: colors.outline),
                     ),
 
                     Gaps.v16,
@@ -73,8 +74,7 @@ class CustomerListView extends GetView<CustomerListController> {
                           Expanded(
                             child: AppCard(
                               child: Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     'TOTAL CUSTOMERS',
@@ -89,8 +89,7 @@ class CustomerListView extends GetView<CustomerListController> {
                                   Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.baseline,
-                                    textBaseline:
-                                        TextBaseline.alphabetic,
+                                    textBaseline: TextBaseline.alphabetic,
                                     children: [
                                       Text(
                                         '${controller.totalCustomers}',
@@ -105,8 +104,8 @@ class CustomerListView extends GetView<CustomerListController> {
                                         '+12% this month',
                                         style: TextStyle(
                                           fontSize: 11,
-                                          color: colors.primary
-                                              .withOpacity(0.6),
+                                          color:
+                                              colors.primary.withOpacity(0.6),
                                         ),
                                       ),
                                     ],
@@ -118,11 +117,9 @@ class CustomerListView extends GetView<CustomerListController> {
                           Gaps.h12,
                           Expanded(
                             child: AppCard(
-                              color: colors.errorContainer
-                                  .withOpacity(0.3),
+                              color: colors.errorContainer.withOpacity(0.3),
                               child: Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     'TOTAL OVERDUE',
@@ -151,8 +148,7 @@ class CustomerListView extends GetView<CustomerListController> {
                     Gaps.v20,
 
                     Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           'Active Customers',
@@ -198,13 +194,11 @@ class CustomerListView extends GetView<CustomerListController> {
                       return Column(
                         children: list
                             .map((c) => Padding(
-                                  padding: const EdgeInsets.only(
-                                      bottom: 12),
+                                  padding: const EdgeInsets.only(bottom: 12),
                                   child: _CustomerCard(
                                     customer: c,
                                     colors: colors,
-                                    onTap: () =>
-                                        controller.onCustomerTap(c),
+                                    onTap: () => controller.onCustomerTap(c),
                                   ),
                                 ))
                             .toList(),
@@ -238,9 +232,7 @@ class _CustomerCard extends StatelessWidget {
     if (parts.length >= 2) {
       return '${parts[0][0]}${parts[1][0]}'.toUpperCase();
     }
-    return customer.name.isNotEmpty
-        ? customer.name[0].toUpperCase()
-        : '?';
+    return customer.name.isNotEmpty ? customer.name[0].toUpperCase() : '?';
   }
 
   bool get _hasOverdue => customer.totalDue > 0;
@@ -255,8 +247,8 @@ class _CustomerCard extends StatelessWidget {
             Container(
               width: 52,
               height: 52,
-              decoration: AppDecorations.avatarDecoration(
-                  color: colors.chipBlueBg),
+              decoration:
+                  AppDecorations.avatarDecoration(color: colors.chipBlueBg),
               child: Center(
                 child: Text(
                   _initials,
@@ -311,9 +303,7 @@ class _CustomerCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    customer.address.isNotEmpty
-                        ? customer.address
-                        : 'N/A',
+                    customer.address.isNotEmpty ? customer.address : 'N/A',
                     style: TextStyle(
                       fontSize: 13,
                       color: colors.textSecondary,
@@ -321,21 +311,18 @@ class _CustomerCard extends StatelessWidget {
                   ),
                   Gaps.v6,
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: AppDecorations.chipDecoration(
-                      bg: _hasOverdue
-                          ? colors.chipRedBg
-                          : colors.chipGreenBg,
+                      bg: _hasOverdue ? colors.chipRedBg : colors.chipGreenBg,
                     ),
                     child: Text(
                       _hasOverdue ? 'Has Overdue' : 'Cleared',
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
-                        color: _hasOverdue
-                            ? colors.chipRedFg
-                            : colors.chipGreenFg,
+                        color:
+                            _hasOverdue ? colors.chipRedFg : colors.chipGreenFg,
                       ),
                     ),
                   ),
@@ -360,9 +347,7 @@ class _CustomerCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: _hasOverdue
-                          ? colors.error
-                          : colors.textPrimary,
+                      color: _hasOverdue ? colors.error : colors.textPrimary,
                     ),
                   ),
                 ],

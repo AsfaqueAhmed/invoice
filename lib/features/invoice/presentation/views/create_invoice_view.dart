@@ -593,8 +593,7 @@ class _SelectProductBottomSheet extends StatelessWidget {
         return Container(
           decoration: BoxDecoration(
             color: cs.surface,
-            borderRadius:
-                const BorderRadius.vertical(top: Radius.circular(24)),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
           ),
           child: Column(
             children: [
@@ -612,8 +611,7 @@ class _SelectProductBottomSheet extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
-                    Text('Select Product',
-                        style: theme.textTheme.titleLarge),
+                    Text('Select Product', style: theme.textTheme.titleLarge),
                     const Spacer(),
                     IconButton(
                       onPressed: Get.back,
@@ -642,14 +640,12 @@ class _SelectProductBottomSheet extends StatelessWidget {
                               duration: const Duration(milliseconds: 200),
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                color: selected
-                                    ? cs.primaryContainer
-                                    : cs.surface,
+                                color:
+                                    selected ? cs.primaryContainer : cs.surface,
                                 borderRadius: BorderRadius.circular(16),
                                 border: Border.all(
-                                  color: selected
-                                      ? cs.primary
-                                      : cs.outlineVariant,
+                                  color:
+                                      selected ? cs.primary : cs.outlineVariant,
                                 ),
                               ),
                               child: Row(children: [
@@ -668,8 +664,7 @@ class _SelectProductBottomSheet extends StatelessWidget {
                                   ),
                                 ),
                                 if (selected)
-                                  Icon(Icons.check_circle,
-                                      color: cs.primary),
+                                  Icon(Icons.check_circle, color: cs.primary),
                               ]),
                             ),
                           ),

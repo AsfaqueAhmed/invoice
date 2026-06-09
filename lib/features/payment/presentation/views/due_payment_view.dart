@@ -57,8 +57,7 @@ class DuePaymentView extends GetView<DuePaymentController> {
                 child: Obx(() => ListView(
                       scrollDirection: Axis.horizontal,
                       children: controller.filters.map((f) {
-                        final active =
-                            controller.selectedFilter.value == f;
+                        final active = controller.selectedFilter.value == f;
                         return Padding(
                           padding: const EdgeInsets.only(right: 8),
                           child: GestureDetector(
@@ -146,8 +145,7 @@ class DuePaymentView extends GetView<DuePaymentController> {
                               : null,
                           child: Column(children: [
                             Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
                                   child: Row(children: [
@@ -156,13 +154,11 @@ class DuePaymentView extends GetView<DuePaymentController> {
                                       height: 48,
                                       decoration:
                                           AppDecorations.avatarDecoration(
-                                              color: colors
-                                                  .surfaceContainerHigh),
+                                              color:
+                                                  colors.surfaceContainerHigh),
                                       child: Center(
                                         child: Text(
-                                          p['name']
-                                              .toString()
-                                              .substring(0, 2),
+                                          p['name'].toString().substring(0, 2),
                                           style: TextStyle(
                                             fontWeight: FontWeight.w700,
                                             color: colors.primary,
@@ -187,10 +183,8 @@ class DuePaymentView extends GetView<DuePaymentController> {
                                           ),
                                           Gaps.v4,
                                           Container(
-                                            padding: const EdgeInsets
-                                                .symmetric(
-                                                horizontal: 8,
-                                                vertical: 3),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8, vertical: 3),
                                             decoration:
                                                 AppDecorations.chipDecoration(
                                               bg: isOverdue
@@ -231,10 +225,8 @@ class DuePaymentView extends GetView<DuePaymentController> {
                                 child: SizedBox(
                                   height: 48,
                                   child: ElevatedButton.icon(
-                                    onPressed: () =>
-                                        controller.onCollect(p),
-                                    icon: const Icon(
-                                        Icons.payments_outlined,
+                                    onPressed: () => controller.onCollect(p),
+                                    icon: const Icon(Icons.payments_outlined,
                                         size: 16),
                                     label: const Text('Collect'),
                                     style: ElevatedButton.styleFrom(

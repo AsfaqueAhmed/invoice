@@ -30,11 +30,26 @@ class AddProductController extends GetxController {
   final purchasePriceController = TextEditingController();
 
   static const List<String> categories = [
-    'General', 'Food', 'Beverages', 'Electronics', 'Computer & IT',
-    'Mobile & Accessories', 'Clothing', 'Footwear', 'Beauty & Personal Care',
-    'Health & Medicine', 'Home & Kitchen', 'Furniture', 'Books & Stationery',
-    'Sports & Fitness', 'Toys & Games', 'Automotive', 'Hardware & Tools',
-    'Pet Supplies', 'Services', 'Other',
+    'General',
+    'Food',
+    'Beverages',
+    'Electronics',
+    'Computer & IT',
+    'Mobile & Accessories',
+    'Clothing',
+    'Footwear',
+    'Beauty & Personal Care',
+    'Health & Medicine',
+    'Home & Kitchen',
+    'Furniture',
+    'Books & Stationery',
+    'Sports & Fitness',
+    'Toys & Games',
+    'Automotive',
+    'Hardware & Tools',
+    'Pet Supplies',
+    'Services',
+    'Other',
   ];
 
   @override

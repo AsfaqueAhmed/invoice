@@ -136,8 +136,7 @@ class AddPaymentView extends GetView<AddPaymentController> {
                       ),
                       Text(
                         'Choose an invoice...',
-                        style:
-                            TextStyle(color: colors.outline, fontSize: 14),
+                        style: TextStyle(color: colors.outline, fontSize: 14),
                       ),
                       Text(
                         'Outstanding Due: \$0.00',
@@ -153,8 +152,7 @@ class AddPaymentView extends GetView<AddPaymentController> {
                 Icon(Icons.expand_more_rounded, color: colors.outline),
               ]),
               Divider(
-                  height: 20,
-                  color: colors.outlineVariant.withOpacity(0.4)),
+                  height: 20, color: colors.outlineVariant.withOpacity(0.4)),
               // Date
               Row(children: [
                 Container(
@@ -164,8 +162,8 @@ class AddPaymentView extends GetView<AddPaymentController> {
                     color: colors.primaryContainer,
                     size: 12,
                   ),
-                  child: Icon(Icons.calendar_today_rounded,
-                      color: colors.primary),
+                  child:
+                      Icon(Icons.calendar_today_rounded, color: colors.primary),
                 ),
                 Gaps.h12,
                 Expanded(
@@ -190,8 +188,7 @@ class AddPaymentView extends GetView<AddPaymentController> {
                 ),
               ]),
               Divider(
-                  height: 20,
-                  color: colors.outlineVariant.withOpacity(0.4)),
+                  height: 20, color: colors.outlineVariant.withOpacity(0.4)),
               // Note
               Row(children: [
                 Container(
@@ -222,8 +219,8 @@ class AddPaymentView extends GetView<AddPaymentController> {
                         style: TextStyle(color: colors.textPrimary),
                         decoration: InputDecoration(
                           hintText: 'Add a short reference...',
-                          hintStyle: TextStyle(
-                              color: colors.outline, fontSize: 14),
+                          hintStyle:
+                              TextStyle(color: colors.outline, fontSize: 14),
                           border: InputBorder.none,
                           isDense: true,
                           contentPadding: EdgeInsets.zero,
@@ -256,19 +253,15 @@ class AddPaymentView extends GetView<AddPaymentController> {
                 spacing: 10,
                 runSpacing: 10,
                 children: controller.methods.map((m) {
-                  final active =
-                      controller.selectedMethod.value == m['label'];
+                  final active = controller.selectedMethod.value == m['label'];
                   return GestureDetector(
-                    onTap: () =>
-                        controller.selectMethod(m['label'] as String),
+                    onTap: () => controller.selectMethod(m['label'] as String),
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
                       width: (MediaQuery.of(context).size.width - 60) / 3,
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       decoration: BoxDecoration(
-                        color: active
-                            ? colors.primaryContainer
-                            : colors.cardBg,
+                        color: active ? colors.primaryContainer : colors.cardBg,
                         borderRadius: AppDecorations.borderRadiusMD,
                         border: Border.all(
                           color: active
@@ -285,9 +278,8 @@ class AddPaymentView extends GetView<AddPaymentController> {
                         children: [
                           Icon(
                             m['icon'] as IconData,
-                            color: active
-                                ? colors.primary
-                                : colors.textSecondary,
+                            color:
+                                active ? colors.primary : colors.textSecondary,
                             size: 24,
                           ),
                           Gaps.v6,

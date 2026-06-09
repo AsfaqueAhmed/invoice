@@ -53,7 +53,7 @@ class AppBottomNav extends StatelessWidget {
           children: List.generate(_items.length, (i) {
             final item = _items[i];
             final isActive = i == currentIndex;
-      
+
             return Expanded(
               child: GestureDetector(
                 onTap: () {
@@ -75,9 +75,8 @@ class AppBottomNav extends StatelessWidget {
                           : null,
                       child: Icon(
                         isActive ? item.activeIcon : item.icon,
-                        color: isActive
-                            ? colors.primary
-                            : colors.onSurfaceVariant,
+                        color:
+                            isActive ? colors.primary : colors.onSurfaceVariant,
                         size: 24,
                       ),
                     ),
@@ -86,12 +85,10 @@ class AppBottomNav extends StatelessWidget {
                       item.label,
                       style: TextStyle(
                         fontSize: 10,
-                        fontWeight: isActive
-                            ? FontWeight.w600
-                            : FontWeight.w500,
-                        color: isActive
-                            ? colors.primary
-                            : colors.onSurfaceVariant,
+                        fontWeight:
+                            isActive ? FontWeight.w600 : FontWeight.w500,
+                        color:
+                            isActive ? colors.primary : colors.onSurfaceVariant,
                         letterSpacing: 0.4,
                       ),
                     ),

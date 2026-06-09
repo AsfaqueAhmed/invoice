@@ -31,8 +31,7 @@ class SelectCustomerBottomSheet extends StatelessWidget {
         return Container(
           decoration: BoxDecoration(
             color: cs.surface,
-            borderRadius:
-                const BorderRadius.vertical(top: Radius.circular(24)),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
           ),
           child: Column(
             children: [
@@ -50,8 +49,7 @@ class SelectCustomerBottomSheet extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
-                    Text('Select Customer',
-                        style: theme.textTheme.titleLarge),
+                    Text('Select Customer', style: theme.textTheme.titleLarge),
                     const Spacer(),
                     IconButton(
                       onPressed: Get.back,
@@ -63,7 +61,8 @@ class SelectCustomerBottomSheet extends StatelessWidget {
 
               // Add new customer action
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                 child: InkWell(
                   onTap: onAddTap,
                   borderRadius: BorderRadius.circular(16),

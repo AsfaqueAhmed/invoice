@@ -35,8 +35,7 @@ class DuePaymentController extends GetxController {
     final total = payments.fold<double>(
       0,
       (s, p) {
-        final raw =
-            (p['amount'] as String).replaceAll(RegExp(r'[^\d.]'), '');
+        final raw = (p['amount'] as String).replaceAll(RegExp(r'[^\d.]'), '');
         return s + (double.tryParse(raw) ?? 0);
       },
     );

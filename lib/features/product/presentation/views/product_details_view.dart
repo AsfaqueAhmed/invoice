@@ -242,7 +242,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                         'Total Inventory Value',
                         style: TextStyle(
                           fontSize: 11,
-                          color: colors.onPrimaryContainer.withValues(alpha: 0.8),
+                          color:
+                              colors.onPrimaryContainer.withValues(alpha: 0.8),
                           fontWeight: FontWeight.w600,
                         ),
                       ),

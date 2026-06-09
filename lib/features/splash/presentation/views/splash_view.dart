@@ -75,13 +75,11 @@ class SplashView extends GetView<SplashController> {
               animation: controller.animationController,
               builder: (context, _) {
                 return Opacity(
-                  opacity:
-                      (controller.progressValue.value * 2).clamp(0.0, 1.0),
+                  opacity: (controller.progressValue.value * 2).clamp(0.0, 1.0),
                   child: Column(
                     children: [
                       Padding(
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 180),
+                        padding: const EdgeInsets.symmetric(horizontal: 180),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(99),
                           child: LinearProgressIndicator(
@@ -89,8 +87,8 @@ class SplashView extends GetView<SplashController> {
                             minHeight: 2,
                             backgroundColor:
                                 colors.outlineVariant.withOpacity(0.3),
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                colors.primary),
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(colors.primary),
                           ),
                         ),
                       ),

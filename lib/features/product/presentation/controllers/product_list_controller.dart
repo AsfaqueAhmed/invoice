@@ -25,11 +25,27 @@ class ProductListController extends GetxController {
   final Rx<RangeValues> selectedStockRange = const RangeValues(0, 0).obs;
 
   static const List<String> categories = [
-    'All', 'General', 'Food', 'Beverages', 'Electronics', 'Computer & IT',
-    'Mobile & Accessories', 'Clothing', 'Footwear', 'Beauty & Personal Care',
-    'Health & Medicine', 'Home & Kitchen', 'Furniture', 'Books & Stationery',
-    'Sports & Fitness', 'Toys & Games', 'Automotive', 'Hardware & Tools',
-    'Pet Supplies', 'Services', 'Other',
+    'All',
+    'General',
+    'Food',
+    'Beverages',
+    'Electronics',
+    'Computer & IT',
+    'Mobile & Accessories',
+    'Clothing',
+    'Footwear',
+    'Beauty & Personal Care',
+    'Health & Medicine',
+    'Home & Kitchen',
+    'Furniture',
+    'Books & Stationery',
+    'Sports & Fitness',
+    'Toys & Games',
+    'Automotive',
+    'Hardware & Tools',
+    'Pet Supplies',
+    'Services',
+    'Other',
   ];
 
   String get totalValue {
@@ -57,8 +73,11 @@ class ProductListController extends GetxController {
           p.sellingPrice <= selectedPriceRange.value.end;
       final matchesStock = p.stock >= selectedStockRange.value.start &&
           p.stock <= selectedStockRange.value.end;
-      return matchesSearch && matchesCategory && matchesActive &&
-          matchesPrice && matchesStock;
+      return matchesSearch &&
+          matchesCategory &&
+          matchesActive &&
+          matchesPrice &&
+          matchesStock;
     }).toList();
   }
 
@@ -112,9 +131,11 @@ class ProductListController extends GetxController {
     activeFilter.value = !(activeFilter.value ?? false);
   }
 
-  void updatePriceRange(RangeValues values) => selectedPriceRange.value = values;
+  void updatePriceRange(RangeValues values) =>
+      selectedPriceRange.value = values;
 
-  void updateStockRange(RangeValues values) => selectedStockRange.value = values;
+  void updateStockRange(RangeValues values) =>
+      selectedStockRange.value = values;
 
   double get maxHeight {
     final context = Get.context!;

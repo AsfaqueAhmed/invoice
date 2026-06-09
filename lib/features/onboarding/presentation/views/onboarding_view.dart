@@ -43,8 +43,7 @@ class OnboardingView extends GetView<OnboardingController> {
                   opacity: controller.fadeAnimation,
                   child: SlideTransition(
                     position: controller.slideAnimation,
-                    child: _CtaSection(
-                        controller: controller, colors: colors),
+                    child: _CtaSection(controller: controller, colors: colors),
                   ),
                 ),
               ),
@@ -60,12 +59,10 @@ class OnboardingView extends GetView<OnboardingController> {
 class _IllustrationSection extends StatefulWidget {
   final OnboardingController controller;
   final AppColorBase colors;
-  const _IllustrationSection(
-      {required this.controller, required this.colors});
+  const _IllustrationSection({required this.controller, required this.colors});
 
   @override
-  State<_IllustrationSection> createState() =>
-      _IllustrationSectionState();
+  State<_IllustrationSection> createState() => _IllustrationSectionState();
 }
 
 class _IllustrationSectionState extends State<_IllustrationSection>
@@ -81,8 +78,7 @@ class _IllustrationSectionState extends State<_IllustrationSection>
       duration: const Duration(milliseconds: 3000),
     )..repeat(reverse: true);
     _float = Tween<double>(begin: -8, end: 8).animate(
-      CurvedAnimation(
-          parent: _floatController, curve: Curves.easeInOut),
+      CurvedAnimation(parent: _floatController, curve: Curves.easeInOut),
     );
   }
 
@@ -154,8 +150,7 @@ class _IllustrationSectionState extends State<_IllustrationSection>
                       decoration: BoxDecoration(
                         color: colors.primary,
                         borderRadius: BorderRadius.circular(24),
-                        boxShadow:
-                            AppDecorations.iconShadow(colors.primary),
+                        boxShadow: AppDecorations.iconShadow(colors.primary),
                       ),
                       child: Icon(
                         Icons.account_balance_wallet_rounded,
@@ -243,8 +238,7 @@ class _CtaSection extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: colors.primary,
                   foregroundColor: colors.onPrimary,
-                  disabledBackgroundColor:
-                      colors.primary.withOpacity(0.6),
+                  disabledBackgroundColor: colors.primary.withOpacity(0.6),
                   shape: RoundedRectangleBorder(
                     borderRadius: AppDecorations.borderRadiusSM,
                   ),
@@ -260,8 +254,7 @@ class _CtaSection extends StatelessWidget {
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(
-                              Icons.add_circle_outline_rounded,
+                          const Icon(Icons.add_circle_outline_rounded,
                               size: 20),
                           Gaps.h8,
                           Text(
@@ -283,8 +276,7 @@ class _CtaSection extends StatelessWidget {
                     : controller.onRestoreBackup,
                 style: OutlinedButton.styleFrom(
                   foregroundColor: colors.primary,
-                  side: BorderSide(
-                      color: colors.outlineVariant, width: 1),
+                  side: BorderSide(color: colors.outlineVariant, width: 1),
                   backgroundColor: colors.surfaceContainerLow,
                   shape: RoundedRectangleBorder(
                     borderRadius: AppDecorations.borderRadiusSM,
@@ -299,8 +291,7 @@ class _CtaSection extends StatelessWidget {
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(
-                              Icons.settings_backup_restore_rounded,
+                          const Icon(Icons.settings_backup_restore_rounded,
                               size: 20),
                           Gaps.h8,
                           Text(

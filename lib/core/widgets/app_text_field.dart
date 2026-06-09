@@ -203,15 +203,13 @@ class _AppTextFieldState extends State<AppTextField> {
                   },
                   onFieldSubmitted: widget.onFieldSubmitted ??
                       (_) {
-                        FocusScope.of(context)
-                            .requestFocus(widget.nextFocus);
+                        FocusScope.of(context).requestFocus(widget.nextFocus);
                       },
                   obscureText: widget.isPassword && !_showPassword,
                   minLines: widget.minLines,
                   maxLines: widget.isPassword ? 1 : widget.maxLines,
                   autovalidateMode: widget.autoValidateMode,
-                  readOnly:
-                      widget.onTap != null || widget.readOnly,
+                  readOnly: widget.onTap != null || widget.readOnly,
                   showCursor: !widget.readOnly,
                   enabled: widget.enabled,
                   onTap: widget.onTap,
@@ -221,8 +219,7 @@ class _AppTextFieldState extends State<AppTextField> {
                   decoration: _buildDecoration(),
                 ),
                 // Char count
-                if (widget.showCharCount &&
-                    widget.maxLength != null) ...[
+                if (widget.showCharCount && widget.maxLength != null) ...[
                   Gaps.v4,
                   Text(
                     '${value.text.length} / ${widget.maxLength}',

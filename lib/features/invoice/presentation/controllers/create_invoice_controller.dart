@@ -37,8 +37,7 @@ class CreateInvoiceController extends GetxController {
   String get invoiceNo =>
       'INV-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}';
 
-  double get subtotal =>
-      cartItems.fold(0.0, (s, item) => s + item.lineTotal);
+  double get subtotal => cartItems.fold(0.0, (s, item) => s + item.lineTotal);
 
   double get grandTotal => subtotal * (1 - discount.value / 100);
 

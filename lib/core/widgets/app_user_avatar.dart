@@ -35,7 +35,8 @@ class AppUserAvatar extends StatelessWidget {
       ),
       child: imageUrl != null
           ? ClipOval(
-              child: Image.network(imageUrl!, fit: BoxFit.cover,
+              child: Image.network(imageUrl!,
+                  fit: BoxFit.cover,
                   errorBuilder: (_, __, ___) => _fallback(colors)))
           : _fallback(colors),
     );

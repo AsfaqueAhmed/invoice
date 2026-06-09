@@ -155,12 +155,10 @@ class InvoiceDetailsView extends GetView<InvoiceDetailsController> {
                 Gaps.v4,
                 Text(
                   '123 Financial District, New York, NY 10001',
-                  style:
-                      TextStyle(fontSize: 12, color: colors.textSecondary),
+                  style: TextStyle(fontSize: 12, color: colors.textSecondary),
                 ),
                 Divider(
-                    height: 24,
-                    color: colors.outlineVariant.withOpacity(0.5)),
+                    height: 24, color: colors.outlineVariant.withOpacity(0.5)),
 
                 // Billed to / Payment terms
                 Row(
@@ -304,8 +302,7 @@ class InvoiceDetailsView extends GetView<InvoiceDetailsController> {
                     child: Column(children: [
                       _SummaryRow('Subtotal', r'$5,350.00', colors),
                       _SummaryRow('Tax (8%)', r'$428.00', colors),
-                      Divider(
-                          color: colors.outlineVariant.withOpacity(0.5)),
+                      Divider(color: colors.outlineVariant.withOpacity(0.5)),
                       _SummaryRow('Total Amount', r'$5,778.00', colors,
                           bold: true, valueColor: colors.primary),
                       Container(
@@ -314,24 +311,20 @@ class InvoiceDetailsView extends GetView<InvoiceDetailsController> {
                             horizontal: 12, vertical: 6),
                         decoration: AppDecorations.chipDecoration(
                             bg: colors.surfaceContainer),
-                        child: _SummaryRow(
-                            'Amount Paid', r'-$5,778.00', colors,
+                        child: _SummaryRow('Amount Paid', r'-$5,778.00', colors,
                             small: true),
                       ),
-                      _SummaryRow('Balance Due', r'$0.00', colors,
-                          bold: true),
+                      _SummaryRow('Balance Due', r'$0.00', colors, bold: true),
                     ]),
                   ),
                 ),
 
                 Divider(
-                    height: 24,
-                    color: colors.outlineVariant.withOpacity(0.5)),
+                    height: 24, color: colors.outlineVariant.withOpacity(0.5)),
                 Text(
                   'Thank you for your business. Payment was processed via Stripe on Oct 26, 2023.',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 11, color: colors.textSecondary),
+                  style: TextStyle(fontSize: 11, color: colors.textSecondary),
                 ),
               ]),
             ),
