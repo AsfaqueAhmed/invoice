@@ -51,21 +51,25 @@ class AppPages {
       name: Routes.splash,
       page: () => const SplashView(),
       binding: SplashBinding(),
+      transition: Transition.fadeIn,
     ),
     GetPage(
       name: Routes.onboarding,
       page: () => const OnboardingView(),
       binding: OnboardingBinding(),
+      transition: Transition.fadeIn,
     ),
     GetPage(
       name: Routes.businessSetup,
       page: () => const BusinessSetupView(),
       binding: BusinessSetupBinding(),
+      transition: Transition.downToUp,
     ),
     GetPage(
       name: Routes.dashboard,
       page: () => const DashboardView(),
       binding: DashboardBinding(),
+      transition: Transition.fadeIn,
     ),
 
     // ── Invoices ──────────────────────────────────────────────
@@ -73,16 +77,19 @@ class AppPages {
       name: Routes.invoices,
       page: () => const InvoiceListView(),
       binding: InvoiceListBinding(),
+      transition: Transition.fadeIn,
     ),
     GetPage(
       name: Routes.createInvoice,
       page: () => const CreateInvoiceView(),
       binding: CreateInvoiceBinding(),
+      transition: Transition.downToUp,
     ),
     GetPage(
       name: Routes.invoiceDetails,
       page: () => const InvoiceDetailsView(),
       binding: InvoiceDetailsBinding(),
+      transition: Transition.downToUp,
     ),
 
     // ── Customers ─────────────────────────────────────────────
@@ -90,16 +97,19 @@ class AppPages {
       name: Routes.customers,
       page: () => const CustomerListView(),
       binding: CustomerListBinding(),
+      transition: Transition.fadeIn,
     ),
     GetPage(
       name: Routes.addCustomer,
       page: () => const AddCustomerView(),
       binding: AddCustomerBinding(),
+      transition: Transition.downToUp,
     ),
     GetPage(
       name: Routes.customerDetails,
       page: () => const CustomerDetailsView(),
       binding: CustomerDetailsBinding(),
+      transition: Transition.downToUp,
     ),
 
     // ── Products ──────────────────────────────────────────────
@@ -107,16 +117,19 @@ class AppPages {
       name: Routes.products,
       page: () => const ProductListView(),
       binding: ProductListBinding(),
+      transition: Transition.fadeIn,
     ),
     GetPage(
       name: Routes.addProduct,
       page: () => const AddProductView(),
       binding: AddProductBinding(),
+      transition: Transition.downToUp,
     ),
     GetPage(
       name: Routes.productDetails,
       page: () => const ProductDetailsView(),
       binding: ProductDetailsBinding(),
+      transition: Transition.downToUp,
     ),
 
     // ── Payments ──────────────────────────────────────────────
@@ -124,11 +137,13 @@ class AppPages {
       name: Routes.addPayment,
       page: () => const AddPaymentView(),
       binding: AddPaymentBinding(),
+      transition: Transition.downToUp,
     ),
     GetPage(
       name: Routes.duePayment,
       page: () => const DuePaymentView(),
       binding: DuePaymentBinding(),
+      transition: Transition.downToUp,
     ),
 
     // ── Settings ──────────────────────────────────────────────
@@ -136,11 +151,13 @@ class AppPages {
       name: Routes.settings,
       page: () => const SettingsView(),
       binding: SettingsBinding(),
+      transition: Transition.fadeIn,
     ),
     GetPage(
       name: Routes.backupRestore,
       page: () => const BackupRestoreView(),
       binding: BackupRestoreBinding(),
+      transition: Transition.downToUp,
     ),
   ];
 }
